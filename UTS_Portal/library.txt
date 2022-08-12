@@ -1,0 +1,12 @@
+﻿Install-Package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation Version 5.0.9
+Install-Package Microsoft.EntityFrameworkCore.Tools -Version 5.0.9
+Install-Package Microsoft.EntityFrameworkCore.SqlServer  -Version 5.0.9
+Install-Package Microsoft.EntityFrameworkCore -Version 5.0.9
+PagedList.Core
+
+
+// Sinh model tu database
+Scaffold-DBContext "Server=THIENHOA;Database=db_uts;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+Scaffold-DBContext "Server=THIENHOA;Database=db_uts;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+
+Scaffold-DBContext "Server=THIENHOA;Database=db_uts;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -DataAnnotations -OutputDir Models -Force

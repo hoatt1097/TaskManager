@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - UTS_Portal</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link href="~/assets/img/favicon.png" rel="icon">
+    <link href="~/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/css/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/assets/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/assets/css/quill.snow.css" rel="stylesheet" />
+    <link href="~/assets/css/quill.bubble.css" rel="stylesheet" />
+    <link href="~/assets/css/remixicon.css" rel="stylesheet" />
+    <link href="~/assets/css/simple-datatables.css" rel="stylesheet" />
+    <link href="~/assets/css/style.css" rel="stylesheet" />
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <header id="header" class="header fixed-top d-flex align-items-center">
+        <div class="d-flex align-items-center justify-content-between"> <a href="index.html" class="logo d-flex align-items-center"> <img src="assets/img/logo.png" alt=""> <span class="d-none d-lg-block">Admin</span> </a> <i class="bi bi-list toggle-sidebar-btn"></i></div>
+        <div class="search-bar">
+            <form class="search-form d-flex align-items-center" method="POST" action="#"> <input type="text" name="query" placeholder="Search" title="Enter search keyword"> <button type="submit" title="Search"><i class="bi bi-search"></i></button></form>
+        </div>
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+                <li class="nav-item d-block d-lg-none"> <a class="nav-link nav-icon search-bar-toggle " href="#"> <i class="bi bi-search"></i> </a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown"> <i class="bi bi-bell"></i> <span class="badge bg-primary badge-number">4</span> </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                        <li class="dropdown-header"> You have 4 new notifications <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="notification-item">
+                            <i class="bi bi-exclamation-circle text-warning"></i>
+                            <div>
+                                <h4>Lorem Ipsum</h4>
+                                <p>Quae dolorem earum veritatis oditseno</p>
+                                <p>30 min. ago</p>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="notification-item">
+                            <i class="bi bi-x-circle text-danger"></i>
+                            <div>
+                                <h4>Atque rerum nesciunt</h4>
+                                <p>Quae dolorem earum veritatis oditseno</p>
+                                <p>1 hr. ago</p>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="dropdown-footer"> <a href="#">Show all notifications</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <aside id="sidebar" class="sidebar">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item"> <a class="nav-link " href="index.html"> <i class="bi bi-grid"></i> <span>Dashboard</span> </a></li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-menu-button-wide"></i><span>Administrator</span><i class="bi bi-chevron-down ms-auto"></i> </a>
+                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li> <a href="#"> <i class="bi bi-circle"></i><span>Users</span> </a></li>
+                    <li> <a href="#"> <i class="bi bi-circle"></i><span>Roles</span> </a></li>
+                    <li> <a href="#"> <i class="bi bi-circle"></i><span>Permissions</span> </a></li>
+                </ul>
+            </li>
+            <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-file-earmark"></i> <span>Blog Admin</span> </a></li>
+            <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-file-earmark"></i> <span>Blogs</span> </a></li>
+            <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-layout-text-window-reverse"></i> <span>Menu</span> </a></li>
+            <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-journal-text"></i> <span>Order</span> </a></li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-bar-chart"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i> </a>
+                <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li> <a href="#"> <i class="bi bi-circle"></i><span>Chart.js</span> </a></li>
+                    <li> <a href="#"> <i class="bi bi-circle"></i><span>ApexCharts</span> </a></li>
+                    <li> <a href="#"> <i class="bi bi-circle"></i><span>ECharts</span> </a></li>
+                    <li> <a href="#"> <i class="bi bi-circle"></i><span>Chart.js</span> </a></li>
+                    <li> <a href="#"> <i class="bi bi-circle"></i><span>ApexCharts</span> </a></li>
+                    <li> <a href="#"> <i class="bi bi-circle"></i><span>ECharts</span> </a></li>
+                </ul>
+            </li>
+            <li class="nav-item"> <a class="nav-link collapsed" href="pages-faq.html"> <i class="bi bi-question-circle"></i> <span>F.A.Q</span> </a></li>
+            <li class="nav-item"> <a class="nav-link collapsed" href="pages-contact.html"> <i class="bi bi-envelope"></i> <span>Contact</span> </a></li>
+        </ul>
+    </aside>
+    <main id="main" class="main">
+        @RenderBody()
+    </main>
+    <footer id="footer" class="footer fixed-bottom">
+        <div class="copyright"> &copy; Copyright <strong><span>Compnay Name</span></strong>. All Rights Reserved</div>
+    </footer>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="~/assets/js/apexcharts.min.js"></script>
+    <script src="~/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/js/chart.min.js"></script>
+    <script src="~/assets/js/echarts.min.js"></script>
+    <script src="~/assets/js/quill.min.js"></script>
+    <script src="~/assets/js/simple-datatables.js"></script>
+    <script src="~/assets/js/tinymce.min.js"></script>
+    <script src="~/assets/js/validate.js"></script>
+    <script src="~/assets/js/main.js"></script>
+    <script src="~/assets/js/site.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
