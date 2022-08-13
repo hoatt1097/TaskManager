@@ -97,7 +97,6 @@ namespace UTS_Portal.Controllers
                 posts.Alias = Utilities.SEOUrl(posts.Title);
                 posts.CreatedDate = DateTime.Now;
 
-
                 _context.Add(posts);
                 await _context.SaveChangesAsync();
                 _notyfService.Success("Add new post sucessfully!");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,9 +19,12 @@ namespace UTS_Portal.Controllers
     {
         private readonly db_utsContext _context;
 
-        public UsersController(db_utsContext context)
+        public INotyfService _notyfService { get; }
+
+        public UsersController(db_utsContext context, INotyfService notyfService)
         {
             _context = context;
+            _notyfService = notyfService;
         }
 
         // GET: Users
@@ -29,7 +33,7 @@ namespace UTS_Portal.Controllers
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;
             var pageSize = 10;
 
-            var ls = _context.Users.Include(a => a.Role).AsNoTracking().OrderByDescending(x => x.CreatedDate);
+            var ls = _context.Users.Include(a => a.Role).AsNoTracking().OrderBy(x => x.Id);
 
             if (roleID != 0)
             {
@@ -37,7 +41,7 @@ namespace UTS_Portal.Controllers
                 .AsNoTracking()
                 .Where(x => x.RoleId == roleID)
                 .Include(x => x.Role)
-                .OrderByDescending(x => x.CreatedDate);
+                .OrderBy(x => x.Id);
             }
 
             var models = new PagedList<Users>(ls, pageNumber, pageSize);
@@ -91,15 +95,17 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Fullname,Email,Phone,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
+        public async Task<IActionResult> Create([Bind("Id,Fullname,Email,Phone,Username,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
         {
             if (ModelState.IsValid)
             {
+                accounts.CreatedDate = DateTime.Now;
                 _context.Add(accounts);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", accounts.RoleId);
+            _notyfService.Success("Add user post sucessfully!");
             return View(accounts);
         }
 
@@ -125,7 +131,7 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Fullname,Email,Phone,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Fullname,Email,Phone,Username,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
         {
             if (id != accounts.Id)
             {
@@ -153,6 +159,7 @@ namespace UTS_Portal.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", accounts.RoleId);
+            _notyfService.Success("Edit user post sucessfully!");
             return View(accounts);
         }
 

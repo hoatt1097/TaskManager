@@ -24,7 +24,7 @@ namespace UTS_Portal.Models
         public string Username { get; set; }
         [StringLength(255)]
         public string Password { get; set; }
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? CreatedDate { get; set; }
         [Column("RoleID")]

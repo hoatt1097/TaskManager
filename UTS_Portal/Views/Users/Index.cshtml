@@ -46,7 +46,7 @@
                         <th>Phone</th>
                         <th>Role</th>
                         <th>Active</th>
-                        <th>Created Date</th>
+                        <th>Latest login</th>
                         <th style="width: 180px">Action</th>
                     </tr>
                 </thead>
@@ -82,7 +82,7 @@
                                         }
                                     </div>
                                 </td>
-                                <td>@item.CreatedDate</td>
+                                <td>@item.LastLogin</td>
                                 <td>
                                     <a class="btn btn-secondary btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                     <a class="btn btn-danger btn-sm" asp-controller="Users" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
