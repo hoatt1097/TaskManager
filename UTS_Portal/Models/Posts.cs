@@ -18,8 +18,9 @@ namespace UTS_Portal.Models
         [StringLength(255)]
         public string Title { get; set; }
         [StringLength(255)]
+        public string Alias { get; set; }
+        [StringLength(255)]
         public string Scontents { get; set; }
-        [Column(TypeName = "text")]
         public string Contents { get; set; }
         [StringLength(255)]
         public string Thumb { get; set; }

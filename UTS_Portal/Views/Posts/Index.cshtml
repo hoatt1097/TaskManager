@@ -2,6 +2,7 @@
 @model PagedList.Core.IPagedList<UTS_Portal.Models.Posts>
 @{
     int CurrentPage = ViewBag.CurrentPage;
+    int TotalPost = ViewBag.TotalPost;
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,7 +11,7 @@
     <div class="header-sub-title">
         <nav class="breadcrumb breadcrumb-dash">
             <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Posts</a>
-            <span class="breadcrumb-item active">List post : page @CurrentPage</span>
+            <span class="breadcrumb-item active">List: @TotalPost posts</span>
         </nav>
     </div>
 </div>
@@ -30,48 +31,54 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Image</th>
                         <th>Title</th>
-                        <th>Status</th>
-                        <th>Created Date</th>
-                        <th>Action</th>
+                        <th style="width: 120px">Status</th>
+                        <th style="width: 200px">Created Date</th>
+                        <th style="width: 180px">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (Model != null)
                     {
+
+                        var i = 1;
                         foreach (var item in Model)
                         {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td><a asp-controller="Posts" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                @if (item.Published == true)
-                                {
-                                    <div class="badge badge-success badge-dot mt-1">
-                                        <span>Public</span>
+                            <tr>
+                                <td>@i</td>
+                                <td><img src="~/images/news/@item.Thumb" alt="@item.Title" style="height:40px" /></td>
+                                <td><a asp-controller="Posts" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        @if (item.Published == true)
+                                        {
+                                            <div class="badge badge-success badge-dot mt-1">
+                                                <span>Public</span>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="badge badge-secondary badge-dot mt-1">
+                                                <span>Non-Public</span>
+                                            </div>
+                                        }
                                     </div>
-                                }
-                                else
-                                {
-                                    <div class="badge badge-secondary badge-dot mt-1">
-                                        <span>Non-Public</span>
-                                    </div>
-                                }
-                            </div>
-                        </td>
-                        <td>@item.CreatedDate</td>
-                        <td>
-                            <a href="/#" target="_blank" class="btn btn-primary btn-sm">View</a>
-                            <a class="btn btn-secondary btn-sm" asp-controller="Posts" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-danger btn-sm" asp-controller="Posts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        </td>
-                    </tr>
+                                </td>
+                                <td>@item.CreatedDate</td>
+                                <td>
+                                    <a href="/#" target="_blank" class="btn btn-primary btn-sm">View</a>
+                                    <a class="btn btn-secondary btn-sm" asp-controller="Posts" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a class="btn btn-danger btn-sm" asp-controller="Posts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                </td>
+                            </tr>
+                            i++;
                         }
                     }
 
                 </tbody>
             </table>
+            <div id="PlaceHolderHere"></div>
             <div>
                 <ul class="pagination justify-content-end">
                     <pager class="pager-container" list="@Model" asp-controller="Posts" asp-action="Index" />
@@ -80,3 +87,5 @@
         </div>
     </div>
 </div>
+
+

@@ -73,7 +73,7 @@
                     <li> <a href="#"> <i class="bi bi-circle"></i><span>Permissions</span> </a></li>
                 </ul>
             </li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-file-earmark"></i> <span>Blog Admin</span> </a></li>
+            <li class="nav-item"> <a class="nav-link collapsed" asp-controller="Posts" asp-action="Index"> <i class="bi bi-file-earmark"></i> <span>Blog Admin</span> </a></li>
             <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-file-earmark"></i> <span>Blogs</span> </a></li>
             <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-layout-text-window-reverse"></i> <span>Menu</span> </a></li>
             <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-journal-text"></i> <span>Order</span> </a></li>
@@ -114,7 +114,7 @@
     <script src="~/assets/js/validate.js"></script>
     <script src="~/assets/js/main.js"></script>
     <script src="~/assets/js/site.js"></script>
-
+    @await Component.InvokeAsync("Notyf")
     @RenderSection("Scripts", required: false)
 </body>
 </html>

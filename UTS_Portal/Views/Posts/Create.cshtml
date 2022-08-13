@@ -30,14 +30,19 @@
                     </div>
                     <div class="col-md-12 mb-2">
                         <label class="control-label">Description</label>
-                        <input asp-for="Scontents" class="form-control" />
+                        <textarea asp-for="Scontents" class="form-control" /></textarea>
                         <span asp-validation-for="Scontents" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="control-label">Image</label>
+                        <input name="fThumb" type="file" class="form-control-file" asp-for="Thumb" />
+                        <span asp-validation-for="Thumb" class="text-danger"></span>
                     </div>
                     <div class="col-md-12 mb-2">
                         <label asp-for="Contents" class="control-label"></label>
                         <textarea class="summernote" asp-for="Contents"></textarea>
                     </div>
-                    <div class="col-md-12 mb-2">
+                    <div class="col-md-4 mb-2">
                         <label asp-for="Author" class="control-label"></label>
                         <input asp-for="Author" class="form-control" />
                         <span asp-validation-for="Author" class="text-danger"></span>
