@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UTS_Portal.Models
 {
-    public partial class Accounts
+    public partial class Users
     {
         [Key]
         [Column("ID")]
@@ -33,7 +33,7 @@ namespace UTS_Portal.Models
         public DateTime? LastLogin { get; set; }
 
         [ForeignKey(nameof(RoleId))]
-        [InverseProperty(nameof(Roles.Accounts))]
+        [InverseProperty(nameof(Roles.Users))]
         public virtual Roles Role { get; set; }
     }
 }

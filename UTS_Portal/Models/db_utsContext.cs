@@ -19,10 +19,10 @@ namespace UTS_Portal.Models
         {
         }
 
-        public virtual DbSet<Accounts> Accounts { get; set; }
         public virtual DbSet<Functions> Functions { get; set; }
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -35,10 +35,10 @@ namespace UTS_Portal.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Accounts>(entity =>
+            modelBuilder.Entity<Users>(entity =>
             {
                 entity.HasOne(d => d.Role)
-                    .WithMany(p => p.Accounts)
+                    .WithMany(p => p.Users)
                     .HasForeignKey(d => d.RoleId)
                     .HasConstraintName("FK_Accounts_Roles");
             });

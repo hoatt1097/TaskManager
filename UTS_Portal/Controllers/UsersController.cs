@@ -14,11 +14,11 @@ using UTS_Portal.Models;
 
 namespace UTS_Portal.Controllers
 {
-    public class AccountsController : Controller
+    public class UsersController : Controller
     {
         private readonly db_utsContext _context;
 
-        public AccountsController(db_utsContext context)
+        public UsersController(db_utsContext context)
         {
             _context = context;
         }
@@ -43,7 +43,7 @@ namespace UTS_Portal.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Accounts kh = _context.Accounts
+                    Users kh = _context.Users
                     .Include(p => p.Role)
                     .SingleOrDefault(p => p.Username.ToLower() == model.UserName.ToLower().Trim());
 
@@ -84,7 +84,7 @@ namespace UTS_Portal.Controllers
             }
             catch
             {
-                return RedirectToAction("Login", "Accounts");
+                return RedirectToAction("Login", "Users");
             }
             return View();
         }
@@ -95,18 +95,18 @@ namespace UTS_Portal.Controllers
             {
                 HttpContext.SignOutAsync();
                 HttpContext.Session.Remove("AccountId");
-                return RedirectToAction("Login", "Accounts");
+                return RedirectToAction("Login", "Users");
             }
             catch
             {
-                return RedirectToAction("Login", "Accounts");
+                return RedirectToAction("Login", "Users");
             }
         }
 
-        // GET: Accounts
+        // GET: Users
         public async Task<IActionResult> Index(int? page)
         {
-            var collection = _context.Accounts.Include(a => a.Role).AsNoTracking().ToList();
+            var collection = _context.Users.Include(a => a.Role).AsNoTracking().ToList();
             foreach (var item in collection)
             {
                 if (item.CreatedDate == null)
@@ -119,15 +119,15 @@ namespace UTS_Portal.Controllers
 
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;
             var pageSize = 10;
-            var ls = _context.Accounts.Include(a => a.Role).AsNoTracking().OrderByDescending(x => x.CreatedDate);
-            PagedList<Accounts> models = new PagedList<Accounts>(ls, pageNumber, pageSize);
+            var ls = _context.Users.Include(a => a.Role).AsNoTracking().OrderByDescending(x => x.CreatedDate);
+            PagedList<Users> models = new PagedList<Users>(ls, pageNumber, pageSize);
 
             ViewBag.CurrentPage = pageNumber;
             ViewBag.Total = ls.Count();
             return View(models);
         }
 
-        // GET: Accounts/Details/5
+        // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -135,7 +135,7 @@ namespace UTS_Portal.Controllers
                 return NotFound();
             }
 
-            var accounts = await _context.Accounts
+            var accounts = await _context.Users
                 .Include(a => a.Role)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (accounts == null)
@@ -146,19 +146,19 @@ namespace UTS_Portal.Controllers
             return View(accounts);
         }
 
-        // GET: Accounts/Create
+        // GET: Users/Create
         public IActionResult Create()
         {
             ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name");
             return View();
         }
 
-        // POST: Accounts/Create
+        // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Fullname,Email,Phone,Password,Active,CreatedDate,RoleId,LastLogin")] Accounts accounts)
+        public async Task<IActionResult> Create([Bind("Id,Fullname,Email,Phone,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
         {
             if (ModelState.IsValid)
             {
@@ -170,7 +170,7 @@ namespace UTS_Portal.Controllers
             return View(accounts);
         }
 
-        // GET: Accounts/Edit/5
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -178,7 +178,7 @@ namespace UTS_Portal.Controllers
                 return NotFound();
             }
 
-            var accounts = await _context.Accounts.FindAsync(id);
+            var accounts = await _context.Users.FindAsync(id);
             if (accounts == null)
             {
                 return NotFound();
@@ -187,12 +187,12 @@ namespace UTS_Portal.Controllers
             return View(accounts);
         }
 
-        // POST: Accounts/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Fullname,Email,Phone,Password,Active,CreatedDate,RoleId,LastLogin")] Accounts accounts)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Fullname,Email,Phone,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
         {
             if (id != accounts.Id)
             {
@@ -223,7 +223,7 @@ namespace UTS_Portal.Controllers
             return View(accounts);
         }
 
-        // GET: Accounts/Delete/5
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -231,7 +231,7 @@ namespace UTS_Portal.Controllers
                 return NotFound();
             }
 
-            var accounts = await _context.Accounts
+            var accounts = await _context.Users
                 .Include(a => a.Role)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (accounts == null)
@@ -242,20 +242,20 @@ namespace UTS_Portal.Controllers
             return View(accounts);
         }
 
-        // POST: Accounts/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var accounts = await _context.Accounts.FindAsync(id);
-            _context.Accounts.Remove(accounts);
+            var accounts = await _context.Users.FindAsync(id);
+            _context.Users.Remove(accounts);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool AccountsExists(int id)
         {
-            return _context.Accounts.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

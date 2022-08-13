@@ -13,7 +13,7 @@ namespace UTS_Portal.Models
     {
         public Roles()
         {
-            Accounts = new HashSet<Accounts>();
+            Users = new HashSet<Users>();
         }
 
         [Key]
@@ -28,6 +28,6 @@ namespace UTS_Portal.Models
         public string Functions { get; set; }
 
         [InverseProperty("Role")]
-        public virtual ICollection<Accounts> Accounts { get; set; }
+        public virtual ICollection<Users> Users { get; set; }
     }
 }
