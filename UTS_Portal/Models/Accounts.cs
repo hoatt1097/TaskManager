@@ -21,10 +21,12 @@ namespace UTS_Portal.Models
         [StringLength(255)]
         public string Phone { get; set; }
         [StringLength(255)]
+        public string Username { get; set; }
+        [StringLength(255)]
         public string Password { get; set; }
         public bool? Active { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime? CreateDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         [Column("RoleID")]
         public int? RoleId { get; set; }
         [Column(TypeName = "datetime")]

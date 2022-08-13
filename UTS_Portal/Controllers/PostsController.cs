@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -41,11 +42,11 @@ namespace UTS_Portal.Controllers
 
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;
             var pageSize = 10;
-            var lsPost = _context.Posts.AsNoTracking().OrderByDescending(x => x.CreatedDate);
-            PagedList<Posts> models = new PagedList<Posts>(lsPost, pageNumber, pageSize);
+            var ls = _context.Posts.AsNoTracking().OrderByDescending(x => x.CreatedDate);
+            PagedList<Posts> models = new PagedList<Posts>(ls, pageNumber, pageSize);
 
             ViewBag.CurrentPage = pageNumber;
-            ViewBag.TotalPost = lsPost.Count();
+            ViewBag.Total = ls.Count();
             return View(models);
         }
 
@@ -70,7 +71,8 @@ namespace UTS_Portal.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
-            return View();
+            Posts post = new Posts { Author = HttpContext.Session.GetString("Fullname") };
+            return View(post);
         }
 
         // POST: Posts/Create

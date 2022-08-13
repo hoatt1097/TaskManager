@@ -1,5 +1,5 @@
 ﻿@using PagedList.Core.Mvc
-@model PagedList.Core.IPagedList<UTS_Portal.Models.Posts>
+@model PagedList.Core.IPagedList<UTS_Portal.Models.Accounts>
 @{
     int CurrentPage = ViewBag.CurrentPage;
     int Total = ViewBag.Total;
@@ -10,8 +10,8 @@
 <div class="page-header">
     <div class="header-sub-title">
         <nav class="breadcrumb breadcrumb-dash">
-            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Posts</a>
-            <span class="breadcrumb-item active">List: @Total posts</span>
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Accounts</a>
+            <span class="breadcrumb-item active">List: @Total users</span>
         </nav>
     </div>
 </div>
@@ -19,7 +19,7 @@
     <div class="card-body">
         <div class="row mb-2">
             <div class="col-lg-8">
-                <a class="btn btn-primary" asp-controller="Posts" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>New</span></a>
+                <a class="btn btn-primary" asp-controller="Accounts" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>New</span></a>
             </div>
             <div class="col-lg-4 text-right">
 
@@ -31,10 +31,13 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th style="width: 120px">Status</th>
-                        <th style="width: 200px">Created Date</th>
+                        <th>Username</th>
+                        <th>Fullname</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Role</th>
+                        <th>Active</th>
+                        <th>Created Date</th>
                         <th style="width: 180px">Action</th>
                     </tr>
                 </thead>
@@ -47,29 +50,33 @@
                         {
                             <tr>
                                 <td>@i</td>
-                                <td><img src="~/images/news/@item.Thumb" alt="@item.Title" style="height:40px" /></td>
-                                <td><a asp-controller="Posts" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></td>
+                                <td>@item.Username</td>
+                                <td>@item.Fullname</td>
+                                <td>
+                                    @item.Email
+                                </td>
+                                <td>@item.Phone</td>
+                                <td>@item.Role?.Name</td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        @if (item.Published == true)
+                                        @if (item.Active == true)
                                         {
                                             <div class="badge badge-success badge-dot mt-1">
-                                                <span>Public</span>
+                                                <span>Active</span>
                                             </div>
                                         }
                                         else
                                         {
                                             <div class="badge badge-secondary badge-dot mt-1">
-                                                <span>Non-Public</span>
+                                                <span>Non-Active</span>
                                             </div>
                                         }
                                     </div>
                                 </td>
                                 <td>@item.CreatedDate</td>
                                 <td>
-                                    <a href="/#" target="_blank" class="btn btn-primary btn-sm">View</a>
-                                    <a class="btn btn-secondary btn-sm" asp-controller="Posts" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a class="btn btn-danger btn-sm" asp-controller="Posts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                    <a class="btn btn-secondary btn-sm" asp-controller="Accounts" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a class="btn btn-danger btn-sm" asp-controller="Accounts" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                                 </td>
                             </tr>
                             i++;
@@ -80,11 +87,9 @@
             </table>
             <div>
                 <ul class="pagination justify-content-end">
-                    <pager class="pager-container" list="@Model" asp-controller="Posts" asp-action="Index" />
+                    <pager class="pager-container" list="@Model" asp-controller="Accounts" asp-action="Index" />
                 </ul>
             </div>
         </div>
     </div>
 </div>
-
-
