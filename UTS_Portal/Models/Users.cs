@@ -14,21 +14,25 @@ namespace UTS_Portal.Models
         [Key]
         [Column("ID")]
         public int Id { get; set; }
+        [Required]
         [StringLength(255)]
         public string Fullname { get; set; }
+        [Required]
         [StringLength(255)]
         public string Email { get; set; }
         [StringLength(255)]
         public string Phone { get; set; }
+        [Required]
         [StringLength(255)]
         public string Username { get; set; }
+        [Required]
         [StringLength(255)]
         public string Password { get; set; }
         public bool Active { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? CreatedDate { get; set; }
         [Column("RoleID")]
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? LastLogin { get; set; }
 

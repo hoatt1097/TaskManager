@@ -43,6 +43,7 @@ namespace UTS_Portal.Controllers
                 {
                     Users kh = _context.Users
                     .Include(p => p.Role)
+                    .Where(p => p.Active == true)
                     .SingleOrDefault(p => p.Username.ToLower() == model.UserName.ToLower().Trim());
 
                     if (kh == null)
