@@ -39,8 +39,6 @@ namespace UTS_Portal
                 {
                     p.Cookie.Name = "UserLoginCookie";
                     p.ExpireTimeSpan = TimeSpan.FromDays(1);
-                    //p.LoginPath = "/dang-nhap.html";
-                    //p.LogoutPath = "/dang-xuat/html";
                     p.AccessDeniedPath = "/not-found.html";
                 });
 
@@ -73,14 +71,14 @@ namespace UTS_Portal
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }

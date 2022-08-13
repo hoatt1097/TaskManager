@@ -5,57 +5,55 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Users</a>
+            <span class="breadcrumb-item active">New</span>
+        </nav>
+    </div>
+</div>
 
-<h4>Users</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Fullname" class="control-label"></label>
-                <input asp-for="Fullname" class="form-control" />
-                <span asp-validation-for="Fullname" class="text-danger"></span>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="row" asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-md-12 mb-2">
+                        <label asp-for="Fullname" class="control-label"></label></label><label class="text-danger">*</label>
+                        <input asp-for="Fullname" class="form-control" />
+                        <span asp-validation-for="Fullname" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="Phone" class="control-label"></label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="RoleId" class="control-label"></label>
+                        <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <input asp-for="Active" class="form-check-input ml-1" type="checkbox" >
+                        <label class="ml-4">Active</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Active" class="control-label"></label>
-                <input asp-for="Active" class="form-control" />
-                <span asp-validation-for="Active" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RoleId" class="control-label"></label>
-                <select asp-for="RoleId" class ="form-control" asp-items="ViewBag.RoleId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastLogin" class="control-label"></label>
-                <input asp-for="LastLogin" class="form-control" />
-                <span asp-validation-for="LastLogin" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 

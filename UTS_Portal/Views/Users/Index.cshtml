@@ -18,11 +18,20 @@
 <div class="card">
     <div class="card-body">
         <div class="row mb-2">
-            <div class="col-lg-8">
+            <div class="col-lg-10">
                 <a class="btn btn-primary" asp-controller="Users" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>New</span></a>
             </div>
-            <div class="col-lg-4 text-right">
-
+            <div class="col-lg-2 text-right">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-affix">
+                            <select class="custom-select" id="txtRoleID" name="txtRoleID" style="min-width: 200px;" asp-items="ViewBag.Role">
+                                <option selected>Select role</option>
+                                <option value="0">Chọn tất cả</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -93,3 +102,34 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            jQuery("#txtRoleID").change(function () {
+                var roleID = jQuery(this).children(":selected").attr("value");
+                roleID = parseFloat(roleID);
+                $('#txtRoleID option')
+                    .removeAttr('selected');
+                $("#txtRoleID > [value=" + roleID + "]").attr("selected", "true");
+                $.ajax({
+                    url: '/Users/Filtter',
+                    datatype: "json",
+                    type: "GET",
+                    data: {
+                        roleID: roleID
+                    },
+                    async: true,
+                    success: function (results) {
+                        if (results.status == "success") {
+                            window.location.href = results.redirectUrl;
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -23,108 +23,41 @@ namespace UTS_Portal.Controllers
             _context = context;
         }
 
-        [AllowAnonymous]
-        [Route("login.html", Name = "Login")]
-        public IActionResult Login(string returnUrl = null)
-        {
-            var taikhoanID = HttpContext.Session.GetString("AccountId");
-            if (taikhoanID != null) return RedirectToAction("Index", "Home");
-            ViewBag.ReturnUrl = returnUrl;
-
-            LoginViewModel loginViewModel = new LoginViewModel { AccountType = "Parent" };
-            return View(loginViewModel);
-        }
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("login.html", Name = "Login")]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    Users kh = _context.Users
-                    .Include(p => p.Role)
-                    .SingleOrDefault(p => p.Username.ToLower() == model.UserName.ToLower().Trim());
-
-                    if (kh == null)
-                    {
-                        ViewBag.Error = "Thông tin đăng nhập chưa chính xác";
-                    }
-                    string pass = (model.Password.Trim());
-                    if (kh?.Password?.Trim() != pass)
-                    {
-                        ViewBag.Error = "Thông tin đăng nhập chưa chính xác";
-                        return View(model);
-                    }
-
-                    kh.LastLogin = DateTime.Now;
-                    _context.Update(kh);
-                    await _context.SaveChangesAsync();
-
-                    var taikhoanID = HttpContext.Session.GetString("AccountId");
-                    HttpContext.Session.SetString("AccountId", kh.Id.ToString());
-                    HttpContext.Session.SetString("Fullname", kh.Fullname);
-
-                    //identity
-                    var userClaims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, kh.Fullname),
-                        new Claim(ClaimTypes.Email, kh.Email),
-                        new Claim("AccountId", kh.Id.ToString()),
-                        new Claim("RoleId", kh.RoleId.ToString()),
-                        new Claim(ClaimTypes.Role, kh.Role.Name)
-                    };
-                    var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");
-                    var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
-                    await HttpContext.SignInAsync(userPrincipal);
-
-                    return RedirectToAction("Index", "Home");
-                }
-            }
-            catch
-            {
-                return RedirectToAction("Login", "Users");
-            }
-            return View();
-        }
-        [Route("logout.html", Name = "Logout")]
-        public IActionResult Logout()
-        {
-            try
-            {
-                HttpContext.SignOutAsync();
-                HttpContext.Session.Remove("AccountId");
-                return RedirectToAction("Login", "Users");
-            }
-            catch
-            {
-                return RedirectToAction("Login", "Users");
-            }
-        }
-
         // GET: Users
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(int? page, int roleID = 0)
         {
-            var collection = _context.Users.Include(a => a.Role).AsNoTracking().ToList();
-            foreach (var item in collection)
-            {
-                if (item.CreatedDate == null)
-                {
-                    item.CreatedDate = DateTime.Now;
-                    _context.Update(item);
-                    _context.SaveChanges();
-                }
-            }
-
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;
             var pageSize = 10;
-            var ls = _context.Users.Include(a => a.Role).AsNoTracking().OrderByDescending(x => x.CreatedDate);
-            PagedList<Users> models = new PagedList<Users>(ls, pageNumber, pageSize);
 
+            var ls = _context.Users.Include(a => a.Role).AsNoTracking().OrderByDescending(x => x.CreatedDate);
+
+            if (roleID != 0)
+            {
+                ls = _context.Users
+                .AsNoTracking()
+                .Where(x => x.RoleId == roleID)
+                .Include(x => x.Role)
+                .OrderByDescending(x => x.CreatedDate);
+            }
+
+            var models = new PagedList<Users>(ls, pageNumber, pageSize);
+
+            ViewBag.CurrentRole= roleID;
             ViewBag.CurrentPage = pageNumber;
             ViewBag.Total = ls.Count();
+            ViewData["Role"] = new SelectList(_context.Roles, "Id", "Name");
+
             return View(models);
+        }
+
+        public IActionResult Filtter(int roleID = 0)
+        {
+            var url = $"/Users/Index?roleID={roleID}";
+            if (roleID == 0)
+            {
+                url = $"/Users/Index";
+            }
+            return Json(new { status = "success", redirectUrl = url });
         }
 
         // GET: Users/Details/5
