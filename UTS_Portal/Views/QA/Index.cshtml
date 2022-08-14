@@ -32,9 +32,9 @@
                 <thead>
                     <tr>
                         <th>OrderNo</th>
-                        <th>Title</th>
+                        <th style="width: 30%">Title</th>
                         <th>Description</th>
-                        <th style="width: 180px">Action</th>
+                        <th style="width: 140px">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,7 +47,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Title)
                             </td>
-                            <td>
+                            <td style="max-width: 400px">
                                 @Html.Raw(@item.Contents)
                             </td>
                             <td>
