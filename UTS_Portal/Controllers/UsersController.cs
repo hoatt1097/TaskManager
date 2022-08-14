@@ -102,10 +102,11 @@ namespace UTS_Portal.Controllers
                 accounts.CreatedDate = DateTime.Now;
                 _context.Add(accounts);
                 await _context.SaveChangesAsync();
+                _notyfService.Success("Add user sucessfully!");
                 return RedirectToAction(nameof(Index));
             }
             ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", accounts.RoleId);
-            _notyfService.Success("Add user post sucessfully!");
+            _notyfService.Error("Add user unsucessfully!");
             return View(accounts);
         }
 
@@ -156,10 +157,11 @@ namespace UTS_Portal.Controllers
                         throw;
                     }
                 }
+                _notyfService.Success("Edit user sucessfully!");
                 return RedirectToAction(nameof(Index));
             }
             ViewData["RoleId"] = new SelectList(_context.Roles, "Id", "Name", accounts.RoleId);
-            _notyfService.Success("Edit user post sucessfully!");
+            _notyfService.Error("Edit user unsucessfully!");
             return View(accounts);
         }
 

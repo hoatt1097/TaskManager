@@ -1,0 +1,73 @@
+﻿@model UTS_Portal.Models.Qa
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles{
+    <link href="~/assets/summernote/summernote-bs4.css" rel="stylesheet" />
+    <link href="~/assets/summernote/summernote.css" rel="stylesheet" />
+}
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Q&A</a>
+            <span class="breadcrumb-item active">New</span>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Create new Q&A</h5>
+                <form class="row" asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-md-12 mb-2">
+                        <label asp-for="OrderNo" class="control-label"></label><label class="text-danger">*</label>
+                        <input asp-for="OrderNo" class="form-control" />
+                        <span asp-validation-for="OrderNo" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="control-label">Title</label>
+                        <textarea asp-for="Title" class="form-control" /></textarea>
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="control-label">Description</label>
+                        <textarea class="summernote" asp-for="Contents" class="form-control" /></textarea>
+                        <span asp-validation-for="Contents" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts{
+    <script src="~/assets/vendors/select2/select2.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.1/jquery.validate.min.js"></script>
+    <script src="~/assets/summernote/summernote-bs4.js"></script>
+
+    <script>
+
+        jQuery(document).ready(function () {
+            $('.summernote').summernote({
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
+                styleTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5'],
+                height: 200,
+                minHeight: null,
+                maxHeight: null,
+                focus: true
+            });
+        });
+    </script>
+}
+
