@@ -20,6 +20,7 @@ namespace UTS_Portal.Models
         }
 
         public virtual DbSet<Functions> Functions { get; set; }
+        public virtual DbSet<Holidays> Holidays { get; set; }
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<Qa> Qa { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }

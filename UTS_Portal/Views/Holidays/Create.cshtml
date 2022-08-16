@@ -1,0 +1,65 @@
+﻿@model UTS_Portal.ViewModels.HolidayCreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Holidays</a>
+            <span class="breadcrumb-item active">New</span>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Create new hodidays</h5>
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="control-label">Days</label>
+                        <input asp-for="Day" class="form-control datePick" placeholder="You can choose multi day">
+                        <span asp-validation-for="Day" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div>
+                        <ul>
+                            <li>By default, Saturday and Sunday are school holidays</li>
+                            <li>You can select multiple days to add holidays</li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+</form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<link rel="stylesheet" href="~/lib/flatpickr/flatpickr.min.css">
+@section Scripts{
+    <script src="~/lib/flatpickr/flatpickr.js"></script>
+
+    <script>
+
+        jQuery(document).ready(function () {
+            $('.datePick').flatpickr({
+                mode: "multiple",
+                dateFormat: "Y-m-d"
+            });
+        });
+    </script>
+}

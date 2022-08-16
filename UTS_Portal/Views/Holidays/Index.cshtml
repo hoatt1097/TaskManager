@@ -1,0 +1,108 @@
+﻿@model IEnumerable<UTS_Portal.ViewModels.HolidaysByMonth>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Holidays</a>
+            <span class="breadcrumb-item active">List</span>
+        </nav>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="row mb-2">
+            <div class="col-lg-10">
+                <a class="btn btn-primary" asp-controller="Holidays" asp-action="Create"><i class="anticon anticon-plus-circle m-r-5"></i><span>New</span></a>
+            </div>
+            <div class="col-lg-2 text-right">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="input-affix">
+                            <select class="custom-select" id="txtYearFilter" name="txtYearFilter" style="min-width: 200px;" asp-items="ViewBag.YearFilter">
+                                <option selected>Select year</option>
+                                <option value="0">Select all</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover e-commerce-table">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Month</th>
+                        <th>Holidays</th>
+                        <th style="width: 180px">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+
+                        var i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.Month</td>
+                                <td>
+                                    @foreach (var h in @item.Holidays)
+                                    {
+                                        <div><span>@h.Day</span> <span>@h.Description</span></div>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="btn btn-secondary btn-sm" asp-controller="Posts" asp-action="Edit">Edit</a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            jQuery("#txtYearFilter").change(function () {
+                var yearFilter = jQuery(this).children(":selected").attr("value");
+                console.log(yearFilter);
+                yearFilter = parseFloat(yearFilter);
+                $('#txtYearFilter option')
+                    .removeAttr('selected');
+                $("#txtYearFilter > [value=" + yearFilter + "]").attr("selected", "true");
+                $.ajax({
+                    url: '/Holidays/ListHolidayFiltter',
+                    datatype: "json",
+                    type: "GET",
+                    data: {
+                        yearFilter: yearFilter
+                    },
+                    async: true,
+                    success: function (results) {
+                        if (results.status == "success") {
+                            window.location.href = results.redirectUrl;
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+

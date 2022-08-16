@@ -49,7 +49,7 @@ namespace UTS_Portal.Controllers
             ViewBag.CurrentRole= roleID;
             ViewBag.CurrentPage = pageNumber;
             ViewBag.Total = ls.Count();
-            ViewData["Role"] = new SelectList(_context.Roles, "Id", "Name");
+            ViewData["Role"] = new SelectList(_context.Roles, "Id", "Name", roleID);
 
             return View(models);
         }
