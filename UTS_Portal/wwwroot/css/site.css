@@ -1,3 +1,13 @@
 ﻿.control-label {
     font-weight: bold;
 }
+
+#result {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.thumbnail {
+    height: 192px;
+}
