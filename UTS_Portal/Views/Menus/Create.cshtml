@@ -29,7 +29,7 @@
                         <label asp-for="Images" class="control-label"></label>
                         <div class="d-flex">
                             <input asp-for="Images" class="form-control" type="file" multiple="multiple" accept="image/jpeg, image/png, image/jpg" />
-                            <span class="btn btn-outline-secondary ml-1 show-image">Show</span>
+                            <span class="btn btn-outline-secondary ml-1 show-image">Hide</span>
                         </div>
                     </div>
                     <div class="col-md-1 mb-2">
@@ -59,8 +59,18 @@
     <script>
         jQuery(document).ready(function () {
             $('.show-image').click(function () {
+                if ($('.show-image').text() === "Show") {
+                    $('.show-image').text("Hide");
+                } else {
+                    $('.show-image').text("Show");
+                }
                 $('#result').toggle();
             })
+
+            // Hide Show button
+            if ($("#Images").val() == "") {
+                $(".show-image").hide();
+            }
         });
 
         document.querySelector("#Images").addEventListener("change", (e) => { //CHANGE EVENT FOR UPLOADING PHOTOS
@@ -68,6 +78,11 @@
                 const files = e.target.files; //FILE LIST OBJECT CONTAINING UPLOADED FILES
                 const output = document.querySelector("#result");
                 output.innerHTML = "";
+                if (files.length > 0) {
+                    $(".show-image").show();
+                } else {
+                    $(".show-image").hide();
+                }
                 for (let i = 0; i < files.length; i++) { // LOOP THROUGH THE FILE LIST OBJECT
                     if (!files[i].type.match("image")) continue; // ONLY PHOTOS (SKIP CURRENT ITERATION IF NOT A PHOTO)
                     const picReader = new FileReader(); // RETRIEVE DATA URI

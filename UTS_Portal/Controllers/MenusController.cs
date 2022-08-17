@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
+using UTS_Portal.Extension;
 using UTS_Portal.Models;
 
 namespace UTS_Portal.Controllers
@@ -87,10 +89,36 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Month,Images")] MenuInfos menuInfos)
+        public async Task<IActionResult> Create([Bind("Id,Month,Images,Status")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> Images)
         {
             if (ModelState.IsValid)
             {
+                var existMonth = _context.MenuInfos.ToList().Where(x => x.Month.ToString("yyyyMM") == menuInfos.Month.ToString("yyyyMM")).FirstOrDefault();
+                if (existMonth != null)
+                {
+                    ModelState.AddModelError("Month", "Month is exist");
+                    return View(menuInfos);
+                }
+
+                //Handle Images
+                var listImagePath = new List<string>();
+                if (Images != null)
+                {
+                    int fileNumber = 1;
+                    foreach(var image in Images)
+                    {
+                        string newFilename = "menus_" + menuInfos.Month.ToString("yyyyMM") + "_" + fileNumber;
+                        string folder = "menus/" + menuInfos.Month.ToString("yyyyMM");
+                        string extension = Path.GetExtension(image.FileName);
+                        string imageName = newFilename + extension;
+                        var imagePath = await Utilities.UploadFile(image, folder, imageName.ToLower());
+
+                        listImagePath.Add(folder.ToLower() + "/" + imagePath);
+                        fileNumber++;
+                    } 
+                }
+
+                menuInfos.Images = string.Join(";", listImagePath);
                 _context.Add(menuInfos);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -157,8 +185,7 @@ namespace UTS_Portal.Controllers
                 return NotFound();
             }
 
-            var menuInfos = await _context.MenuInfos
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var menuInfos = await _context.MenuInfos.FirstOrDefaultAsync(m => m.Id == id);
             if (menuInfos == null)
             {
                 return NotFound();
@@ -169,13 +196,22 @@ namespace UTS_Portal.Controllers
 
         // POST: Menus/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var menuInfos = await _context.MenuInfos.FindAsync(id);
+
+            // Delete all images in project
+            if(menuInfos.Month != null)
+            {
+                string folder = "menus/" + menuInfos.Month.ToString("yyyyMM");
+                Utilities.DeleteAllFiles(folder);
+            }
+
             _context.MenuInfos.Remove(menuInfos);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            // return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "Deleted Successfully" });
         }
 
         private bool MenuInfosExists(int id)

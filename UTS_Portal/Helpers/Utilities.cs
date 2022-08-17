@@ -78,6 +78,34 @@ namespace UTS_Portal.Extension
             }
         }
 
+        public static bool DeleteAllFiles(string sDirectory)
+        {
+            try
+            {
+                if(sDirectory == string.Empty)
+                {
+                    return false;
+                }
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", sDirectory);
+                if (!System.IO.Directory.Exists(path))
+                {
+                    return true;
+                }
+
+                DirectoryInfo di = new DirectoryInfo(path);
+                FileInfo[] files = di.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    file.Delete();
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static string GetRandomKey(int length = 5)
         {
             string pattern = @"0123456789zxcvbnmasdfghjklqwertyuiop[]{}:~!@#$%^&*()+";
