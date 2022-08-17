@@ -24,11 +24,11 @@ namespace UTS_Portal.Controllers
         // GET: Holidays
         public async Task<IActionResult> Index(int yearFilter = 0)
         {
-            var DB_Holidays = _context.Holidays.ToList();
+            var DB_Holidays = _context.Holidays.OrderBy(x => x.Day).ToList();
 
             if (yearFilter != 0)
             {
-                DB_Holidays = _context.Holidays.Where(x => x.Day.Year == yearFilter).ToList();
+                DB_Holidays = DB_Holidays.Where(x => x.Day.Year == yearFilter).ToList();
             }
             
             var DB_Holidays_Convert = DB_Holidays.Select(k => 
@@ -196,13 +196,19 @@ namespace UTS_Portal.Controllers
 
         // POST: Holidays/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string month)
         {
-            var holidays = await _context.Holidays.FindAsync(id);
-            _context.Holidays.Remove(holidays);
+            var holidays = _context.Holidays.ToList().Where(x => x.Day.ToString("yyyy/MM") == month).ToList();
+
+            foreach(var holiday in holidays)
+            {
+                _context.Holidays.Remove(holiday);
+            }
+            
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            // return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "Deleted Successfully" });
         }
 
         private bool HolidaysExists(int id)

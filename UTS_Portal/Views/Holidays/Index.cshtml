@@ -56,11 +56,11 @@
                                 <td>
                                     @foreach (var h in @item.Holidays)
                                     {
-                                        <div><span>@h.Day</span> <span>@h.Description</span></div>
+                                        <div><span>@h.Day</span><span> : @h.Description</span></div>
                                     }
                                 </td>
                                 <td>
-                                    <a class="btn btn-secondary btn-sm" asp-controller="Posts" asp-action="Edit">Edit</a>
+                                    <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","Holidays")', '@item.Month')">Delete</a>
                                 </td>
                             </tr>
                             i++;
@@ -101,6 +101,32 @@
                 });
             });
         });
+
+        function Delete(url, month) {
+            $.confirm({
+                boxWidth: '400px',
+                useBootstrap: false,
+                title: 'Confirm!',
+                content: 'Do you want to delete all holidays in ' + month + " !",
+                buttons: {
+                    confirm: function () {
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: { month: month},
+                            success: function (data) {
+                                if (data.success) {
+                                    location.reload(true);
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+
+                    },
+                }
+            });
+        }
     </script>
 }
 
