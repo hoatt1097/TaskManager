@@ -1,5 +1,5 @@
 ﻿@using PagedList.Core.Mvc
-@model PagedList.Core.IPagedList<UTS_Portal.Models.Qa>
+@model PagedList.Core.IPagedList<UTS_Portal.Models.Faqs>
 
 @{
     int CurrentPage = ViewBag.CurrentPage;
@@ -52,7 +52,7 @@
                             </td>
                             <td>
                                 <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","QA")/@item.Id')">Delete</a>
+                                <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","FAQs")/@item.Id')">Delete</a>
                             </td>
                         </tr>
                     }

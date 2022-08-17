@@ -9,8 +9,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UTS_Portal.Models
 {
-    [Table("QA")]
-    public partial class Qa
+    [Table("FAQs")]
+    public partial class Faqs
     {
         [Key]
         [Column("ID")]

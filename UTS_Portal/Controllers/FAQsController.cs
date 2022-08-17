@@ -10,29 +10,29 @@ using UTS_Portal.Models;
 
 namespace UTS_Portal.Controllers
 {
-    public class QAController : Controller
+    public class FAQsController : Controller
     {
         private readonly db_utsContext _context;
 
-        public QAController(db_utsContext context)
+        public FAQsController(db_utsContext context)
         {
             _context = context;
         }
 
-        // GET: QA
+        // GET: FAQ
         public async Task<IActionResult> Index(int? page)
         {
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;
             var pageSize = 10;
-            var ls = _context.Qa.AsNoTracking().OrderBy(x => x.OrderNo);
-            PagedList<Qa> models = new PagedList<Qa>(ls, pageNumber, pageSize);
+            var ls = _context.Faqs.AsNoTracking().OrderBy(x => x.OrderNo);
+            PagedList<Faqs> models = new PagedList<Faqs>(ls, pageNumber, pageSize);
 
             ViewBag.CurrentPage = pageNumber;
             ViewBag.Total = ls.Count();
             return View(models);
         }
 
-        // GET: QA/Details/5
+        // GET: FAQ/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,39 +40,39 @@ namespace UTS_Portal.Controllers
                 return NotFound();
             }
 
-            var qa = await _context.Qa
+            var faqs = await _context.Faqs
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (qa == null)
+            if (faqs == null)
             {
                 return NotFound();
             }
 
-            return View(qa);
+            return View(faqs);
         }
 
-        // GET: QA/Create
+        // GET: FAQ/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: QA/Create
+        // POST: FAQ/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OrderNo,Title,Contents")] Qa qa)
+        public async Task<IActionResult> Create([Bind("Id,OrderNo,Title,Contents")] Faqs faqs)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(qa);
+                _context.Add(faqs);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(qa);
+            return View(faqs);
         }
 
-        // GET: QA/Edit/5
+        // GET: FAQ/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,22 +80,22 @@ namespace UTS_Portal.Controllers
                 return NotFound();
             }
 
-            var qa = await _context.Qa.FindAsync(id);
-            if (qa == null)
+            var faqs = await _context.Faqs.FindAsync(id);
+            if (faqs == null)
             {
                 return NotFound();
             }
-            return View(qa);
+            return View(faqs);
         }
 
-        // POST: QA/Edit/5
+        // POST: FAQ/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderNo,Title,Contents")] Qa qa)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderNo,Title,Contents")] Faqs faqs)
         {
-            if (id != qa.Id)
+            if (id != faqs.Id)
             {
                 return NotFound();
             }
@@ -104,12 +104,12 @@ namespace UTS_Portal.Controllers
             {
                 try
                 {
-                    _context.Update(qa);
+                    _context.Update(faqs);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!QaExists(qa.Id))
+                    if (!QaExists(faqs.Id))
                     {
                         return NotFound();
                     }
@@ -120,10 +120,10 @@ namespace UTS_Portal.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(qa);
+            return View(faqs);
         }
 
-        // GET: QA/Delete/5
+        // GET: FAQ/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,22 +131,22 @@ namespace UTS_Portal.Controllers
                 return NotFound();
             }
 
-            var qa = await _context.Qa
+            var faqs = await _context.Faqs
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (qa == null)
+            if (faqs == null)
             {
                 return NotFound();
             }
 
-            return View(qa);
+            return View(faqs);
         }
 
-        // POST: QA/Delete/5
+        // POST: FAQ/Delete/5
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var qa = await _context.Qa.FindAsync(id);
-            _context.Qa.Remove(qa);
+            var faqs = await _context.Faqs.FindAsync(id);
+            _context.Faqs.Remove(faqs);
             await _context.SaveChangesAsync();
 
             // return RedirectToAction(nameof(Index));
@@ -155,7 +155,7 @@ namespace UTS_Portal.Controllers
 
         private bool QaExists(int id)
         {
-            return _context.Qa.Any(e => e.Id == id);
+            return _context.Faqs.Any(e => e.Id == id);
         }
     }
 }
