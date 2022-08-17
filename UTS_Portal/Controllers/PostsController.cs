@@ -192,8 +192,9 @@ namespace UTS_Portal.Controllers
             var posts = await _context.Posts.FindAsync(id);
             _context.Posts.Remove(posts);
             await _context.SaveChangesAsync();
-            _notyfService.Success("Delete successfully");
-            return RedirectToAction(nameof(Index));
+
+            // return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "Deleted Successfully" });
         }
 
         private bool PostsExists(int id)

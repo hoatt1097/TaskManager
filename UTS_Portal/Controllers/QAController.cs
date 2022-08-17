@@ -143,13 +143,14 @@ namespace UTS_Portal.Controllers
 
         // POST: QA/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var qa = await _context.Qa.FindAsync(id);
             _context.Qa.Remove(qa);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            // return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "Deleted Successfully" });
         }
 
         private bool QaExists(int id)

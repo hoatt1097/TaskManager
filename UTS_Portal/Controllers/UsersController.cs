@@ -186,13 +186,14 @@ namespace UTS_Portal.Controllers
 
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var accounts = await _context.Users.FindAsync(id);
             _context.Users.Remove(accounts);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            // return RedirectToAction(nameof(Index));
+            return Json(new { success = true, message = "Deleted Successfully" });
         }
 
         private bool AccountsExists(int id)
