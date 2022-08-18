@@ -79,7 +79,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a class="btn btn-secondary btn-sm" asp-controller="Posts" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a class="btn btn-secondary btn-sm" asp-controller="Menus" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                                     <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","Menus")/@item.Id', '@item.Month.ToString("yyyy/MM")')">Delete</a>
                                 </td>
                             </tr>

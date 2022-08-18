@@ -10,6 +10,11 @@ https://craftpip.github.io/jquery-confirm/
 //Date picker
 https://flatpickr.js.org/examples/
 
+// Inital database: Run 2 command
+ add-migration inital
+ udpate-database
+
+
 
 // Sinh model tu database
 Scaffold-DBContext "Server=THIENHOA;Database=db_uts;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models

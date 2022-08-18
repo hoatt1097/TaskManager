@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +17,11 @@ namespace UTS_Portal.Controllers
     {
         private readonly db_utsContext _context;
 
-        public MenusController(db_utsContext context)
+        public INotyfService _notyfService { get; }
+        public MenusController(db_utsContext context, INotyfService notyfService)
         {
             _context = context;
+            _notyfService = notyfService;
         }
 
         // GET: Menus
@@ -89,7 +92,7 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Month,Images,Status")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> Images)
+        public async Task<IActionResult> Create([Bind("Id,Month,Images,Status")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> fThumbs)
         {
             if (ModelState.IsValid)
             {
@@ -102,10 +105,10 @@ namespace UTS_Portal.Controllers
 
                 //Handle Images
                 var listImagePath = new List<string>();
-                if (Images != null)
+                if (fThumbs != null && fThumbs.Count() > 0)
                 {
                     int fileNumber = 1;
-                    foreach(var image in Images)
+                    foreach(var image in fThumbs)
                     {
                         string newFilename = "menus_" + menuInfos.Month.ToString("yyyyMM") + "_" + fileNumber;
                         string folder = "menus/" + menuInfos.Month.ToString("yyyyMM");
@@ -115,14 +118,18 @@ namespace UTS_Portal.Controllers
 
                         listImagePath.Add(folder.ToLower() + "/" + imagePath);
                         fileNumber++;
-                    } 
+                    }
+                    menuInfos.Images = string.Join(";", listImagePath);
                 }
 
-                menuInfos.Images = string.Join(";", listImagePath);
                 _context.Add(menuInfos);
                 await _context.SaveChangesAsync();
+
+                _notyfService.Success("Add new menu sucessfully!");
                 return RedirectToAction(nameof(Index));
             }
+
+            _notyfService.Error("Add new menu unsucessfully!");
             return View(menuInfos);
         }
 
@@ -147,7 +154,7 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Month,Images")] MenuInfos menuInfos)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Month,Images,Status")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> fThumbs)
         {
             if (id != menuInfos.Id)
             {
@@ -158,7 +165,34 @@ namespace UTS_Portal.Controllers
             {
                 try
                 {
+                    //Handle Images
+                    var listImagePath = new List<string>();
+                    if (fThumbs != null && fThumbs.Count() > 0)
+                    {
+                        // Delete all images in project
+                        if (menuInfos.Month != null)
+                        {
+                            string folder = "menus/" + menuInfos.Month.ToString("yyyyMM");
+                            Utilities.DeleteAllFiles(folder);
+                        }
+
+                        int fileNumber = 1;
+                        foreach (var image in fThumbs)
+                        {
+                            string newFilename = "menus_" + menuInfos.Month.ToString("yyyyMM") + "_" + fileNumber;
+                            string folder = "menus/" + menuInfos.Month.ToString("yyyyMM");
+                            string extension = Path.GetExtension(image.FileName);
+                            string imageName = newFilename + extension;
+                            var imagePath = await Utilities.UploadFile(image, folder, imageName.ToLower());
+
+                            listImagePath.Add(folder.ToLower() + "/" + imagePath);
+                            fileNumber++;
+                        }
+                        menuInfos.Images = string.Join(";", listImagePath);
+                    }
+
                     _context.Update(menuInfos);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -172,8 +206,11 @@ namespace UTS_Portal.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                _notyfService.Success("Edit menu sucessfully!");
+                return View(menuInfos);
             }
+
             return View(menuInfos);
         }
 

@@ -16,22 +16,24 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-12">
-                <h5 class="card-title">Create new post</h5>
+            <div class="col-md-6">
+                <h5 class="card-title m-0 pt-1 pb-2">Create new menu</h5>
                 <form class="row" asp-action="Create" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="col-md-2 mb-2">
+                    <div class="col-md-12 mb-2">
                         <label asp-for="Month" class="control-label"></label>
                         <input asp-for="Month" class="form-control" type="month" />
                         <span asp-validation-for="Month" class="text-danger"></span>
                     </div>
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-12 mb-2">
                         <label asp-for="Images" class="control-label"></label>
                         <div class="d-flex">
-                            <input asp-for="Images" class="form-control" type="file" multiple="multiple" accept="image/jpeg, image/png, image/jpg" />
-                            <span class="btn btn-outline-secondary ml-1 show-image">Hide</span>
+                            <input id="fThumbs" name="fThumbs" class="form-control" type="file" multiple="multiple" accept="image/jpeg, image/png, image/jpg" />
+                            <span class="btn btn-outline-secondary ml-1 show-image" style="border: 1px solid #ced4da">Hide</span>
                         </div>
                     </div>
+                    <div class="col-md-12 mb-2" id="result"></div>
+
                     <div class="col-md-1 mb-2">
                         <label class="control-label">Active</label>
                         <div class="mt-2">
@@ -39,18 +41,11 @@
                             <label class="ml-4">Active</label>
                         </div>
                     </div>
-                    <div class="col-md-12 mb-2" id="result">
-
-                    </div>
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-primary" />
                     </div>
                 </form>
             </div>
-        </div>
-
-        <div>
-            <a asp-action="Index">Back to List</a>
         </div>
     </div>
 </div>
@@ -68,12 +63,12 @@
             })
 
             // Hide Show button
-            if ($("#Images").val() == "") {
+            if ($("#fThumbs").val() == "") {
                 $(".show-image").hide();
             }
         });
 
-        document.querySelector("#Images").addEventListener("change", (e) => { //CHANGE EVENT FOR UPLOADING PHOTOS
+        document.querySelector("#fThumbs").addEventListener("change", (e) => { //CHANGE EVENT FOR UPLOADING PHOTOS
             if (window.File && window.FileReader && window.FileList && window.Blob) { //CHECK IF FILE API IS SUPPORTED
                 const files = e.target.files; //FILE LIST OBJECT CONTAINING UPLOADED FILES
                 const output = document.querySelector("#result");
