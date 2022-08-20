@@ -1,0 +1,245 @@
+﻿@using UTS_Portal.ViewModels;
+@{
+    string CurrentMonth = ViewBag.CurrentMonth;
+    string SelectBoxElement = ViewBag.SelectBoxElement;
+    List<CalendarMonth> calendarMonth = ViewBag.CalendarMonth;
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <style>
+        .nav-link.active {
+            color: #fff !important;
+            background-color: #0d6efd !important;
+        }
+
+        .meal-title {
+            background-color: beige;
+            min-width: 225px;
+        }
+
+        .day p, .day label {
+            width: 100%;
+            border: solid 1px #ddd;
+            border-right: 0;
+            margin: 0;
+            margin-left: -1px;
+            margin-top: -1px;
+            padding: 0 2px;
+            height: 55px;
+        }
+
+        .breakfast-1 {
+            height: 109px !important;
+        }
+
+        .holiday p, .holiday label {
+            width: 85px;
+        }
+
+        .day:last-child {
+            border-right: solid 1px #ddd;
+        }
+
+        .tb-header {
+            background-color: #FF8302;
+        }
+
+        .breakfast, .lunch, .title-breakfast, .title-lunch {
+            border-bottom: solid 2px bisque;
+        }
+
+        .breakfast, .breakfast label, .lunch, .lunch label {
+            cursor: pointer;
+        }
+
+
+        @@media only screen and (max-width: 1600px) {
+            .day p, .day label {
+                height: 80px;
+            }
+
+            .breakfast-1 {
+                height: 159px !important;
+            }
+        }
+
+
+        
+        input {
+            display: none;
+        }
+
+        input[type=radio]:checked + label {
+            color: #0d6efd;
+        }
+    </style>
+}
+
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Orders</a>
+            <span class="breadcrumb-item active">Month: @CurrentMonth</span>
+        </nav>
+    </div>
+</div>
+@if (@CurrentMonth != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="pt-0 text-center">Menu @CurrentMonth</h1>
+                    <h4 class="pt-0 text-center">(@calendarMonth.First().DateMonth - @calendarMonth.Last().DateMonth)</h4>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        @for (int Week = 1; Week <= calendarMonth.Last().Week; Week++)
+                        {
+                            var Active = Week == 1 ? "active" : "";
+                            var TabName = "Week" + Week;
+                            <li class="nav-item">
+                                <button class="nav-link @Active" data-bs-toggle="tab" data-bs-target="#@TabName">
+                                    Week @Week
+                                </button>
+                            </li>
+                        }
+                    </ul>
+                    <div class="tab-content pt-2" id="myTabContent">
+                        @for (int Week = 1; Week <= calendarMonth.Last().Week; Week++)
+                        {
+                            var Active = Week == 1 ? "active" : "";
+                            var TabName = "Week" + Week;
+                            <div class="tab-pane fade show @Active" id="@TabName">
+                                <div class="d-flex text-center">
+                                    <div class="day meal-title font-weight-bold">
+                                        <div class="tb-header font-weight-bold">
+                                            <p>BỮA ĂN/MEALS</p>
+                                        </div>
+                                        <div class="title-breakfast">
+                                            <p class="breakfast-1">Bữa sáng chọn 1 trong 2 / Breakfast choose 1 of 2</p>
+                                            <p>Sữa cho buổi sáng / Milk</p>
+                                        </div>
+                                        <div class="title-lunch d-flex">
+                                            <div class="flex-fill w-25">
+                                                <p class="h-100 border-bottom-0">Lunch</p>
+                                            </div>
+                                            <div class="flex-fill w-75">
+                                                <p>Lựa chọn món nước / Option Noodle</p>
+                                                <p>Lựa chọn món Việt / Option VietNam</p>
+                                                <p>Lựa chọn món Á / Option Asian</p>
+                                                <p>Lựa chọn món Tây / Option Western</p>
+                                                <p>Lựa chọn món Chay / Option Vegetarian</p>
+                                                <p>Western</p>
+                                                <p>Canh / Soup</p>
+                                                <p>Tráng miệng / Desert</p>
+                                            </div>
+                                        </div>
+                                        <div class="title-afternoon">
+                                            <p class="breakfast-1">Ăn nhẹ / Afternoon snack</p>
+                                        </div>
+                                    </div>
+                                    @foreach (var day in calendarMonth.Where(x => x.Week == Week).ToList())
+                                    {
+                                        if (@day.DateString == "Saturday" || @day.DateString == "Sunday") continue;
+                                        if (@day.IsHoliday)
+                                        {
+                                            <div class="day @day.DateString holiday">
+                                                <div class="tb-header font-weight-bold">
+                                                    <p>@day.DateString.Substring(0, 3) (@day.DateMonth)</p>
+                                                </div>
+                                                <div class="breakfast">
+                                                    <p></p>
+                                                    <p></p>
+                                                    <p></p>
+                                                </div>
+                                                <div class="lunch">
+                                                    <p></p>
+                                                    <p></p>
+                                                    <p></p>
+                                                    <p></p>
+                                                    <p></p>
+                                                    <p></p>
+                                                    <p></p>
+                                                    <p></p>
+                                                </div>
+                                                <div class="afternoon">
+                                                    <p></p>
+                                                    <p></p>
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="day @day.DateString">
+                                                <div class="tb-header font-weight-bold">
+                                                    <p>@day.DateString.Substring(0, 3) (@day.DateMonth)</p>
+                                                </div>
+                                                <div class="breakfast">
+                                                    <input type="radio" id="breakfast-mon1-@day.Day" name="breakfast-@day.Day" value="mon1"/>
+                                                    <label for="breakfast-mon1-@day.Day">Bánh mì xíu mại / Bread with pork ball</label>
+
+                                                    <input type="radio" id="breakfast-mon2-@day.Day" name="breakfast-@day.Day" value="mon2"/>
+                                                    <label for="breakfast-mon2-@day.Day">Bún gạo chả cá / Rice vemicelli soup with fishcake</label>
+                                                    
+                                                    <p>Mon 3</p>
+                                                </div>
+                                                <div class="lunch">
+                                                    <input type="radio" id="lunch-mon1-@day.Day" name="lunch-@day.Day" value="mon1" />
+                                                    <label for="lunch-mon1-@day.Day">Mon 1</label>
+
+                                                    <input type="radio" id="lunch-mon2-@day.Day" name="lunch-@day.Day" value="mon2" />
+                                                    <label for="lunch-mon2-@day.Day">Mon 2</label>
+
+                                                    <input type="radio" id="lunch-mon3-@day.Day" name="lunch-@day.Day" value="mon3" />
+                                                    <label for="lunch-mon3-@day.Day">Mon 3</label>
+
+                                                    <input type="radio" id="lunch-mon4-@day.Day" name="lunch-@day.Day" value="mon4" />
+                                                    <label for="lunch-mon4-@day.Day">Mon 4</label>
+
+                                                    <input type="radio" id="lunch-mon5-@day.Day" name="lunch-@day.Day" value="mon5" />
+                                                    <label for="lunch-mon5-@day.Day">Mon 5</label>
+
+                                                    <p>Mon phu 1</p>
+                                                    <p>Mon phu 2</p>
+                                                    <p>Mon phu 3</p>
+                                                </div>
+                                                <div class="afternoon">
+                                                    <p>Mon 1</p>
+                                                    <p>Sinh tố / Smoothies</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script>
+        jQuery(document).ready(function () {
+            if ('@CurrentMonth' == '') {
+                $.confirm({
+                    title: 'Select month for order!',
+                    content: "@Html.Raw(SelectBoxElement)",
+                    buttons: {
+                        confirm: function () {
+                            var monthSelected = $("#txtMonthSelect").val();
+                            window.location.href = "@Url.Action("Index","Orders")?month=" + monthSelected;
+                        },
+                        cancel: function () {
+                           window.location.href = "@Url.Action("Index","Home")";
+                        },
+                    }
+                });
+            }
+        });
+    </script>
+}

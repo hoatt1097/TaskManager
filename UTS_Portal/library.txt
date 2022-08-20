@@ -12,7 +12,7 @@ https://flatpickr.js.org/examples/
 
 // Inital database: Run 2 command
  add-migration inital
- udpate-database
+ update-database
 
 
 
