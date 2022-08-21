@@ -2,8 +2,9 @@
 @{
     string CurrentMonth = ViewBag.CurrentMonth;
     string SelectBoxElement = ViewBag.SelectBoxElement;
-    List<CalendarMonth> CalendarMonth = ViewBag.CalendarMonth;
+    List<CalendarMonth> calendarMonth = ViewBag.CalendarMonth;
 
+    string language = "English";
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -23,16 +24,16 @@
             max-width: 400px;
         }
 
-            .day p, .day label, .meal-title p, .meal-title label {
-                width: 100%;
-                border: solid 1px #ddd;
-                border-right: 0;
-                margin: 0;
-                margin-left: -1px;
-                margin-top: -1px;
-                padding: 0 2px;
-                height: 55px;
-            }
+        .day p, .day label, .meal-title p, .meal-title label {
+            width: 100%;
+            border: solid 1px #ddd;
+            border-right: 0;
+            margin: 0;
+            margin-left: -1px;
+            margin-top: -1px;
+            padding: 0 2px;
+            height: 55px;
+        }
 
         .breakfast-1 {
             height: 109px !important;
@@ -71,22 +72,15 @@
 
 
 
-        input[type=checkbox], input[type=radio] {
+        input {
             display: none;
         }
 
-        input[type=checkbox]:checked + label {
-            background-color: cyan;
-        }
-
-        label.checked {
-            background-color: cyan;
-        }
+            input[type=radio]:checked + label, input[type=checkbox]:checked + label {
+                color: #0d6efd;
+            }
     </style>
 }
-
-
-<input type="hidden" id="ListDaySelect" value="@string.Join( ',', CalendarMonth.Where(x => !x.IsHoliday).Select(x => x.Day).ToList())"/>
 
 <div class="page-header">
     <div class="header-sub-title">
@@ -103,9 +97,9 @@
             <div class="card">
                 <div class="card-body">
                     <h1 class="pt-0 text-center">Menu @CurrentMonth</h1>
-                    <h4 class="pt-0 text-center">(@CalendarMonth.First().DateMonth - @CalendarMonth.Last().DateMonth)</h4>
+                    <h4 class="pt-0 text-center">(@calendarMonth.First().DateMonth - @calendarMonth.Last().DateMonth)</h4>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        @for (int Week = 1; Week <= CalendarMonth.Last().Week; Week++)
+                        @for (int Week = 1; Week <= calendarMonth.Last().Week; Week++)
                         {
                             var Active = Week == 1 ? "active" : "";
                             var TabName = "Week" + Week;
@@ -117,14 +111,11 @@
                         }
                     </ul>
                     <div class="tab-content pt-2" id="myTabContent">
-                        <label>Choose language: </label>
-                        <select class="custom-select mt-3 mb-3 mr-3" id="language" name="language" style="width: 200px;">
+                        <select class="custom-select m-3" id="language" name="language" style="width: 200px;">
                             <option value="vn">Vietnamese</option>
-                            <option value="en" selected>English</option>
+                            <option value="en">English</option>
                         </select>
-                        <button class="btn btn-primary" id="btn-submit" data-bs-toggle="modal" data-bs-target="#ReviewOrder">Submit</button>
-
-                        @for (int Week = 1; Week <= CalendarMonth.Last().Week; Week++)
+                        @for (int Week = 1; Week <= calendarMonth.Last().Week; Week++)
                         {
                             var Active = Week == 1 ? "active" : "";
                             var TabName = "Week" + Week;
@@ -178,7 +169,7 @@
                                             <p class="breakfast-1 title-en">Afternoon snack</p>
                                         </div>
                                     </div>
-                                    @foreach (var day in CalendarMonth.Where(x => x.Week == Week).ToList())
+                                    @foreach (var day in calendarMonth.Where(x => x.Week == Week).ToList())
                                     {
                                         if (@day.DateString == "Saturday" || @day.DateString == "Sunday") continue;
                                         if (@day.IsHoliday)
@@ -226,8 +217,8 @@
 
                                                     @*Món phụ*@
                                                     <input type="radio" id="breakfast-op1-@day.Day" name="breakfast-op-@day.Day" value="mon2" />
-                                                    <label class="vn" for="breakfast-op1-@day.Day" name="breakfast-op-@day.Day">Sữa tươi</label>
-                                                    <label class="en" for="breakfast-op1-@day.Day" name="breakfast-op-@day.Day">Fresh milk</label>
+                                                    <label class="vn" for="breakfast-op1-@day.Day">Sữa tươi</label>
+                                                    <label class="en" for="breakfast-op1-@day.Day">Fresh milk</label>
                                                 </div>
 
                                                 <div class="lunch">
@@ -253,25 +244,25 @@
 
                                                     @*Món phụ*@
                                                     <input type="checkbox" id="lunch-op1-@day.Day" name="lunch-op-@day.Day" value="mon1" />
-                                                    <label class="vn" for="lunch-op1-@day.Day" name="lunch-op-@day.Day">Rau củ thập cẩm luộc</label>
-                                                    <label class="en" for="lunch-op1-@day.Day" name="lunch-op-@day.Day">Boiled mixed vegetables</label>
+                                                    <label class="vn" for="lunch-op1-@day.Day">Rau củ thập cẩm luộc</label>
+                                                    <label class="en" for="lunch-op1-@day.Day">Boiled mixed vegetables</label>
 
                                                     <input type="checkbox" id="lunch-op2-@day.Day" name="lunch-op-@day.Day" value="mon2" />
-                                                    <label class="vn" for="lunch-op2-@day.Day" name="lunch-op-@day.Day">Canh cà chua trứng</label>
-                                                    <label class="en" for="lunch-op2-@day.Day" name="lunch-op-@day.Day"> Tomato egg drop soup</label>
+                                                    <label class="vn" for="lunch-op2-@day.Day">Canh cà chua trứng</label>
+                                                    <label class="en" for="lunch-op2-@day.Day"> Tomato egg drop soup</label>
 
                                                     <input type="checkbox" id="lunch-op3-@day.Day" name="lunch-op-@day.Day" value="mon3" />
-                                                    <label class="vn" for="lunch-op3-@day.Day" name="lunch-op-@day.Day">Chuối</label>
-                                                    <label class="en" for="lunch-op3-@day.Day" name="lunch-op-@day.Day">Banana</label>
+                                                    <label class="vn" for="lunch-op3-@day.Day">Chuối</label>
+                                                    <label class="en" for="lunch-op3-@day.Day">Banana</label>
 
                                                 </div>
 
                                                 <div class="afternoon">
-                                                    <input type="radio" id="afternoon-op1-@day.Day" name="afternoon-op-@day.Day" value="mon1" />
+                                                    <input type="checkbox" id="afternoon-op1-@day.Day" name="afternoon-op-@day.Day" value="mon1" />
                                                     <label class="vn" for="afternoon-op1-@day.Day">Súp bắp gà xé</label>
                                                     <label class="en" for="afternoon-op1-@day.Day">Sweet corn chicken soup</label>
 
-                                                    <input type="radio" id="afternoon-op2-@day.Day" name="afternoon-op-@day.Day" value="mon1" />
+                                                    <input type="checkbox" id="afternoon-op2-@day.Day" name="afternoon-op-@day.Day" value="mon1" />
                                                     <label class="vn" for="afternoon-op2-@day.Day">Sinh tố</label>
                                                     <label class="en" for="afternoon-op2-@day.Day">Smoothies</label>
                                                 </div>
@@ -282,20 +273,6 @@
                             </div>
                         }
 
-                        @*Review order modal*@
-                        <div class="modal fade" id="ReviewOrder" tabindex="-1" aria-hidden="true" style="display: none;">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Review your order</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body OrderContent"></div>
-                                    <div class="modal-footer"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <button type="button" class="btn btn-primary">Save changes</button></div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -305,7 +282,6 @@
 }
 
 @section Scripts{
-    <script src="~/js/custom-order.js"></script>
     <script>
         jQuery(document).ready(function () {
             if ('@CurrentMonth' == '') {
@@ -324,13 +300,57 @@
                 });
             }
 
-            //Handle submition
-            $("#btn-submit").click(function () {
-                var listDay = $("#ListDaySelect").val();
-
-
-                $(".OrderContent").html(listDay);
+            $(".title-en").hide();
+            $(".en").hide();
+            $(".en").each(function () {
+                var value = $(this).attr('for');
+                $(this).attr('for', "hide-" + value);
             });
+
+            // Language handle
+            $('#language').on('change', function (e) {
+                var language = $("#language").val();
+                if (language == "vn") {
+                    $(".title-en").hide();
+                    $(".title-vn").show();
+
+                    $(".en").hide();
+                    $(".en").each(function () {
+                        var value = $(this).attr('for');
+                        if (value.indexOf("hide-") == -1) {
+                            $(this).attr('for', "hide-" + value);
+                        }
+                    });
+
+                    $(".vn").show();
+                    $(".vn").each(function () {
+                        var value = $(this).attr('for');
+                        if (value.indexOf("hide-") != -1) {
+                            $(this).attr('for', value.replace("hide-", ""));
+                        }
+                    });
+                } else {
+                    $(".title-vn").hide();
+                    $(".title-en").show();
+
+                    $(".vn").hide();
+                    $(".vn").each(function () {
+                        var value = $(this).attr('for');
+                        if (value.indexOf("hide-") == -1) {
+                            $(this).attr('for', "hide-" + value);
+                        }
+                    });
+
+                    $(".en").show();
+                    $(".en").each(function () {
+                        var value = $(this).attr('for');
+                        if (value.indexOf("hide-") != -1) {
+                            $(this).attr('for', value.replace("hide-", ""));
+                        }
+                    });
+                }
+            });
+
         });
     </script>
 }
