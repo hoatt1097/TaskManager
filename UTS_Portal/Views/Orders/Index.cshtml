@@ -75,9 +75,9 @@
             display: none;
         }
 
-        input[type=checkbox]:checked + label {
-            background-color: cyan;
-        }
+            input[type=checkbox]:checked + label {
+                background-color: cyan;
+            }
 
         label.checked {
             background-color: cyan;
@@ -85,8 +85,10 @@
     </style>
 }
 
+@if(CalendarMonth != null) { 
+    <input type="hidden" id="ListDaySelect" value="@string.Join( ',', CalendarMonth.Where(x => !x.IsHoliday).Select(x => x.Day).ToList())" />
+}
 
-<input type="hidden" id="ListDaySelect" value="@string.Join( ',', CalendarMonth.Where(x => !x.IsHoliday).Select(x => x.Day).ToList())"/>
 
 <div class="page-header">
     <div class="header-sub-title">

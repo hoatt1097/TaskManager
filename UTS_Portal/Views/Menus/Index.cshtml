@@ -55,7 +55,7 @@
                         {
                             <tr>
                                 <td>@i</td>
-                                <td>@item.Month.ToString("yyyy/MM")</td>
+                                <td>@item.Month.ToString("MM/yyyy")</td>
                                 <td>
                                     @foreach (var image in item.Images.Split(";"))
                                     {
@@ -80,7 +80,7 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-secondary btn-sm" asp-controller="Menus" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","Menus")/@item.Id', '@item.Month.ToString("yyyy/MM")')">Delete</a>
+                                    <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","Menus")/@item.Id', '@item.Month.ToString("MM/yyyy")')">Delete</a>
                                 </td>
                             </tr>
                             i++;

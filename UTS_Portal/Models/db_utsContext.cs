@@ -23,6 +23,7 @@ namespace UTS_Portal.Models
         public virtual DbSet<Functions> Functions { get; set; }
         public virtual DbSet<Holidays> Holidays { get; set; }
         public virtual DbSet<MenuInfos> MenuInfos { get; set; }
+        public virtual DbSet<Menus> Menus { get; set; }
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Users> Users { get; set; }
@@ -38,6 +39,15 @@ namespace UTS_Portal.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Menus>(entity =>
+            {
+                entity.Property(e => e.Ckcode).IsUnicode(false);
+
+                entity.Property(e => e.ItemCode).IsUnicode(false);
+
+                entity.Property(e => e.MonthYear).IsUnicode(false);
+            });
+
             modelBuilder.Entity<Users>(entity =>
             {
                 entity.HasOne(d => d.Role)

@@ -33,7 +33,7 @@ namespace UTS_Portal.Controllers
             
             var DB_Holidays_Convert = DB_Holidays.Select(k => 
                     new { 
-                        Key = k.Day.ToString("yyyy/MM"), 
+                        Key = k.Day.ToString("MM/yyyy"), 
                         Value = new Holiday { Day = k.Day.ToString("yyyy-MM-dd"), Description = k.Description }
                     }).ToList();
 
@@ -198,7 +198,7 @@ namespace UTS_Portal.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(string month)
         {
-            var holidays = _context.Holidays.ToList().Where(x => x.Day.ToString("yyyy/MM") == month).ToList();
+            var holidays = _context.Holidays.ToList().Where(x => x.Day.ToString("MM/yyyy") == month).ToList();
 
             foreach(var holiday in holidays)
             {
