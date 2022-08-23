@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UTS_Portal.Models;
 using UTS_Portal.ViewModels;
 
 namespace UTS_Portal.Helpers
 {
     public class DateHelper
     {
-		public static List<CalendarMonth> GetCalendar (DateTime datetime)
+		public static List<CalendarMonth> GetCalendar (db_utsContext _context, DateTime datetime)
         {
+			List<Holidays> holidays = GetHolidaysByMonth(_context, datetime.ToString("MM/yyyy"));
+
 			List<CalendarMonth> calendarMonths = new List<CalendarMonth>();
 			int totalDateMonth = DateTime.DaysInMonth(datetime.Year, datetime.Month);
 			int StartWeek = 1;
@@ -23,20 +26,27 @@ namespace UTS_Portal.Helpers
 				}
 
 				// Check day is holiday
-				bool IsHoliday = DoW.ToString() == "Saturday" || DoW.ToString() == "Sunday";
+				bool IsWeekend = DoW.ToString() == "Saturday" || DoW.ToString() == "Sunday";
+				bool IsHoliday = holidays.Any(x => x.Day.ToString("dd/MM/yyyy") == date.ToString("dd/MM/yyyy"));
 				// Check day is holiday
 
 				CalendarMonth m = new CalendarMonth();
-				m.DateMonth = date.ToString("MM/dd");
+				m.DateMonth = date.ToString("dd/MM");
 				m.DateString = DoW.ToString();
 				m.Day = date.Day;
 				m.Week = StartWeek;
-				m.IsHoliday = IsHoliday;
+				m.IsHoliday = IsWeekend || IsHoliday;
 
 				calendarMonths.Add(m);
 			}
 
 			return calendarMonths;
 		}
-    }
+
+		public static List<Holidays> GetHolidaysByMonth(db_utsContext _context, string month)
+		{
+			var DB_Holidays = _context.Holidays.ToList().Where(x => x.Day.ToString("MM/yyyy") == month).ToList();
+			return DB_Holidays;
+		}
+	}
 }

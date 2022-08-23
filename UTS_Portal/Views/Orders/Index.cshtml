@@ -3,92 +3,15 @@
     string CurrentMonth = ViewBag.CurrentMonth;
     string SelectBoxElement = ViewBag.SelectBoxElement;
     List<CalendarMonth> CalendarMonth = ViewBag.CalendarMonth;
+    List<MenusByMonth> MenusByMonth = ViewBag.MenusByMonth;
+    var HasMenuData = ViewBag.HasMenuData;
 
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Styles {
-    <style>
-        .nav-link.active {
-            color: #fff !important;
-            background-color: #0d6efd !important;
-        }
-
-        .meal-title {
-            background-color: beige;
-            min-width: 225px;
-        }
-
-        .day {
-            max-width: 400px;
-        }
-
-            .day p, .day label, .meal-title p, .meal-title label {
-                width: 100%;
-                border: solid 1px #ddd;
-                border-right: 0;
-                margin: 0;
-                margin-left: -1px;
-                margin-top: -1px;
-                padding: 0 2px;
-                height: 55px;
-            }
-
-        .breakfast-1 {
-            height: 109px !important;
-        }
-
-        .holiday p, .holiday label {
-            width: 85px;
-        }
-
-        .day:last-child {
-            border-right: solid 1px #ddd;
-        }
-
-        .tb-header {
-            background-color: #FF8302;
-        }
-
-        .breakfast, .lunch, .title-breakfast, .title-lunch {
-            border-bottom: solid 2px bisque;
-        }
-
-        label {
-            cursor: pointer;
-        }
-
-
-        @@media only screen and (max-width: 1600px) {
-            .day p, .day label, .meal-title p, .meal-title label {
-                height: 80px;
-            }
-
-            .breakfast-1 {
-                height: 159px !important;
-            }
-        }
-
-
-
-        input[type=checkbox], input[type=radio] {
-            display: none;
-        }
-
-            input[type=checkbox]:checked + label {
-                background-color: cyan;
-            }
-
-        label.checked {
-            background-color: cyan;
-        }
-    </style>
+    <link href="~/css/custom-order.css" rel="stylesheet" />
 }
-
-@if(CalendarMonth != null) { 
-    <input type="hidden" id="ListDaySelect" value="@string.Join( ',', CalendarMonth.Where(x => !x.IsHoliday).Select(x => x.Day).ToList())" />
-}
-
 
 <div class="page-header">
     <div class="header-sub-title">
@@ -98,11 +21,11 @@
         </nav>
     </div>
 </div>
-@if (@CurrentMonth != null)
+@if (@CurrentMonth != null && HasMenuData)
 {
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card order-table">
                 <div class="card-body">
                     <h1 class="pt-0 text-center">Menu @CurrentMonth</h1>
                     <h4 class="pt-0 text-center">(@CalendarMonth.First().DateMonth - @CalendarMonth.Last().DateMonth)</h4>
@@ -119,6 +42,9 @@
                         }
                     </ul>
                     <div class="tab-content pt-2" id="myTabContent">
+                        <input type="hidden" id="ListDaySelect" value="@string.Join( ',', CalendarMonth.Where(x => !x.IsHoliday).Select(x => x.Day).ToList())" />
+                        <input type="hidden" id="CurrentMonth" value="@CurrentMonth" />
+
                         <label>Choose language: </label>
                         <select class="custom-select mt-3 mb-3 mr-3" id="language" name="language" style="width: 200px;">
                             <option value="vn">Vietnamese</option>
@@ -141,8 +67,8 @@
                                             <p class="breakfast-1 title-vn">Bữa sáng chọn 1 trong 2</p>
                                             <p class="breakfast-1 title-en">Breakfast choose 1 of 2</p>
 
-                                            <p class="title-vn">Sữa cho buổi sáng </p>
-                                            <p class="title-en"> Milk</p>
+                                            <p class="title-vn breakfast-op">Sữa cho buổi sáng </p>
+                                            <p class="title-en breakfast-op"> Milk</p>
                                         </div>
                                         <div class="title-lunch d-flex">
                                             <div class="flex-fill w-25">
@@ -192,7 +118,7 @@
                                                 <div class="breakfast">
                                                     <p></p>
                                                     <p></p>
-                                                    <p></p>
+                                                    <p class="breakfast-op"></p>
                                                 </div>
                                                 <div class="lunch">
                                                     <p></p>
@@ -212,70 +138,76 @@
                                         }
                                         else
                                         {
+                                            @* Get data menus *@
+                                            var MenuDay = MenusByMonth.Where(x => x.DateMonth == day.DateMonth).First();
+                                            var BfData = MenuDay.Noon.Where(x => x.Noon == 1).First().Menus;
+                                            var LnData = MenuDay.Noon.Where(x => x.Noon == 2).First().Menus;
+                                            var AfData = MenuDay.Noon.Where(x => x.Noon == 3).First().Menus;
+
                                             <div class="day @day.DateString">
                                                 <div class="tb-header font-weight-bold">
                                                     <p>@day.DateString.Substring(0, 3) (@day.DateMonth)</p>
                                                 </div>
 
                                                 <div class="breakfast">
-                                                    <input type="radio" id="breakfast-1-@day.Day" name="breakfast-@day.Day" value="mon1" />
-                                                    <label class="vn" for="breakfast-1-@day.Day">Mì xào hải sản</label>
-                                                    <label class="en" for="breakfast-1-@day.Day">Stir-fried yellow noodle with seafood</label>
-
-                                                    <input type="radio" id="breakfast-2-@day.Day" name="breakfast-@day.Day" value="mon2" />
-                                                    <label class="vn" for="breakfast-2-@day.Day">Nui nấu thịt heo</label>
-                                                    <label class="en" for="breakfast-2-@day.Day">Pork macaroni soup</label>
+                                                    @{int i = 1;}
+                                                    @foreach (var item in BfData.Where(x => x.Bundled == 0))
+                                                    {
+                                                        <input type="radio" id="breakfast-@i-@day.Day" name="breakfast-@day.Day" origin-name="@item.OriginalName" value="@item.ItemCode" />
+                                                        <label class="vn" for="breakfast-@i-@day.Day">@item.ItemNameVn</label>
+                                                        <label class="en" for="breakfast-@i-@day.Day">@item.ItemNameEn</label>
+                                                        i++;
+                                                    }
 
                                                     @*Món phụ*@
-                                                    <input type="radio" id="breakfast-op1-@day.Day" name="breakfast-op-@day.Day" value="mon2" />
-                                                    <label class="vn" for="breakfast-op1-@day.Day" name="breakfast-op-@day.Day">Sữa tươi</label>
-                                                    <label class="en" for="breakfast-op1-@day.Day" name="breakfast-op-@day.Day">Fresh milk</label>
+                                                    @{i = 1;}
+                                                    @foreach (var item in BfData.Where(x => x.Bundled == 1))
+                                                    {
+                                                        <input type="checkbox" id="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day" origin-name="@item.OriginalName" value="@item.ItemCode" />
+                                                        <label class="vn breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameVn</label>
+                                                        <label class="en breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameEn</label>
+                                                        i++;
+                                                    }
                                                 </div>
 
                                                 <div class="lunch">
-                                                    <input type="radio" id="lunch-1-@day.Day" name="lunch-@day.Day" value="mon1" />
-                                                    <label class="vn" for="lunch-1-@day.Day">Phở bò nạm</label>
-                                                    <label class="en" for="lunch-1-@day.Day">Beef brisket rice noodle soup</label>
+                                                    @{i = 1;}
+                                                    @foreach (var item in LnData.Where(x => x.Bundled == 0))
+                                                    {
+                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" value="@item.ItemCode" />
+                                                        <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn</label>
+                                                        <label class="en" for="lunch-@i-@day.Day">@item.ItemNameEn</label>
+                                                        i++;
+                                                    }
 
-                                                    <input type="radio" id="lunch-2-@day.Day" name="lunch-@day.Day" value="mon2" />
-                                                    <label class="vn" for="lunch-2-@day.Day">Sườn non xào chua ngọt</label>
-                                                    <label class="en" for="lunch-2-@day.Day">Sautéed pork ribs with sweet and sour sauce</label>
 
-                                                    <input type="radio" id="lunch-3-@day.Day" name="lunch-@day.Day" value="mon3" />
-                                                    <label class="vn" for="lunch-3-@day.Day">Cơm chiên Hawaiian</label>
-                                                    <label class="en" for="lunch-3-@day.Day">Hawaiian fried rice</label>
+                                                    @for (int k = i; k <= 5; k++)
+                                                    {
+                                                        <label class="text-white">No Item</label>
+                                                    }
 
-                                                    <input type="radio" id="lunch-4-@day.Day" name="lunch-@day.Day" value="mon4" />
-                                                    <label class="vn" for="lunch-4-@day.Day">Pasta hải sản</label>
-                                                    <label class="en" for="lunch-4-@day.Day">Seafood pasta</label>
 
-                                                    <input type="radio" id="lunch-5-@day.Day" name="lunch-@day.Day" value="mon5" />
-                                                    <label class="vn" for="lunch-5-@day.Day">Sườn non xào chua ngọt</label>
-                                                    <label class="en" for="lunch-5-@day.Day">Sautéed pork ribs with sweet and sour sauce</label>
 
                                                     @*Món phụ*@
-                                                    <input type="checkbox" id="lunch-op1-@day.Day" name="lunch-op-@day.Day" value="mon1" />
-                                                    <label class="vn" for="lunch-op1-@day.Day" name="lunch-op-@day.Day">Rau củ thập cẩm luộc</label>
-                                                    <label class="en" for="lunch-op1-@day.Day" name="lunch-op-@day.Day">Boiled mixed vegetables</label>
-
-                                                    <input type="checkbox" id="lunch-op2-@day.Day" name="lunch-op-@day.Day" value="mon2" />
-                                                    <label class="vn" for="lunch-op2-@day.Day" name="lunch-op-@day.Day">Canh cà chua trứng</label>
-                                                    <label class="en" for="lunch-op2-@day.Day" name="lunch-op-@day.Day"> Tomato egg drop soup</label>
-
-                                                    <input type="checkbox" id="lunch-op3-@day.Day" name="lunch-op-@day.Day" value="mon3" />
-                                                    <label class="vn" for="lunch-op3-@day.Day" name="lunch-op-@day.Day">Chuối</label>
-                                                    <label class="en" for="lunch-op3-@day.Day" name="lunch-op-@day.Day">Banana</label>
-
+                                                    @{i = 1;}
+                                                    @foreach (var item in LnData.Where(x => x.Bundled == 1))
+                                                    {
+                                                        <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" origin-name="@item.OriginalName" value="@item.ItemCode" />
+                                                        <label class="vn" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameVn</label>
+                                                        <label class="en" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameEn</label>
+                                                        i++;
+                                                    }
                                                 </div>
 
                                                 <div class="afternoon">
-                                                    <input type="radio" id="afternoon-op1-@day.Day" name="afternoon-op-@day.Day" value="mon1" />
-                                                    <label class="vn" for="afternoon-op1-@day.Day">Súp bắp gà xé</label>
-                                                    <label class="en" for="afternoon-op1-@day.Day">Sweet corn chicken soup</label>
-
-                                                    <input type="radio" id="afternoon-op2-@day.Day" name="afternoon-op-@day.Day" value="mon1" />
-                                                    <label class="vn" for="afternoon-op2-@day.Day">Sinh tố</label>
-                                                    <label class="en" for="afternoon-op2-@day.Day">Smoothies</label>
+                                                    @{i = 1;}
+                                                    @foreach (var item in AfData.Where(x => x.Bundled == 0))
+                                                    {
+                                                        <input type="radio" id="afternoon-@i-@day.Day" name="afternoon-@day.Day" origin-name="@item.OriginalName" value="@item.ItemCode" />
+                                                        <label class="vn" for="afternoon-@i-@day.Day">@item.ItemNameVn</label>
+                                                        <label class="en" for="afternoon-@i-@day.Day">@item.ItemNameEn</label>
+                                                        i++;
+                                                    }
                                                 </div>
                                             </div>
                                         }
@@ -285,7 +217,7 @@
                         }
 
                         @*Review order modal*@
-                        <div class="modal fade" id="ReviewOrder" tabindex="-1" aria-hidden="true" style="display: none;">
+                        @*<div class="modal fade" id="ReviewOrder" tabindex="-1" aria-hidden="true" style="display: none;">
                             <div class="modal-dialog modal-xl">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -296,7 +228,7 @@
                                     <div class="modal-footer"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <button type="button" class="btn btn-primary">Save changes</button></div>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
 
                     </div>
                 </div>
@@ -328,10 +260,119 @@
 
             //Handle submition
             $("#btn-submit").click(function () {
-                var listDay = $("#ListDaySelect").val();
+                var CurrentMonth = $("#CurrentMonth").val();
+                var month = []; // my array
+                var errors = [];
+
+                var listDayStr = $("#ListDaySelect").val();
+                var listDay = listDayStr.split(",");
+                listDay.forEach(function (day) {
+                    var list_bf = [];
+                    var list_ln = [];
+                    var list_af = [];
+
+                    var br_selected = $('input[name=breakfast-' + day + ']:checked');
+                    if (br_selected.val() != undefined) {
+                        var bf = {
+                            code: br_selected.val(),
+                            name: br_selected.attr("origin-name"),
+                            qty: 1,
+                            bundled: 0
+                        }
+                        list_bf.push(bf)
+                    }
+
+                    var br_op_selected = $('input[name=breakfast-op-' + day + ']:checked');
+                    if (br_op_selected.val() != undefined) {
+                        var bf_op = {
+                            code: br_op_selected.val(),
+                            name: br_op_selected.attr("origin-name"),
+                            qty: 1,
+                            bundled: 1
+                        }
+                        list_bf.push(bf_op)
+                    }
 
 
-                $(".OrderContent").html(listDay);
+                    var ln_selected = $('input[name=lunch-' + day + ']:checked');
+                    if (ln_selected.val() != undefined) {
+                        var ln = {
+                            code: ln_selected.val(),
+                            name: ln_selected.attr("origin-name"),
+                            qty: 1,
+                            bundled: 0
+                        }
+                        list_ln.push(ln);
+                    }
+
+                    $('input[name=lunch-op-' + day + ']:checked').each(function () {
+                        var item = {
+                            code: $(this).val(),
+                            name: $(this).attr("origin-name"),
+                            qty: 1,
+                            bundled: 1
+                        };
+                        list_ln.push(item);
+                    });
+
+
+                    var af_selected = $('input[name=afternoon-' + day + ']:checked');
+                    if (af_selected.val() != undefined) {
+                        var af = {
+                            code: af_selected.val(),
+                            name: af_selected.attr("origin-name"),
+                            qty: 1,
+                            bundled: 0
+                        }
+                        list_af.push(af);
+                    }
+
+
+                    if (list_bf.length != 2) {
+                        errors.push("You need to choose a breakfast dish for " + day + "/" + CurrentMonth);
+                    }
+
+                    if (list_ln.length != 4) {
+                        errors.push("You need to choose a lunch dish for " + day + "/" + CurrentMonth);
+                    }
+
+                    month.push(
+                        {
+                            day: day,
+                            breakfast: list_bf,
+                            lunch: list_ln,
+                            afternoon: list_af
+                        }
+                    )
+                });
+
+                if (errors.length > 0) {
+                    var error_html = "<ul>";
+                    errors.forEach(function (er) {
+                        error_html = error_html + "<li>" + er +"</li>";
+                    });
+                    error_html = error_html + "</ul>";
+
+                    $.confirm({
+                        closeIcon: true,
+                        columnClass: 'col-md-12',
+                        type: 'red',
+                        typeAnimated: true,
+                        icon: 'fa fa-warning',
+                        title: 'You need to complete the food selection for the whole month',
+                        content: error_html,
+                        buttons: {
+                            ChooseAgain: {
+                                text: 'Choose Again',
+                                btnClass: 'btn-red',
+                                action: function () {
+                                }
+                            },
+                        }
+                    });
+                }
+
+                @*$(".OrderContent").html(listDayStr);*@
             });
         });
     </script>

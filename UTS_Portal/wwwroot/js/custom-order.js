@@ -26,6 +26,13 @@
 
     });
 
+    /* Check box */
+    $('input[type="checkbox"]').on('change', function () {
+        var func = 'addClass';
+        $('label[for="' + $(this).attr('id') + '"]')[func]('checked');
+        $('label[for="hide-' + $(this).attr('id') + '"]')[func]('checked');
+    });
+
 
     // Init Language
     if ($("#language").val() === "vn") {

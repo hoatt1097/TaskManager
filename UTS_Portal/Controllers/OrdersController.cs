@@ -24,6 +24,7 @@ namespace UTS_Portal.Controllers
 
         public IActionResult Index(string? month)
         {
+            //Format month from select: MM/yyyy
             // Get selectbox select month
             string SelectBoxElement = BuildTxtMonth();
             ViewBag.SelectBoxElement = SelectBoxElement;
@@ -32,8 +33,15 @@ namespace UTS_Portal.Controllers
             {
                 // Call data menu in month
                 DateTime date = DateTime.Parse(month + "/1");
-                List<CalendarMonth> CalendarMonth = DateHelper.GetCalendar(date);
+                List<CalendarMonth> CalendarMonth = DateHelper.GetCalendar(_context, date);
                 ViewBag.CalendarMonth = CalendarMonth;
+
+                // Collect data menu item by month
+                List<MenusByMonth> MenusByMonth = MenuHelper.GetMenusByMonth(_context, month);
+                ViewBag.MenusByMonth = MenusByMonth;
+
+                // Check menu item data has data
+                ViewBag.HasMenuData = MenusByMonth.Count > 0 ? true : false;
             }
 
             ViewBag.CurrentMonth = month;
