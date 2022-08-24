@@ -95,7 +95,7 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Fullname,Email,Phone,Username,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
+        public async Task<IActionResult> Create([Bind("Id,Code,Fullname,Email,Phone,Username,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
         {
             if (ModelState.IsValid)
             {
@@ -132,7 +132,7 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Fullname,Email,Phone,Username,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Fullname,Email,Phone,Username,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
         {
             if (id != accounts.Id)
             {

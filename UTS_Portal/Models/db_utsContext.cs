@@ -122,6 +122,10 @@ namespace UTS_Portal.Models
 
             modelBuilder.Entity<Users>(entity =>
             {
+                entity.Property(e => e.Code)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.RoleId)

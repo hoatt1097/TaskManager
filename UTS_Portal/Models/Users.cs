@@ -35,6 +35,9 @@ namespace UTS_Portal.Models
         public int RoleId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? LastLogin { get; set; }
+        [Required]
+        [StringLength(6)]
+        public string Code { get; set; }
 
         [ForeignKey(nameof(RoleId))]
         [InverseProperty(nameof(Roles.Users))]

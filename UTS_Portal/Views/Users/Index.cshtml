@@ -41,6 +41,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Username</th>
+                        <th>User Code</th>
                         <th>Fullname</th>
                         <th>Email</th>
                         <th>Phone</th>
@@ -57,37 +58,38 @@
                         var i = 1;
                         foreach (var item in Model)
                         {
-                            <tr>
-                                <td>@i</td>
-                                <td>@item.Username</td>
-                                <td>@item.Fullname</td>
-                                <td>
-                                    @item.Email
-                                </td>
-                                <td>@item.Phone</td>
-                                <td>@item.Role?.Name</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        @if (item.Active == true)
-                                        {
-                                            <div class="badge badge-success badge-dot mt-1">
-                                                <span>Active</span>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="badge badge-secondary badge-dot mt-1">
-                                                <span>Non-Active</span>
-                                            </div>
-                                        }
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.Username</td>
+                        <td>@item.Code</td>
+                        <td>@item.Fullname</td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>@item.Phone</td>
+                        <td>@item.Role?.Name</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                @if (item.Active == true)
+                                {
+                                    <div class="badge badge-success badge-dot mt-1">
+                                        <span>Active</span>
                                     </div>
-                                </td>
-                                <td>@item.LastLogin</td>
-                                <td>
-                                    <a class="btn btn-secondary btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","Users")/@item.Id')">Delete</a>
-                                </td>
-                            </tr>
+                                }
+                                else
+                                {
+                                    <div class="badge badge-secondary badge-dot mt-1">
+                                        <span>Non-Active</span>
+                                    </div>
+                                }
+                            </div>
+                        </td>
+                        <td>@item.LastLogin</td>
+                        <td>
+                            <a class="btn btn-secondary btn-sm" asp-controller="Users" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","Users")/@item.Id')">Delete</a>
+                        </td>
+                    </tr>
                             i++;
                         }
                     }
