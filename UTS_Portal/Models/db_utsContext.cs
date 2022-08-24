@@ -20,11 +20,13 @@ namespace UTS_Portal.Models
         }
 
         public virtual DbSet<Faqs> Faqs { get; set; }
+        public virtual DbSet<Feedbacks> Feedbacks { get; set; }
         public virtual DbSet<Functions> Functions { get; set; }
         public virtual DbSet<Holidays> Holidays { get; set; }
         public virtual DbSet<MenuInfos> MenuInfos { get; set; }
         public virtual DbSet<Menus> Menus { get; set; }
         public virtual DbSet<Posts> Posts { get; set; }
+        public virtual DbSet<PreOrders> PreOrders { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Users> Users { get; set; }
 
@@ -39,13 +41,83 @@ namespace UTS_Portal.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Feedbacks>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+            });
+
             modelBuilder.Entity<Menus>(entity =>
             {
-                entity.Property(e => e.Ckcode).IsUnicode(false);
+                entity.Property(e => e.Category)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
-                entity.Property(e => e.ItemCode).IsUnicode(false);
+                entity.Property(e => e.Ckcode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
-                entity.Property(e => e.MonthYear).IsUnicode(false);
+                entity.Property(e => e.Class)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.MonthYear)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<PreOrders>(entity =>
+            {
+                entity.Property(e => e.CanteenId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Ckcode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Class)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CustId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModifiedTime)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModifiedUser)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.MonthYear)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.PlcId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Post)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.SubmittedTime)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.UserCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<Users>(entity =>

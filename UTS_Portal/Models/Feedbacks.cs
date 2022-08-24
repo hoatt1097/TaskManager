@@ -9,15 +9,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UTS_Portal.Models
 {
-    public partial class MenuInfos
+    public partial class Feedbacks
     {
         [Key]
         [Column("ID")]
         public int Id { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime Month { get; set; }
+        [Required]
+        [StringLength(255)]
+        public string Name { get; set; }
+        [StringLength(11)]
+        public string Phone { get; set; }
+        [StringLength(255)]
+        public string Email { get; set; }
+        [Required]
         [StringLength(2000)]
-        public string Images { get; set; }
-        public bool Status { get; set; }
+        public string Message { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime SubmittedDate { get; set; }
     }
 }

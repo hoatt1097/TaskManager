@@ -9,41 +9,56 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UTS_Portal.Models
 {
-    public partial class Menus
+    public partial class PreOrders
     {
         [Key]
         [Column("ID")]
         public int Id { get; set; }
+        [Required]
+        [StringLength(20)]
+        public string UserCode { get; set; }
         [Required]
         [StringLength(6)]
         public string MonthYear { get; set; }
         public int? Week { get; set; }
         public int? Dow { get; set; }
         [Column(TypeName = "date")]
-        public DateTime MenuDate { get; set; }
+        public DateTime OrderDate { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime SubmittedDate { get; set; }
         [Required]
-        [StringLength(20)]
-        public string Category { get; set; }
+        [StringLength(5)]
+        public string SubmittedTime { get; set; }
         [Required]
         [StringLength(6)]
         public string ItemCode { get; set; }
-        [Required]
         [Column("CKCode")]
         [StringLength(20)]
         public string Ckcode { get; set; }
-        [Required]
-        [StringLength(255)]
-        public string OriginalName { get; set; }
-        [StringLength(255)]
-        public string ItemNameVn { get; set; }
-        [StringLength(255)]
-        public string ItemNameEn { get; set; }
-        public int? Qty { get; set; }
+        public int Qty { get; set; }
         public int Repast { get; set; }
         [StringLength(20)]
         public string Class { get; set; }
         public int Bundled { get; set; }
         public int IsOrdered { get; set; }
         public int Status { get; set; }
+        [StringLength(20)]
+        public string Post { get; set; }
+        public int? IsModified { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime? ModifiedDate { get; set; }
+        [StringLength(5)]
+        public string ModifiedTime { get; set; }
+        [StringLength(20)]
+        public string ModifiedUser { get; set; }
+        [Column("CanteenID")]
+        [StringLength(5)]
+        public string CanteenId { get; set; }
+        [Column("CustID")]
+        [StringLength(5)]
+        public string CustId { get; set; }
+        [Column("PlcID")]
+        [StringLength(5)]
+        public string PlcId { get; set; }
     }
 }
