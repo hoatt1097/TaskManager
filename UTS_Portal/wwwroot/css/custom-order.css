@@ -26,7 +26,6 @@
     border: solid 1px #ddd;
     border-right: 0;
     margin: 0;
-    margin-left: -1px;
     margin-top: -1px;
     padding: 0 2px;
     height: 75px;
@@ -52,8 +51,8 @@
     height: 30px !important;
 }
 
-.order-table .breakfast, .order-table .lunch, .order-table .title-breakfast, .order-table .title-lunch {
-    border-bottom: solid 2px bisque;
+.order-table .breakfast, .order-table .lunch, .order-table .afternoon, .order-table .title-breakfast, .order-table .title-lunch, .order-table .title-afternoon {
+    border-top: solid 2px bisque;
 }
 
 .order-table label {
@@ -123,8 +122,24 @@
 
 .order-table input[type=checkbox]:checked + label {
     background-color: cyan;
+    /*border-color: #2f80ed;
+    color: #2f80ed;
+    border: 2px solid #2f80ed;
+    border-bottom: 3px solid #2f80ed;*/
 }
 
 .order-table label.checked {
     background-color: cyan;
+    /*border-color: #2f80ed;
+    color: #2f80ed;
+    border: 2px solid #2f80ed;
+    border-bottom: 3px solid #2f80ed;*/
+}
+
+.order-qty {
+    display: none;
+}
+
+.order-qty.checked {
+    display:  inline-block !important;
 }

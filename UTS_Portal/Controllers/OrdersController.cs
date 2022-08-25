@@ -48,6 +48,12 @@ namespace UTS_Portal.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult OrderSubmit(List<OrderSubmit> orderSubmit)
+        {
+            var a = 0;
+            return Json(new { success = true, message = $"Submit order successfully!" });
+        }
         public string BuildTxtMonth()
         {
             var MonthActive = _context.MenuInfos.OrderBy(x => x.Month).Where(x => x.Status == true)

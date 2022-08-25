@@ -24,6 +24,12 @@
             font-size: 23px;
             line-height: 0;
         }
+
+        .order-qty {
+            padding: 0;
+            border: none;
+            background-color: antiquewhite;
+        }
     </style>
 }
 
@@ -167,9 +173,25 @@
                                                     @{int i = 1;}
                                                     @foreach (var item in BfData.Where(x => x.Bundled == 0))
                                                     {
-                                                        <input type="radio" id="breakfast-@i-@day.Day" name="breakfast-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" value="@item.ItemCode" />
-                                                        <label class="vn" for="breakfast-@i-@day.Day">@item.ItemNameVn</label>
-                                                        <label class="en" for="breakfast-@i-@day.Day">@item.ItemNameEn</label>
+                                                        <input type="radio" id="breakfast-@i-@day.Day" name="breakfast-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
+                                                        <label class="vn" for="breakfast-@i-@day.Day">@item.ItemNameVn
+                                                            <select class="order-qty" name="breakfast-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                        <label class="en" for="breakfast-@i-@day.Day">@item.ItemNameEn
+                                                            <select class="order-qty" name="breakfast-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
                                                         i++;
                                                     }
 
@@ -177,7 +199,7 @@
                                                     @{i = 1;}
                                                     @foreach (var item in BfData.Where(x => x.Bundled == 1))
                                                     {
-                                                        <input type="checkbox" id="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" value="@item.ItemCode" />
+                                                        <input type="checkbox" id="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
                                                         <label class="vn breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameVn</label>
                                                         <label class="en breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameEn</label>
                                                         i++;
@@ -188,9 +210,25 @@
                                                     @{i = 1;}
                                                     @foreach (var item in LnData.Where(x => x.Bundled == 0))
                                                     {
-                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" value="@item.ItemCode" />
-                                                        <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn</label>
-                                                        <label class="en" for="lunch-@i-@day.Day">@item.ItemNameEn</label>
+                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
+                                                        <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                        <label class="en" for="lunch-@i-@day.Day">@item.ItemNameEn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
                                                         i++;
                                                     }
 
@@ -206,7 +244,7 @@
                                                     @{i = 1;}
                                                     @foreach (var item in LnData.Where(x => x.Bundled == 1))
                                                     {
-                                                        <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" value="@item.ItemCode" />
+                                                        <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
                                                         <label class="vn" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameVn</label>
                                                         <label class="en" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameEn</label>
                                                         i++;
@@ -217,7 +255,7 @@
                                                     @{i = 1;}
                                                     @foreach (var item in AfData.Where(x => x.Bundled == 0))
                                                     {
-                                                        <input type="radio" id="afternoon-@i-@day.Day" name="afternoon-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" value="@item.ItemCode" />
+                                                        <input type="radio" id="afternoon-@i-@day.Day" name="afternoon-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
                                                         <label class="vn" for="afternoon-@i-@day.Day">@item.ItemNameVn</label>
                                                         <label class="en" for="afternoon-@i-@day.Day">@item.ItemNameEn</label>
                                                         i++;
@@ -251,7 +289,7 @@
                                         <div class="col-md-6">
                                             <div class="card info-card sales-card">
                                                 <div class="card-body pre-order">
-                                                    <h5 class="card-title pt-1 pb-1">Ngay @i/08</h5>
+                                                    <h5 class="card-title pt-1 pb-1">Day @i/08</h5>
                                                     <div>
                                                         <p><b>Breakfast:</b></p>
                                                         <p class="pl-5"><i class="bx bx-cart"></i>: Stir-fried yellow noodle with seafood Test </p>
@@ -318,12 +356,12 @@
                     var br_selected = $('input[name=breakfast-' + day + ']:checked');
                     if (br_selected.val() != undefined) {
                         var bf = {
-                            code: br_selected.val(),
-                            originName: br_selected.attr("origin-name"),
-                            nameVn: br_selected.attr("name-vn"),
-                            nameEn: br_selected.attr("name-en"),
-                            qty: 1,
-                            bundled: 0
+                            Code: br_selected.val(),
+                            OriginName: br_selected.attr("origin-name"),
+                            NameVn: br_selected.attr("name-vn"),
+                            NameEn: br_selected.attr("name-en"),
+                            Qty: br_selected.attr("qty"),
+                            Bundled: 0
                         }
                         list_bf.push(bf)
                     }
@@ -331,12 +369,12 @@
                     var br_op_selected = $('input[name=breakfast-op-' + day + ']:checked');
                     if (br_op_selected.val() != undefined) {
                         var bf_op = {
-                            code: br_op_selected.val(),
-                            originName: br_op_selected.attr("origin-name"),
-                            nameVn: br_op_selected.attr("name-vn"),
-                            nameEn: br_op_selected.attr("name-en"),
-                            qty: 1,
-                            bundled: 1
+                            Code: br_op_selected.val(),
+                            OriginName: br_op_selected.attr("origin-name"),
+                            NameVn: br_op_selected.attr("name-vn"),
+                            NameEn: br_op_selected.attr("name-en"),
+                            Qty: br_op_selected.attr("qty"),
+                            Bundled: 1
                         }
                         list_bf.push(bf_op)
                     }
@@ -345,24 +383,24 @@
                     var ln_selected = $('input[name=lunch-' + day + ']:checked');
                     if (ln_selected.val() != undefined) {
                         var ln = {
-                            code: ln_selected.val(),
-                            originName: ln_selected.attr("origin-name"),
-                            nameVn: ln_selected.attr("name-vn"),
-                            nameEn: ln_selected.attr("name-en"),
-                            qty: 1,
-                            bundled: 0
+                            Code: ln_selected.val(),
+                            OriginName: ln_selected.attr("origin-name"),
+                            NameVn: ln_selected.attr("name-vn"),
+                            NameEn: ln_selected.attr("name-en"),
+                            Qty: ln_selected.attr("qty"),
+                            Bundled: 0
                         }
                         list_ln.push(ln);
                     }
 
                     $('input[name=lunch-op-' + day + ']:checked').each(function () {
                         var item = {
-                            code: $(this).val(),
-                            originName: $(this).attr("origin-name"),
-                            nameVn: $(this).attr("name-vn"),
-                            nameEn: $(this).attr("name-en"),
-                            qty: 1,
-                            bundled: 1
+                            Code: $(this).val(),
+                            OriginName: $(this).attr("origin-name"),
+                            NameVn: $(this).attr("name-vn"),
+                            NameEn: $(this).attr("name-en"),
+                            Qty: $(this).attr("qty"),
+                            Bundled: 1
                         };
                         list_ln.push(item);
                     });
@@ -371,12 +409,12 @@
                     var af_selected = $('input[name=afternoon-' + day + ']:checked');
                     if (af_selected.val() != undefined) {
                         var af = {
-                            code: af_selected.val(),
-                            originName: af_selected.attr("origin-name"),
-                            nameVn: af_selected.attr("name-vn"),
-                            nameEn: af_selected.attr("name-en"),
-                            qty: 1,
-                            bundled: 0
+                            Code: af_selected.val(),
+                            OriginName: af_selected.attr("origin-name"),
+                            NameVn: af_selected.attr("name-vn"),
+                            NameEn: af_selected.attr("name-en"),
+                            Qty: af_selected.attr("qty"),
+                            Bundled: 0
                         }
                         list_af.push(af);
                     }
@@ -392,10 +430,11 @@
 
                     month.push(
                         {
-                            day: day,
-                            breakfast: list_bf,
-                            lunch: list_ln,
-                            afternoon: list_af
+                            Day: day,
+                            CurrentMonth: CurrentMonth,
+                            Breakfast: list_bf,
+                            Lunch: list_ln,
+                            Afternoon: list_af
                         }
                     )
                 });
@@ -452,6 +491,22 @@
                                 action: function () {
                                 }
                             },
+                            Submit: {
+                                text: 'Ok and Submit',
+                                btnClass: 'btn-success',
+                                action: function () {
+                                    console.log(month);
+                                    $.ajax({
+                                        url: '@Url.Action("OrderSubmit", "Orders")',
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: { orderSubmit: month },
+                                        success: function (data) {
+                                            console.log(data.message);
+                                        }
+                                    });
+                                }
+                            },
                         }
                     });
                 }
@@ -460,44 +515,6 @@
             });
         });
 
-        function BuildReviewOrderOriginName(monthOrder) {
-            var html = "";
-            html = html + '<div class="row">';
-            monthOrder.forEach(function (d) {
-                html = html + '<div class="col-md-6">';
-                html = html + '<div class="card info-card sales-card">';
-                html = html + '<div class="card-body pre-order">';
-                html = html + '<h5 class="card-title pt-1 pb-1">Ngay ' + d.day + '/08</h5>';
-                html = html + '<div>';
-                html = html + '<p><b>Breakfast:</b></p>';
-                html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.breakfast[0].originName + ' </p>';
-                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.breakfast[1].originName + '</p>';
-                html = html + '</div>';
-                html = html + '<div>';
-                html = html + '<p><b>Lunch:</b></p>';
-                html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.lunch[0].originName + '</p>';
-                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.lunch[1].originName + ', ' + d.lunch[2].originName + ', ' + d.lunch[3].originName +' </p>';
-                html = html + '</div>';
-                html = html + '<div>';
-                html = html + '<p><b>Afternoon:</b></p>';
-                if (d.afternoon.length == 0) {
-                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i></p>';
-                }
-                if (d.afternoon.length == 1) {
-                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.afternoon[0].originName + '</p>';
-                }
-                if (d.afternoon.length == 2) {
-                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.afternoon[0].originName + ', ' + d.afternoon[1].originName + '</p>';
-                }
-                html = html + '</div>';
-                html = html + '</div>';
-                html = html + '</div>';
-                html = html + '</div>';
-            });
-            html = html + '</div>';
-            return html;
-        }
-
         function BuildReviewOrderNameVn(monthOrder) {
             var html = "";
             html = html + '<div class="row">';
@@ -505,27 +522,32 @@
                 html = html + '<div class="col-md-6">';
                 html = html + '<div class="card info-card sales-card">';
                 html = html + '<div class="card-body pre-order">';
-                html = html + '<h5 class="card-title pt-1 pb-1">Ngay ' + d.day + '/08</h5>';
+                html = html + '<h5 class="card-title pt-1 pb-1">Day ' + d.Day + '/' + d.CurrentMonth + '</h5>';
                 html = html + '<div>';
                 html = html + '<p><b>Breakfast:</b></p>';
-                html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.breakfast[0].nameVn + ' </p>';
-                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.breakfast[1].nameVn + '</p>';
+                if (d.Breakfast[0].Qty == 1) {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Breakfast[0].NameVn + '</p>';
+                } else {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Breakfast[0].NameVn + ' <b> (#' + d.Breakfast[0].Qty + ')</b></p>';
+                }
+                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.Breakfast[1].NameVn + '</p>';
                 html = html + '</div>';
                 html = html + '<div>';
                 html = html + '<p><b>Lunch:</b></p>';
-                html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.lunch[0].nameVn + '</p>';
-                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.lunch[1].nameVn + ', ' + d.lunch[2].nameVn + ', ' + d.lunch[3].nameVn + ' </p>';
+                if (d.Lunch[0].Qty == 1) {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Lunch[0].NameVn + '</p>';
+                } else {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Lunch[0].NameVn + ' <b> (#' + d.Lunch[0].Qty + ')</b></p>';
+                }
+                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.Lunch[1].NameVn + ', ' + d.Lunch[2].NameVn + ', ' + d.Lunch[3].NameVn + ' </p>';
                 html = html + '</div>';
                 html = html + '<div>';
                 html = html + '<p><b>Afternoon:</b></p>';
-                if (d.afternoon.length == 0) {
+                if (d.Afternoon.length == 0) {
                     html = html + '<p class="pl-5"><i class="bx bx-cart"></i></p>';
                 }
-                if (d.afternoon.length == 1) {
-                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.afternoon[0].nameVn + '</p>';
-                }
-                if (d.afternoon.length == 2) {
-                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.afternoon[0].nameVn + ', ' + d.afternoon[1].nameVn + '</p>';
+                if (d.Afternoon.length == 1) {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Afternoon[0].NameVn + '</p>';
                 }
                 html = html + '</div>';
                 html = html + '</div>';
@@ -543,27 +565,32 @@
                 html = html + '<div class="col-md-6">';
                 html = html + '<div class="card info-card sales-card">';
                 html = html + '<div class="card-body pre-order">';
-                html = html + '<h5 class="card-title pt-1 pb-1">Ngay ' + d.day + '/08</h5>';
+                html = html + '<h5 class="card-title pt-1 pb-1">Day ' + d.Day + '/' + d.CurrentMonth + '</h5>';
                 html = html + '<div>';
                 html = html + '<p><b>Breakfast:</b></p>';
-                html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.breakfast[0].nameEn + ' </p>';
-                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.breakfast[1].nameEn + '</p>';
+                if (d.Breakfast[0].Qty == 1) {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Breakfast[0].NameEn + '</p>';
+                } else {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Breakfast[0].NameEn + ' <b> (#' + d.Breakfast[0].Qty + ')</b></p>';
+                }
+                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.Breakfast[1].NameEn + '</p>';
                 html = html + '</div>';
                 html = html + '<div>';
                 html = html + '<p><b>Lunch:</b></p>';
-                html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.lunch[0].nameEn + '</p>';
-                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.lunch[1].nameEn + ', ' + d.lunch[2].nameEn + ', ' + d.lunch[3].nameEn + ' </p>';
+                if (d.Lunch[0].Qty == 1) {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Lunch[0].NameEn + '</p>';
+                } else {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Lunch[0].NameEn + ' <b> (#' + d.Lunch[0].Qty + ')</b></p>';
+                }
+                html = html + '<p class="pl-5"><i class="bx bx-plus"></i>: ' + d.Lunch[1].NameEn + ', ' + d.Lunch[2].NameEn + ', ' + d.Lunch[3].NameEn + ' </p>';
                 html = html + '</div>';
                 html = html + '<div>';
                 html = html + '<p><b>Afternoon:</b></p>';
-                if (d.afternoon.length == 0) {
+                if (d.Afternoon.length == 0) {
                     html = html + '<p class="pl-5"><i class="bx bx-cart"></i></p>';
                 }
-                if (d.afternoon.length == 1) {
-                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.afternoon[0].nameEn + '</p>';
-                }
-                if (d.afternoon.length == 2) {
-                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.afternoon[0].nameEn + ', ' + d.afternoon[1].nameEn + '</p>';
+                if (d.Afternoon.length == 1) {
+                    html = html + '<p class="pl-5"><i class="bx bx-cart"></i>: ' + d.Afternoon[0].NameEn + '</p>';
                 }
                 html = html + '</div>';
                 html = html + '</div>';

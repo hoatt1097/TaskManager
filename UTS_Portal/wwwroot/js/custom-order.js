@@ -6,11 +6,16 @@
             var func = 'removeClass';
             $('label[for="' + $(this).attr('id') + '"]')[func]('checked');
             $('label[for="hide-' + $(this).attr('id') + '"]')[func]('checked');
+
+            $('label[for="' + $(this).attr('id') + '"] select')[func]('checked');
+            $('label[for="hide-' + $(this).attr('id') + '"] select')[func]('checked');
         });
 
         var func = 'addClass';
         $('label[for="' + $(this).attr('id') + '"]')[func]('checked');
         $('label[for="hide-' + $(this).attr('id') + '"]')[func]('checked');
+        $('label[for="' + $(this).attr('id') + '"] select')[func]('checked');
+        $('label[for="hide-' + $(this).attr('id') + '"] select')[func]('checked');
 
 
         // Auto check all option order
@@ -22,6 +27,10 @@
             var func = 'addClass';
             $('label[name="' + NameOptionCb + '"]')[func]('checked');
             $('label[name="hide-' + NameOptionCb + '"]')[func]('checked');
+
+            $('label[name="' + NameOptionCb + '"] select')[func]('checked');
+            $('label[name="hide-' + NameOptionCb + '"] select')[func]('checked');
+
         });
 
     });
@@ -32,6 +41,15 @@
         $('label[for="' + $(this).attr('id') + '"]')[func]('checked');
         $('label[for="hide-' + $(this).attr('id') + '"]')[func]('checked');
     });
+
+    /* Sync 2 select box qty for en and vn */
+    $('select.order-qty').on('change', function () {
+        var name = $(this).attr("name");
+        var value = $(this).val();
+
+        $('select[name="' + name + '"] option[value="' + value + '"]').attr("selected", true);
+        $('#' + name).attr("qty", value);
+    })
 
 
     // Init Language
