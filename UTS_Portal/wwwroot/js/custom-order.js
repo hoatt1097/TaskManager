@@ -38,6 +38,7 @@
     /* Check box */
     $('input[type="checkbox"]').on('change', function () {
         var func = 'addClass';
+        $(this).prop('checked', 'checked');
         $('label[for="' + $(this).attr('id') + '"]')[func]('checked');
         $('label[for="hide-' + $(this).attr('id') + '"]')[func]('checked');
     });

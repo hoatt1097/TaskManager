@@ -224,7 +224,7 @@
 
                                                                 <div class="breakfast">
                                                                     @{int i = 1;}
-                                                                    @foreach (var item in BfData.Where(x => x.Bundled == 0))
+                                                                    @foreach (var item in BfData.Where(x => x.IsBundled == 0))
                                                                     {
                                                                         <input type="radio" id="breakfast-@i-@day.Day" name="breakfast-@day.Day" value="@item.ItemCode" />
                                                                         <label class="vn" for="breakfast-@i-@day.Day">@item.ItemNameVn</label>
@@ -234,7 +234,7 @@
 
                                                                     @*Món phụ*@
                                                                     @{i = 1;}
-                                                                    @foreach (var item in BfData.Where(x => x.Bundled == 1))
+                                                                    @foreach (var item in BfData.Where(x => x.IsBundled == 1))
                                                                     {
                                                                         <input type="checkbox" id="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day" value="@item.ItemCode" />
                                                                         <label class="vn breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameVn</label>
@@ -245,7 +245,7 @@
 
                                                                 <div class="lunch">
                                                                     @{i = 1;}
-                                                                    @foreach (var item in LnData.Where(x => x.Bundled == 0))
+                                                                    @foreach (var item in LnData.Where(x => x.IsBundled == 0))
                                                                     {
                                                                         <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" value="@item.ItemCode" />
                                                                         <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn</label>
@@ -263,7 +263,7 @@
 
                                                                     @*Món phụ*@
                                                                     @{i = 1;}
-                                                                    @foreach (var item in LnData.Where(x => x.Bundled == 1))
+                                                                    @foreach (var item in LnData.Where(x => x.IsBundled == 1))
                                                                     {
                                                                         <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" value="@item.ItemCode" />
                                                                         <label class="vn" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameVn</label>
@@ -274,7 +274,7 @@
 
                                                                 <div class="afternoon">
                                                                     @{i = 1;}
-                                                                    @foreach (var item in AfData.Where(x => x.Bundled == 0))
+                                                                    @foreach (var item in AfData.Where(x => x.IsBundled == 0))
                                                                     {
                                                                         <input type="radio" id="afternoon-@i-@day.Day" name="afternoon-@day.Day" value="@item.ItemCode" />
                                                                         <label class="vn" for="afternoon-@i-@day.Day">@item.ItemNameVn</label>

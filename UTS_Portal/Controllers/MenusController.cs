@@ -372,9 +372,9 @@ namespace UTS_Portal.Controllers
                             ItemNameVn = ItemNameVn, // Fomular
                             ItemNameEn = ItemNameEn, // Fomular
                             Qty = Qty,
-                            Repast = Repast,
+                            RepastId = Repast,
                             Class = Class,
-                            Bundled = Bundled,
+                            IsBundled = Bundled,
                             IsOrdered = IsOrdered,
                             Status = Status,
                         };
@@ -382,7 +382,7 @@ namespace UTS_Portal.Controllers
                         _context.Add(menu);
                     }
 
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                     _notyfService.Success("Add menu sucessfully!");
                     return RedirectToAction("Edit", new { id = id, tab="import_menu" });
                 }

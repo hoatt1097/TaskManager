@@ -17,6 +17,7 @@ namespace UTS_Portal.ViewModels
     public class OrderItem
     {
         public string Code { get; set; }
+        public string Ckcode { get; set; }
         public string OriginName { get; set; }
         public string NameVn { get; set; }
         public string NameEn { get; set; }

@@ -1,5 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,8 +52,104 @@ namespace UTS_Portal.Controllers
         [HttpPost]
         public IActionResult OrderSubmit(List<OrderSubmit> orderSubmit)
         {
-            var a = 0;
-            return Json(new { success = true, message = $"Submit order successfully!" });
+            try
+            {
+                var currentUser = UserHelper.GetCurrentUser(HttpContext);
+                var monthYear = orderSubmit.First().CurrentMonth.Replace("/", "");
+
+                foreach(var day in orderSubmit)
+                {
+                    if (day.Breakfast != null)
+                    {
+                        foreach (var item in day.Breakfast)
+                        {
+                            PreOrders order = new PreOrders
+                            {
+                                UserCode = currentUser.Code,
+                                MonthYear = monthYear,
+                                Week = null,
+                                Dow = null,
+                                OrderDate = DateTime.Parse(day.Day + "/" + day.CurrentMonth),
+                                SubmittedDate = DateTime.Now,
+                                SubmittedTime = DateTime.Now.ToString("HH:mm"),
+                                ItemCode = item.Code.Trim(),
+                                Ckcode = item.Ckcode.Trim(),
+                                Qty = item.Qty,
+                                RepastId = 1,
+                                Class = "",
+                                IsBundled = item.Bundled,
+                                IsOrdered = 1,
+                                Status = 1,
+                            };
+
+                            _context.PreOrders.Add(order);
+                        }
+                    }
+
+                    if (day.Lunch != null)
+                    {
+                        foreach (var item in day.Lunch)
+                        {
+                            PreOrders order = new PreOrders
+                            {
+                                UserCode = currentUser.Code,
+                                MonthYear = monthYear,
+                                Week = null,
+                                Dow = null,
+                                OrderDate = DateTime.Parse(day.Day + "/" + day.CurrentMonth),
+                                SubmittedDate = DateTime.Now,
+                                SubmittedTime = DateTime.Now.ToString("HH:mm"),
+                                ItemCode = item.Code.Trim(),
+                                Ckcode = item.Ckcode.Trim(),
+                                Qty = item.Qty,
+                                RepastId = 2,
+                                Class = "",
+                                IsBundled = item.Bundled,
+                                IsOrdered = 1,
+                                Status = 1,
+                            };
+
+                            _context.PreOrders.Add(order);
+                        }
+                    }
+
+                    if(day.Afternoon != null)
+                    {
+                        foreach (var item in day.Afternoon)
+                        {
+                            PreOrders order = new PreOrders
+                            {
+                                UserCode = currentUser.Code,
+                                MonthYear = monthYear,
+                                Week = null,
+                                Dow = null,
+                                OrderDate = DateTime.Parse(day.Day + "/" + day.CurrentMonth),
+                                SubmittedDate = DateTime.Now,
+                                SubmittedTime = DateTime.Now.ToString("HH:mm"),
+                                ItemCode = item.Code.Trim(),
+                                Ckcode = item.Ckcode.Trim(),
+                                Qty = item.Qty,
+                                RepastId = 3,
+                                Class = "",
+                                IsBundled = item.Bundled,
+                                IsOrdered = 1,
+                                Status = 1,
+                            };
+
+                            _context.PreOrders.Add(order);
+                        }
+                    }
+                }
+
+                _context.SaveChanges();
+                return Json(new { success = true, message = $"Submit order successfully!" });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return Json(new { success = false, message = $"Submit order unsuccessfully!" });
         }
         public string BuildTxtMonth()
         {

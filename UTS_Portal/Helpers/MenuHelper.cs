@@ -21,7 +21,7 @@ namespace UTS_Portal.Helpers
                     {
                         DateMonth = key,
                         Noon = value.GroupBy(
-                                    x => x.Repast,
+                                    x => x.RepastId,
                                     x => x,
                                     (key, value) => new NoonByDay
                                     {

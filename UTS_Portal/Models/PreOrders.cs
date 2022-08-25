@@ -36,10 +36,11 @@ namespace UTS_Portal.Models
         [StringLength(20)]
         public string Ckcode { get; set; }
         public int Qty { get; set; }
-        public int Repast { get; set; }
+        [Column("RepastID")]
+        public int RepastId { get; set; }
         [StringLength(20)]
         public string Class { get; set; }
-        public int Bundled { get; set; }
+        public int IsBundled { get; set; }
         public int IsOrdered { get; set; }
         public int Status { get; set; }
         [StringLength(20)]

@@ -171,9 +171,17 @@
 
                                                 <div class="breakfast">
                                                     @{int i = 1;}
-                                                    @foreach (var item in BfData.Where(x => x.Bundled == 0))
+                                                    @foreach (var item in BfData.Where(x => x.IsBundled == 0))
                                                     {
-                                                        <input type="radio" id="breakfast-@i-@day.Day" name="breakfast-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
+                                                        <input type="radio"
+                                                           id="breakfast-@i-@day.Day"
+                                                           name="breakfast-@day.Day"
+                                                           origin-name="@item.OriginalName"
+                                                           name-vn="@item.ItemNameVn"
+                                                           name-en="@item.ItemNameEn"
+                                                           qty="@item.Qty"
+                                                           Ckcode="@item.Ckcode"
+                                                           value="@item.ItemCode" />
                                                         <label class="vn" for="breakfast-@i-@day.Day">@item.ItemNameVn
                                                             <select class="order-qty" name="breakfast-@i-@day.Day">
                                                                 <option value="1" selected>1</option>
@@ -197,9 +205,9 @@
 
                                                     @*Món phụ*@
                                                     @{i = 1;}
-                                                    @foreach (var item in BfData.Where(x => x.Bundled == 1))
+                                                    @foreach (var item in BfData.Where(x => x.IsBundled == 1))
                                                     {
-                                                        <input type="checkbox" id="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
+                                                        <input type="checkbox" id="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
                                                         <label class="vn breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameVn</label>
                                                         <label class="en breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameEn</label>
                                                         i++;
@@ -208,9 +216,9 @@
 
                                                 <div class="lunch">
                                                     @{i = 1;}
-                                                    @foreach (var item in LnData.Where(x => x.Bundled == 0))
+                                                    @foreach (var item in LnData.Where(x => x.IsBundled == 0))
                                                     {
-                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
+                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
                                                         <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn
                                                             <select class="order-qty" name="lunch-@i-@day.Day">
                                                                 <option value="1" selected>1</option>
@@ -242,9 +250,9 @@
 
                                                     @*Món phụ*@
                                                     @{i = 1;}
-                                                    @foreach (var item in LnData.Where(x => x.Bundled == 1))
+                                                    @foreach (var item in LnData.Where(x => x.IsBundled == 1))
                                                     {
-                                                        <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
+                                                        <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
                                                         <label class="vn" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameVn</label>
                                                         <label class="en" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameEn</label>
                                                         i++;
@@ -253,9 +261,9 @@
 
                                                 <div class="afternoon">
                                                     @{i = 1;}
-                                                    @foreach (var item in AfData.Where(x => x.Bundled == 0))
+                                                    @foreach (var item in AfData.Where(x => x.IsBundled == 0))
                                                     {
-                                                        <input type="radio" id="afternoon-@i-@day.Day" name="afternoon-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" value="@item.ItemCode" />
+                                                        <input type="radio" id="afternoon-@i-@day.Day" name="afternoon-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
                                                         <label class="vn" for="afternoon-@i-@day.Day">@item.ItemNameVn</label>
                                                         <label class="en" for="afternoon-@i-@day.Day">@item.ItemNameEn</label>
                                                         i++;
@@ -361,6 +369,7 @@
                             NameVn: br_selected.attr("name-vn"),
                             NameEn: br_selected.attr("name-en"),
                             Qty: br_selected.attr("qty"),
+                            Ckcode: br_selected.attr("Ckcode"),
                             Bundled: 0
                         }
                         list_bf.push(bf)
@@ -374,6 +383,7 @@
                             NameVn: br_op_selected.attr("name-vn"),
                             NameEn: br_op_selected.attr("name-en"),
                             Qty: br_op_selected.attr("qty"),
+                            Ckcode: br_op_selected.attr("Ckcode"),
                             Bundled: 1
                         }
                         list_bf.push(bf_op)
@@ -388,6 +398,7 @@
                             NameVn: ln_selected.attr("name-vn"),
                             NameEn: ln_selected.attr("name-en"),
                             Qty: ln_selected.attr("qty"),
+                            Ckcode: ln_selected.attr("Ckcode"),
                             Bundled: 0
                         }
                         list_ln.push(ln);
@@ -400,6 +411,7 @@
                             NameVn: $(this).attr("name-vn"),
                             NameEn: $(this).attr("name-en"),
                             Qty: $(this).attr("qty"),
+                            Ckcode: $(this).attr("Ckcode"),
                             Bundled: 1
                         };
                         list_ln.push(item);
@@ -414,6 +426,7 @@
                             NameVn: af_selected.attr("name-vn"),
                             NameEn: af_selected.attr("name-en"),
                             Qty: af_selected.attr("qty"),
+                            Ckcode: af_selected.attr("Ckcode"),
                             Bundled: 0
                         }
                         list_af.push(af);
@@ -439,7 +452,7 @@
                     )
                 });
 
-                if (errors.length < 0) {
+                if (errors.length > 0) {
                     var error_html = "<ul>";
                     errors.forEach(function (er) {
                         error_html = error_html + "<li>" + er + "</li>";
@@ -502,7 +515,11 @@
                                         dataType: "json",
                                         data: { orderSubmit: month },
                                         success: function (data) {
-                                            console.log(data.message);
+                                            if (data.success) {
+                                                $.alert(data.message);
+                                            } else {
+                                                $.alert(data.message);
+                                            }
                                         }
                                     });
                                 }

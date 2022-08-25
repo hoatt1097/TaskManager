@@ -61,18 +61,22 @@ namespace UTS_Portal.Controllers
                     _context.Update(kh);
                     await _context.SaveChangesAsync();
 
-                    var taikhoanID = HttpContext.Session.GetString("AccountId");
-                    HttpContext.Session.SetString("AccountId", kh.Id.ToString());
+                    HttpContext.Session.SetString("UserID", kh.Id.ToString());
+                    HttpContext.Session.SetString("UserCode", kh.Code.ToString());
                     HttpContext.Session.SetString("Fullname", kh.Fullname);
 
                     //identity
                     var userClaims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, kh.Fullname),
+                        new Claim(ClaimTypes.Name, kh.Username),
                         new Claim(ClaimTypes.Email, kh.Email),
-                        new Claim("AccountId", kh.Id.ToString()),
-                        new Claim("UserCode", kh.Code.ToString()),
+                        new Claim("Id", kh.Id.ToString()),
+                        new Claim("Username", kh.Username.ToString()),
+                        new Claim("Code", kh.Code.ToString()),
+                        new Claim("Fullname", kh.Fullname.ToString()),
+                        new Claim("Email", kh.Email.ToString()),
                         new Claim("RoleId", kh.RoleId.ToString()),
+                        new Claim("RoleName", kh.Role.Name),
                         new Claim(ClaimTypes.Role, kh.Role.Name)
                     };
                     var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");
