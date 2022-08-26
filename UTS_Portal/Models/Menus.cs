@@ -15,7 +15,7 @@ namespace UTS_Portal.Models
         [Column("ID")]
         public int Id { get; set; }
         [Required]
-        [StringLength(6)]
+        [Column(TypeName = "text")]
         public string MonthYear { get; set; }
         public int? Week { get; set; }
         public int? Dow { get; set; }

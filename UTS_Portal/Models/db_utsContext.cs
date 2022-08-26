@@ -63,10 +63,6 @@ namespace UTS_Portal.Models
                 entity.Property(e => e.ItemCode)
                     .IsUnicode(false)
                     .IsFixedLength();
-
-                entity.Property(e => e.MonthYear)
-                    .IsUnicode(false)
-                    .IsFixedLength();
             });
 
             modelBuilder.Entity<PreOrders>(entity =>
@@ -85,7 +81,7 @@ namespace UTS_Portal.Models
                     .IsUnicode(false)
                     .IsFixedLength();
 
-                entity.Property(e => e.Ckcode)
+                entity.Property(e => e.CkCode)
                     .IsUnicode(false)
                     .IsFixedLength();
 
@@ -99,11 +95,11 @@ namespace UTS_Portal.Models
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.Property(e => e.ModifiedTime)
+                entity.Property(e => e.ModiTime)
                     .IsUnicode(false)
                     .IsFixedLength();
 
-                entity.Property(e => e.ModifiedUser)
+                entity.Property(e => e.ModiUser)
                     .IsUnicode(false)
                     .IsFixedLength();
 
@@ -119,7 +115,7 @@ namespace UTS_Portal.Models
                     .IsUnicode(false)
                     .IsFixedLength();
 
-                entity.Property(e => e.SubmittedTime)
+                entity.Property(e => e.SubmitTm)
                     .IsUnicode(false)
                     .IsFixedLength();
             });

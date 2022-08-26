@@ -20,47 +20,53 @@ namespace UTS_Portal.Models
         [StringLength(6)]
         public string MonthYear { get; set; }
         public int? Week { get; set; }
-        public int? Dow { get; set; }
+        public int? DoW { get; set; }
         [Key]
-        [Column(TypeName = "date")]
+        [Column("Order_date", TypeName = "date")]
         public DateTime OrderDate { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime SubmittedDate { get; set; }
+        [Column("Submit_dt", TypeName = "date")]
+        public DateTime SubmitDt { get; set; }
         [Required]
+        [Column("Submit_TM")]
         [StringLength(5)]
-        public string SubmittedTime { get; set; }
+        public string SubmitTm { get; set; }
         [Key]
         [StringLength(6)]
         public string ItemCode { get; set; }
-        [Column("CKCode")]
+        [Column("CK_Code")]
         [StringLength(20)]
-        public string Ckcode { get; set; }
+        public string CkCode { get; set; }
         public int Qty { get; set; }
         [Key]
-        [Column("RepastID")]
+        [Column("Repast_ID")]
         public int RepastId { get; set; }
         [StringLength(20)]
         public string Class { get; set; }
-        public int IsBundled { get; set; }
-        public int IsOrdered { get; set; }
-        public int Status { get; set; }
-        [StringLength(20)]
-        public string Post { get; set; }
-        public int? IsModified { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime? ModifiedDate { get; set; }
-        [StringLength(5)]
-        public string ModifiedTime { get; set; }
-        [StringLength(20)]
-        public string ModifiedUser { get; set; }
-        [Column("CanteenID")]
+        [Column("Is_Bundled")]
+        public bool IsBundled { get; set; }
+        [Column("Is_Choosen")]
+        public bool IsChoosen { get; set; }
+        public bool Status { get; set; }
+        [Column("Canteen_ID")]
         [StringLength(5)]
         public string CanteenId { get; set; }
-        [Column("CustID")]
+        [Column("Cust_ID")]
         [StringLength(5)]
         public string CustId { get; set; }
-        [Column("PlcID")]
+        [Column("Plc_ID")]
         [StringLength(5)]
         public string PlcId { get; set; }
+        [Column("POST")]
+        [StringLength(20)]
+        public string Post { get; set; }
+        public bool? IsModified { get; set; }
+        [Column("Modi_Date", TypeName = "date")]
+        public DateTime? ModiDate { get; set; }
+        [Column("Modi_Time")]
+        [StringLength(5)]
+        public string ModiTime { get; set; }
+        [Column("Modi_User")]
+        [StringLength(20)]
+        public string ModiUser { get; set; }
     }
 }
