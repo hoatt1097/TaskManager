@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using UTS_Portal.ViewModels;
 
 namespace UTS_Portal.Helpers
 {
-    public class MenuHelper
+    public static class MenuHelper
     {
         public static List<MenusByMonth> GetMenusByMonth(db_utsContext _context, string month) /* Format: MM/yyyy */
         {
@@ -31,6 +32,22 @@ namespace UTS_Portal.Helpers
                     })
                     .ToList();
             return MenusByMonth;
+        }
+
+        public static string IsSelected(this IHtmlHelper html, string controller = null, string action = null)
+        {
+            string cssClass = "active";
+            string currentAction = (string)html.ViewContext.RouteData.Values["action"];
+            string currentController = (string)html.ViewContext.RouteData.Values["controller"];
+
+            if (String.IsNullOrEmpty(controller))
+                controller = currentController;
+
+            if (String.IsNullOrEmpty(action))
+                action = currentAction;
+
+            return controller == currentController && action == currentAction ?
+                cssClass : String.Empty;
         }
     }
 }

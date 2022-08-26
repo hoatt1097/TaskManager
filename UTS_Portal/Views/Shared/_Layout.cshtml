@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using UTS_Portal.Helpers
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -92,32 +93,31 @@
     </header>
     <aside id="sidebar" class="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
-            <li class="nav-item"> <a class="nav-link " href="index.html"> <i class="bi bi-grid"></i> <span>Dashboard</span> </a></li>
-            <li class="nav-item">
+            <li class="nav-item @Html.IsSelected(controller: "CopyRequest")"> <a class="nav-link " href="index.html"> <i class="bi bi-grid"></i> <span>Dashboard</span> </a></li>
+            <li class="nav-item @Html.IsSelected(controller: "Users") @Html.IsSelected(controller: "Roles") @Html.IsSelected(controller: "FAQs")">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-menu-button-wide"></i><span>Administrator</span><i class="bi bi-chevron-down ms-auto"></i> </a>
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li> <a class="nav-link collapsed" asp-controller="Users" asp-action="Index"> <i class="bi bi-circle"></i><span>Users</span> </a></li>
                     <li> <a class="nav-link collapsed" asp-controller="Roles" asp-action="Index"> <i class="bi bi-circle"></i><span>Roles</span> </a></li>
-                    <li> <a class="nav-link collapsed" asp-controller="Posts" asp-action="Index"> <i class="bi bi-circle"></i><span>Permissions</span> </a></li>
                     <li> <a class="nav-link collapsed" asp-controller="FAQs" asp-action="Index"> <i class="bi bi-circle"></i><span>FAQ</span> </a></li>
                 </ul>
             </li>
-            <li class="nav-item"> <a class="nav-link collapsed" asp-controller="Posts" asp-action="Index"> <i class="bi bi-file-earmark"></i> <span>Blog Admin</span> </a></li>
-            <li class="nav-item"> <a class="nav-link collapsed" asp-controller="Holidays" asp-action="Index"> <i class="bi bi-file-earmark"></i> <span>Holidays</span> </a></li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-file-earmark"></i> <span>Blogs</span> </a></li>
-            <li class="nav-item"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="Index"> <i class="bi bi-layout-text-window-reverse"></i> <span>Menu</span> </a></li>
-            <li class="nav-item"> <a class="nav-link collapsed" asp-controller="Orders" asp-action="Index"> <i class="bi bi-journal-text"></i> <span>Order</span> </a></li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-bar-chart"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i> </a>
-                <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li> <a href="#"> <i class="bi bi-circle"></i><span>Chart.js</span> </a></li>
-                    <li> <a href="#"> <i class="bi bi-circle"></i><span>ApexCharts</span> </a></li>
-                    <li> <a href="#"> <i class="bi bi-circle"></i><span>ECharts</span> </a></li>
-                    <li> <a href="#"> <i class="bi bi-circle"></i><span>Chart.js</span> </a></li>
-                    <li> <a href="#"> <i class="bi bi-circle"></i><span>ApexCharts</span> </a></li>
-                    <li> <a href="#"> <i class="bi bi-circle"></i><span>ECharts</span> </a></li>
-                </ul>
-            </li>
+            <li class="nav-item @Html.IsSelected(controller: "Posts")"> <a class="nav-link collapsed" asp-controller="Posts" asp-action="Index"> <i class="bi bi-file-earmark"></i> <span>Blog Admin</span> </a></li>
+            <li class="nav-item @Html.IsSelected(controller: "Holidays")"> <a class="nav-link collapsed" asp-controller="Holidays" asp-action="Index"> <i class="bi bi-file-earmark"></i> <span>Holidays</span> </a></li>
+            <li class="nav-item @Html.IsSelected(controller: "CopyRequest")"> <a class="nav-link collapsed" href="#"> <i class="bi bi-file-earmark"></i> <span>Blogs</span> </a></li>
+            <li class="nav-item @Html.IsSelected(controller: "Menus")"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="Index"> <i class="bi bi-layout-text-window-reverse"></i> <span>Menu</span> </a></li>
+            <li class="nav-item @Html.IsSelected(controller: "Orders")"> <a class="nav-link collapsed" asp-controller="Orders" asp-action="Index"> <i class="bi bi-journal-text"></i> <span>Order</span> </a></li>
+            @*<li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-bar-chart"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i> </a>
+                    <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li> <a href="#"> <i class="bi bi-circle"></i><span>Chart.js</span> </a></li>
+                        <li> <a href="#"> <i class="bi bi-circle"></i><span>ApexCharts</span> </a></li>
+                        <li> <a href="#"> <i class="bi bi-circle"></i><span>ECharts</span> </a></li>
+                        <li> <a href="#"> <i class="bi bi-circle"></i><span>Chart.js</span> </a></li>
+                        <li> <a href="#"> <i class="bi bi-circle"></i><span>ApexCharts</span> </a></li>
+                        <li> <a href="#"> <i class="bi bi-circle"></i><span>ECharts</span> </a></li>
+                    </ul>
+                </li>*@
             <li class="nav-item"> <a class="nav-link collapsed" href="pages-faq.html"> <i class="bi bi-question-circle"></i> <span>F.A.Q</span> </a></li>
             <li class="nav-item"> <a class="nav-link collapsed" href="pages-contact.html"> <i class="bi bi-envelope"></i> <span>Contact</span> </a></li>
         </ul>
@@ -126,7 +126,7 @@
         @RenderBody()
     </main>
     <footer id="footer" class="footer fixed-bottom">
-        <div class="copyright"> &copy; Copyright <strong><span>Compnay Name</span></strong>. All Rights Reserved</div>
+        <div class="copyright"> &copy; Copyright <strong><span>UTS School</span></strong>. All Rights Reserved</div>
     </footer>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

@@ -1,4 +1,22 @@
-﻿.control-label {
+﻿.sidebar-nav .nav-link {
+    color: #012970;
+    background: #fff;
+}
+
+.sidebar-nav .nav-link i {
+    color: #012970;
+}
+
+.sidebar-nav .active .nav-link {
+    color: #4154f1 !important;
+    background: #f6f9ff !important;
+}
+
+.sidebar-nav .active i {
+    color: #4154f1 !important;
+}
+
+.control-label {
     font-weight: bold;
 }
 
