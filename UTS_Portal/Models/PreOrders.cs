@@ -11,10 +11,9 @@ namespace UTS_Portal.Models
 {
     public partial class PreOrders
     {
-        [Key]
         [Column("ID")]
         public int Id { get; set; }
-        [Required]
+        [Key]
         [StringLength(20)]
         public string UserCode { get; set; }
         [Required]
@@ -22,6 +21,7 @@ namespace UTS_Portal.Models
         public string MonthYear { get; set; }
         public int? Week { get; set; }
         public int? Dow { get; set; }
+        [Key]
         [Column(TypeName = "date")]
         public DateTime OrderDate { get; set; }
         [Column(TypeName = "date")]
@@ -29,13 +29,14 @@ namespace UTS_Portal.Models
         [Required]
         [StringLength(5)]
         public string SubmittedTime { get; set; }
-        [Required]
+        [Key]
         [StringLength(6)]
         public string ItemCode { get; set; }
         [Column("CKCode")]
         [StringLength(20)]
         public string Ckcode { get; set; }
         public int Qty { get; set; }
+        [Key]
         [Column("RepastID")]
         public int RepastId { get; set; }
         [StringLength(20)]

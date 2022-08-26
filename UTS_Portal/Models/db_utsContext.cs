@@ -71,6 +71,16 @@ namespace UTS_Portal.Models
 
             modelBuilder.Entity<PreOrders>(entity =>
             {
+                entity.HasKey(e => new { e.UserCode, e.OrderDate, e.ItemCode, e.RepastId });
+
+                entity.Property(e => e.UserCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
                 entity.Property(e => e.CanteenId)
                     .IsUnicode(false)
                     .IsFixedLength();
@@ -87,9 +97,7 @@ namespace UTS_Portal.Models
                     .IsUnicode(false)
                     .IsFixedLength();
 
-                entity.Property(e => e.ItemCode)
-                    .IsUnicode(false)
-                    .IsFixedLength();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.ModifiedTime)
                     .IsUnicode(false)
@@ -112,10 +120,6 @@ namespace UTS_Portal.Models
                     .IsFixedLength();
 
                 entity.Property(e => e.SubmittedTime)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.UserCode)
                     .IsUnicode(false)
                     .IsFixedLength();
             });

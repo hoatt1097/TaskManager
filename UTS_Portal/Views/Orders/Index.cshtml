@@ -516,9 +516,34 @@
                                         data: { orderSubmit: month },
                                         success: function (data) {
                                             if (data.success) {
-                                                $.alert(data.message);
+                                                $.confirm({
+                                                    title: 'Successfully!',
+                                                    content: data.message,
+                                                    type: 'green',
+                                                    typeAnimated: true,
+                                                    buttons: {
+                                                        Ok: {
+                                                            btnClass: 'btn-success',
+                                                            action: function () {
+
+                                                            }
+                                                        },
+                                                    }
+                                                });
                                             } else {
-                                                $.alert(data.message);
+                                                $.confirm({
+                                                    title: 'Error!',
+                                                    content: data.message,
+                                                    type: 'red',
+                                                    typeAnimated: true,
+                                                    buttons: {
+                                                        Ok: {
+                                                            btnClass: 'btn-red',
+                                                            action: function () {
+                                                            }
+                                                        },
+                                                    }
+                                                });
                                             }
                                         }
                                     });

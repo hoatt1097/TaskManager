@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using UTS_Portal.Helpers;
@@ -59,6 +60,12 @@ namespace UTS_Portal.Controllers
 
                 foreach(var day in orderSubmit)
                 {
+                    string dayString = day.Day.ToString();
+                    if(day.Day < 10)
+                    {
+                        dayString = "0" + day.Day;
+                    }
+                    var orderDate = DateTime.ParseExact(dayString + "/" + day.CurrentMonth, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                     if (day.Breakfast != null)
                     {
                         foreach (var item in day.Breakfast)
@@ -69,7 +76,7 @@ namespace UTS_Portal.Controllers
                                 MonthYear = monthYear,
                                 Week = null,
                                 Dow = null,
-                                OrderDate = DateTime.Parse(day.Day + "/" + day.CurrentMonth),
+                                OrderDate = orderDate,
                                 SubmittedDate = DateTime.Now,
                                 SubmittedTime = DateTime.Now.ToString("HH:mm"),
                                 ItemCode = item.Code.Trim(),
@@ -96,7 +103,7 @@ namespace UTS_Portal.Controllers
                                 MonthYear = monthYear,
                                 Week = null,
                                 Dow = null,
-                                OrderDate = DateTime.Parse(day.Day + "/" + day.CurrentMonth),
+                                OrderDate = orderDate,
                                 SubmittedDate = DateTime.Now,
                                 SubmittedTime = DateTime.Now.ToString("HH:mm"),
                                 ItemCode = item.Code.Trim(),
@@ -123,7 +130,7 @@ namespace UTS_Portal.Controllers
                                 MonthYear = monthYear,
                                 Week = null,
                                 Dow = null,
-                                OrderDate = DateTime.Parse(day.Day + "/" + day.CurrentMonth),
+                                OrderDate = orderDate,
                                 SubmittedDate = DateTime.Now,
                                 SubmittedTime = DateTime.Now.ToString("HH:mm"),
                                 ItemCode = item.Code.Trim(),
@@ -144,12 +151,14 @@ namespace UTS_Portal.Controllers
                 _context.SaveChanges();
                 return Json(new { success = true, message = $"Submit order successfully!" });
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateException)
             {
-                throw;
+                return Json(new { success = false, message = $"Submit order unsuccessfully! Data is exist." });
             }
-
-            return Json(new { success = false, message = $"Submit order unsuccessfully!" });
+            catch (Exception)
+            {
+                return Json(new { success = false, message = $"Something is error" });
+            }
         }
         public string BuildTxtMonth()
         {
