@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
+using UTS_Portal.Extension;
 using UTS_Portal.Models;
 
 namespace UTS_Portal.Controllers
@@ -100,6 +101,7 @@ namespace UTS_Portal.Controllers
             if (ModelState.IsValid)
             {
                 accounts.CreatedDate = DateTime.Now;
+                accounts.Password = Utilities.MD5Hash(accounts.Password);
                 _context.Add(accounts);
                 await _context.SaveChangesAsync();
                 _notyfService.Success("Add user sucessfully!");
@@ -143,6 +145,7 @@ namespace UTS_Portal.Controllers
             {
                 try
                 {
+                    accounts.Password = Utilities.MD5Hash(accounts.Password);
                     _context.Update(accounts);
                     await _context.SaveChangesAsync();
                 }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
+using UTS_Portal.Extension;
 using UTS_Portal.Models;
 
 namespace UTS_Portal.Controllers
@@ -50,8 +51,8 @@ namespace UTS_Portal.Controllers
                     {
                         ViewBag.Error = "Account is not correct. Please try again";
                     }
-                    string pass = (model.Password.Trim());
-                    if (kh?.Password?.Trim() != pass)
+                    string pass = Utilities.MD5Hash(model.Password.Trim());
+                    if (kh.Password!= pass)
                     {
                         ViewBag.Error = "Account is not correct. Please try again";
                         return View(model);
