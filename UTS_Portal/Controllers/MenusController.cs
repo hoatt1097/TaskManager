@@ -363,7 +363,7 @@ namespace UTS_Portal.Controllers
                         {
                             MonthYear = MonthYear,
                             Week = Week,
-                            Dow = Dow,
+                            DoW = Dow,
                             MenuDate = MenuDate,
                             Category = Category,
                             ItemCode = ItemCode,

@@ -63,6 +63,10 @@ namespace UTS_Portal.Models
                 entity.Property(e => e.ItemCode)
                     .IsUnicode(false)
                     .IsFixedLength();
+
+                entity.Property(e => e.MonthYear)
+                    .IsUnicode(false)
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<PreOrders>(entity =>

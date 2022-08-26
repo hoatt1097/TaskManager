@@ -15,14 +15,14 @@ namespace UTS_Portal.Models
         [Column("ID")]
         public int Id { get; set; }
         [Required]
-        [Column(TypeName = "text")]
+        [StringLength(6)]
         public string MonthYear { get; set; }
         public int? Week { get; set; }
-        public int? Dow { get; set; }
+        public int? DoW { get; set; }
         [Column(TypeName = "date")]
         public DateTime MenuDate { get; set; }
         [Required]
-        [StringLength(20)]
+        [StringLength(30)]
         public string Category { get; set; }
         [Required]
         [StringLength(6)]
