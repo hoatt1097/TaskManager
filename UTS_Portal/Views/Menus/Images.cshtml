@@ -1,0 +1,38 @@
+﻿@model UTS_Portal.Models.MenuInfos
+@using UTS_Portal.ViewModels;
+
+@{
+    ViewData["Title"] = "Images";
+    string CurrentMonth = ViewBag.CurrentMonth;
+    int MenuId = ViewBag.MenuId;
+    List<string> MenuFileNames = ViewBag.MenuFileNames;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link href="~/css/custom-order.css" rel="stylesheet" />
+}
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Menus</a>
+            <a asp-action="Edit" asp-route-id="@MenuId" class="breadcrumb-item"><i class="anticon anticon-home"></i>Edit @CurrentMonth</a>
+            <span class="breadcrumb-item active">Images</span>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title pt-0">Menu image @CurrentMonth</h5>
+                @foreach (var image in MenuFileNames)
+                {
+                    <img src="~/images/@image" style="height:200px" alt="@image">
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

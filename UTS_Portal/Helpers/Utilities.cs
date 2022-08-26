@@ -128,6 +128,35 @@ namespace UTS_Portal.Extension
             }
         }
 
+        public static List<string> GetAllFiles(string sDirectory)
+        {
+            try
+            {
+                List<string> listName = new List<string>();
+                if (sDirectory == string.Empty)
+                {
+                    return listName;
+                }
+                string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", sDirectory);
+                if (!System.IO.Directory.Exists(path))
+                {
+                    return listName;
+                }
+
+                DirectoryInfo di = new DirectoryInfo(path);
+                FileInfo[] files = di.GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    listName.Add(sDirectory + "/" + file.Name);
+                }
+                return listName;
+            }
+            catch
+            {
+                return new List<string>();
+            }
+        }
+
         public static string GetRandomKey(int length = 5)
         {
             string pattern = @"0123456789zxcvbnmasdfghjklqwertyuiop[]{}:~!@#$%^&*()+";

@@ -5,7 +5,6 @@
     ViewData["Title"] = "Edit";
     List<CalendarMonth> CalendarMonth = ViewBag.CalendarMonth;
     List<MenusByMonth> MenusByMonth = ViewBag.MenusByMonth;
-    List<string> MenuFileNames = ViewBag.MenuFileNames;
     var HasMenuData = ViewBag.HasMenuData;
 
     string TabView = ViewBag.TabView == null ? "info" : ViewBag.TabView;
@@ -34,56 +33,51 @@
                 <div class="tab-content pt-2" id="myTabContent">
                     <div class="tab-pane fade show @(TabView == "info" ? "active show" : "")" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row">
-                            <div class="col-md-7">
-                                <h5 class="card-title">Update menu</h5>
+                            <div class="col-md-6">
                                 <form class="row" asp-action="Edit" enctype="multipart/form-data">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                     <input type="hidden" asp-for="Id" />
                                     <input type="hidden" asp-for="Month" />
                                     <input type="hidden" name="Images" value="@Model.Images" />
-                                    <p>When updating the menu, old photos will be deleted</p>
-                                    <div class="col-md-10 mb-2">
+                                    <div class="col-md-12 mb-2">
+                                        <p>Choose another images to update menus</p>
                                         <label class="control-label">Change Images</label>
                                         <div class="d-flex">
                                             <input id="fThumbs" name="fThumbs" class="form-control" type="file" multiple="multiple" accept="image/jpeg, image/png, image/jpg" />
+                                            <span class="btn btn-outline-secondary ml-1 show-image" style="border: 1px solid #ced4da">Hide</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 mb-2">
+                                    <div class="col-md-12 mb-2" id="result">
+                                    </div>
+                                    <div class="col-md-1 mb-2">
                                         <label class="control-label">Active</label>
                                         <div class="mt-2">
                                             <input class="form-check-input ml-1" type="checkbox" asp-for="Status">
                                             <label class="ml-4">Active</label>
                                         </div>
                                     </div>
-                                    <div class="form-group text-right">
-                                        <input type="submit" value="Update menu" class="btn btn-primary" />
+                                    <div class="form-group">
+                                        <input type="submit" value="Save" class="btn btn-primary" />
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-md-5" style="border-left: 1px solid rgba(0,0,0,.125)">
-                                <h5 class="card-title">Add photos to the menu</h5>
-                                <form class="row" asp-action="AddPhoto" enctype="multipart/form-data">
-                                    <input type="hidden" asp-for="Id" />
-                                    <div class="col-md-12 mb-2">
-                                        <p>When adding, photos will be added to the old photos folder</p>
-                                        <label class="control-label">Add image to menu</label>
-                                        <div class="d-flex">
-                                            <input id="UpdateImages" name="updateImages" class="form-control" type="file" multiple="multiple" accept="image/jpeg, image/png, image/jpg" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group text-right">
-                                        <input type="submit" value="Add photos" class="btn btn-primary" />
-                                    </div>
-                                </form>
+                            <div class="col-md-6" style="border-left: 1px solid rgba(0,0,0,.125)">
+                                <h5 class="card-title">Current menus</h5>
                                 <div>
+                                    <div class="carousel-inner">
+                                        @if (Model.Images == string.Empty || Model.Images == null)
+                                        {
+                                            <p>There are currently no images</p>
+                                        }
+                                        else
+                                        {
+                                            @foreach (var image in Model.Images.Split(";"))
+                                            {
+                                                <img src="~/images/@image" style="height:200px" alt="@image">
+                                            }
+                                        }
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h5 class="card-title">Menu Images</h5>
-                                <a asp-action="Images" asp-route-id="@Model.Id">Click to view Images</a>
                             </div>
                         </div>
                     </div>
@@ -130,7 +124,7 @@
                                             <option value="vn">Vietnamese</option>
                                             <option value="en" selected>English</option>
                                         </select>
-
+                                       
                                         @for (int Week = 1; Week <= CalendarMonth.Last().Week; Week++)
                                         {
                                             var Active = Week == 1 ? "active" : "";
@@ -310,6 +304,21 @@
 @section Scripts {
     <script>
         jQuery(document).ready(function () {
+            $('.show-image').click(function () {
+                if ($('.show-image').text() === "Show") {
+                    $('.show-image').text("Hide");
+                } else {
+                    $('.show-image').text("Show");
+                }
+                $('#result').toggle();
+            })
+
+            // Hide Show button
+            if ($("#fThumbs").val() == "") {
+                $(".show-image").hide();
+            }
+
+
             // Init Language
             if ($("#language").val() === "vn") {
                 $(".title-en").hide();
@@ -373,6 +382,33 @@
             });
 
         });
+
+        document.querySelector("#fThumbs").addEventListener("change", (e) => { //CHANGE EVENT FOR UPLOADING PHOTOS
+            if (window.File && window.FileReader && window.FileList && window.Blob) { //CHECK IF FILE API IS SUPPORTED
+                const files = e.target.files; //FILE LIST OBJECT CONTAINING UPLOADED FILES
+                const output = document.querySelector("#result");
+                output.innerHTML = "";
+                if (files.length > 0) {
+                    $(".show-image").show();
+                } else {
+                    $(".show-image").hide();
+                }
+                for (let i = 0; i < files.length; i++) { // LOOP THROUGH THE FILE LIST OBJECT
+                    if (!files[i].type.match("image")) continue; // ONLY PHOTOS (SKIP CURRENT ITERATION IF NOT A PHOTO)
+                    const picReader = new FileReader(); // RETRIEVE DATA URI
+                    picReader.addEventListener("load", function (event) { // LOAD EVENT FOR DISPLAYING PHOTOS
+                        const picFile = event.target;
+                        const div = document.createElement("div");
+                        div.innerHTML = `<img class="thumbnail" src="${picFile.result}" title="${picFile.name}"/>`;
+                        output.appendChild(div);
+                    });
+                    picReader.readAsDataURL(files[i]); //READ THE IMAGE
+                }
+            } else {
+                alert("Your browser does not support File API");
+            }
+        });
+
     </script>
 }
 

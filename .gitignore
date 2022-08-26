@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+UTS_Portal/wwwroot/images/menus/*
+UTS_Portal/wwwroot/images/news/*

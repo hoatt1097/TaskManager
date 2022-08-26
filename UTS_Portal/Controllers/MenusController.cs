@@ -92,16 +92,15 @@ namespace UTS_Portal.Controllers
             return View();
         }
 
-        // POST: MenuInfos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestFormLimits(MultipartBodyLengthLimit = 268435456)]
+        [RequestSizeLimit(268435456)]
         public async Task<IActionResult> Create([Bind("Id,Month,Images,Status")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> fThumbs)
         {
             if (ModelState.IsValid)
             {
-                var existMonth = _context.MenuInfos.ToList().Where(x => x.Month.ToString("yyyyMM") == menuInfos.Month.ToString("yyyyMM")).FirstOrDefault();
+                var existMonth = _context.MenuInfos.ToList().Where(x => x.Month.ToString("MMyyyy") == menuInfos.Month.ToString("MMyyyy")).FirstOrDefault();
                 if (existMonth != null)
                 {
                     ModelState.AddModelError("Month", "Month is exist");
@@ -115,8 +114,8 @@ namespace UTS_Portal.Controllers
                     int fileNumber = 1;
                     foreach(var image in fThumbs)
                     {
-                        string newFilename = "menus_" + menuInfos.Month.ToString("yyyyMM") + "_" + fileNumber;
-                        string folder = "menus/" + menuInfos.Month.ToString("yyyyMM");
+                        string newFilename = "menus_" + menuInfos.Month.ToString("MMyyyy") + "_" + fileNumber;
+                        string folder = "menus/" + menuInfos.Month.ToString("MMyyyy");
                         string extension = Path.GetExtension(image.FileName);
                         string imageName = newFilename + extension;
                         var imagePath = await Utilities.UploadFile(image, folder, imageName.ToLower());
@@ -154,6 +153,9 @@ namespace UTS_Portal.Controllers
                 return NotFound();
             }
 
+            // Get all images in folder
+            ViewBag.MenuFileNames = Utilities.GetAllFiles("menus/" + menuInfos.Month.ToString("MMyyyy"));
+
             // Call data menu in month
             List<CalendarMonth> CalendarMonth = DateHelper.GetCalendar(_context, menuInfos.Month);
             ViewBag.CalendarMonth = CalendarMonth;
@@ -168,10 +170,20 @@ namespace UTS_Portal.Controllers
             return View(menuInfos);
         }
 
-        // POST: Menus/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        public async Task<IActionResult> Images(int? id)
+        {
+            // Get all images in folder
+            var menuInfos = await _context.MenuInfos.FindAsync(id);
+            ViewBag.MenuId = menuInfos.Id;
+            ViewBag.CurrentMonth = menuInfos.Month.ToString("MM/yyyy");
+            ViewBag.MenuFileNames = Utilities.GetAllFiles("menus/" + menuInfos.Month.ToString("MMyyyy"));
+            return View();
+        }
+
+            // POST: Menus/Edit/5
+            // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+            // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Month,Images,Status")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> fThumbs)
         {
@@ -188,26 +200,21 @@ namespace UTS_Portal.Controllers
                     var listImagePath = new List<string>();
                     if (fThumbs != null && fThumbs.Count() > 0)
                     {
-                        // Delete all images in project
+                        string folder = "menus/" + menuInfos.Month.ToString("MMyyyy");
+                        // Delete all images
                         if (menuInfos.Month != null)
                         {
-                            string folder = "menus/" + menuInfos.Month.ToString("yyyyMM");
                             Utilities.DeleteAllFiles(folder);
                         }
 
-                        int fileNumber = 1;
                         foreach (var image in fThumbs)
                         {
-                            string newFilename = "menus_" + menuInfos.Month.ToString("yyyyMM") + "_" + fileNumber;
-                            string folder = "menus/" + menuInfos.Month.ToString("yyyyMM");
-                            string extension = Path.GetExtension(image.FileName);
-                            string imageName = newFilename + extension;
+                            string imageName = image.FileName;
                             var imagePath = await Utilities.UploadFile(image, folder, imageName.ToLower());
 
                             listImagePath.Add(folder.ToLower() + "/" + imagePath);
-                            fileNumber++;
                         }
-                        menuInfos.Images = string.Join(";", listImagePath);
+                        menuInfos.Images = folder;
                     }
 
                     _context.Update(menuInfos);
@@ -226,7 +233,11 @@ namespace UTS_Portal.Controllers
                     }
                 }
 
-                _notyfService.Success("Edit menu sucessfully!");
+                _notyfService.Success("Update  menu sucessfully!");
+
+                // Get all images in folder
+                ViewBag.MenuFileNames = Utilities.GetAllFiles("menus/" + menuInfos.Month.ToString("MMyyyy"));
+
                 // Call data menu in month
                 List<CalendarMonth> CalendarMonth = DateHelper.GetCalendar(_context, menuInfos.Month);
                 ViewBag.CalendarMonth = CalendarMonth;
@@ -242,6 +253,60 @@ namespace UTS_Portal.Controllers
             }
 
             return View(menuInfos);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPhoto(int id, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> updateImages)
+        {
+            var menuInfos = await _context.MenuInfos.FirstOrDefaultAsync(m => m.Id == id);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //Handle Images
+                    if (updateImages != null && updateImages.Count() > 0)
+                    {
+                        var listImagePath = new List<string>();
+                        string folder = "menus/" + menuInfos.Month.ToString("MMyyyy");
+
+                        foreach (var image in updateImages)
+                        {
+                            string imageName = image.FileName;
+                            var imagePath = await Utilities.UploadFile(image, folder, imageName.ToLower());
+
+                            listImagePath.Add(folder.ToLower() + "/" + imagePath);
+                        }
+                        menuInfos.Images = folder;
+
+                        _context.Update(menuInfos);
+                        await _context.SaveChangesAsync();
+
+                        // Get all images in folder
+                        ViewBag.MenuFileNames = Utilities.GetAllFiles("menus/" + menuInfos.Month.ToString("MMyyyy"));
+
+                        // Call data menu in month
+                        List<CalendarMonth> CalendarMonth = DateHelper.GetCalendar(_context, menuInfos.Month);
+                        ViewBag.CalendarMonth = CalendarMonth;
+
+                        // Collect data menu item by month
+                        List<MenusByMonth> MenusByMonth = MenuHelper.GetMenusByMonth(_context, menuInfos.Month.ToString("MM/yyyy"));
+                        ViewBag.MenusByMonth = MenusByMonth;
+
+                        // Check menu item data has data
+                        ViewBag.HasMenuData = MenusByMonth.Count > 0 ? true : false;
+
+                        _notyfService.Success("Add photos sucessfully!");
+                        return RedirectToAction("Edit", new { id });
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }   
+            }
+            _notyfService.Error("Add photos unsucessfully!");
+            return RedirectToAction("Edit", new { id });
         }
 
         // GET: Menus/Delete/5
@@ -270,7 +335,7 @@ namespace UTS_Portal.Controllers
             // Delete all images in project
             if(menuInfos.Month != null)
             {
-                string folder = "menus/" + menuInfos.Month.ToString("yyyyMM");
+                string folder = "menus/" + menuInfos.Month.ToString("MMyyyy");
                 Utilities.DeleteAllFiles(folder);
             }
 

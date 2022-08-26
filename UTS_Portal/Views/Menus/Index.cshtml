@@ -41,7 +41,7 @@
                     <tr>
                         <th style="width: 120px">STT</th>
                         <th>Month</th>
-                        <th>Images</th>
+                        <th>Image Link</th>
                         <th style="width: 120px">Status</th>
                         <th style="width: 180px">Action</th>
                     </tr>
@@ -57,10 +57,7 @@
                                 <td>@i</td>
                                 <td>@item.Month.ToString("MM/yyyy")</td>
                                 <td>
-                                    @foreach (var image in item.Images.Split(";"))
-                                    {
-                                        <img src="~/images/@image" alt="@image" style="height:40px" />
-                                    }
+                                    <a asp-action="Images" asp-route-id="@item.Id">View images</a>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">
