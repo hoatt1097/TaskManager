@@ -50,6 +50,7 @@ namespace UTS_Portal.Controllers
                     if (kh == null)
                     {
                         ViewBag.Error = "Account is not correct. Please try again";
+                        return View(model);
                     }
                     string pass = Utilities.MD5Hash(model.Password.Trim());
                     if (kh.Password!= pass)
@@ -65,6 +66,7 @@ namespace UTS_Portal.Controllers
                     HttpContext.Session.SetString("UserID", kh.Id.ToString());
                     HttpContext.Session.SetString("UserCode", kh.Code.ToString());
                     HttpContext.Session.SetString("Fullname", kh.Fullname);
+                    HttpContext.Session.SetString("Username", kh.Username);
 
                     //identity
                     var userClaims = new List<Claim>

@@ -8,13 +8,22 @@
 }
 
 .sidebar-nav .active .nav-link {
-    color: #4154f1 !important;
+    color: #ff8302 !important;
     background: #f6f9ff !important;
 }
 
 .sidebar-nav .active i {
-    color: #4154f1 !important;
+    color: #ff8302 !important;
 }
+
+.sidebar-nav .nav-link:hover {
+    color: #ff8302;
+    background: #f6f9ff;
+}
+
+    .sidebar-nav .nav-link:hover i {
+        color: #ff8302;
+    }
 
 .control-label {
     font-weight: bold;
