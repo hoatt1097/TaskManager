@@ -1,0 +1,59 @@
+﻿@model UTS_Portal.Models.Feedbacks
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link href="~/css/contact.css" rel="stylesheet" />
+}
+
+@*<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-controller="Homes" asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Home</a>
+            <span class="breadcrumb-item active">Contact</span>
+        </nav>
+    </div>
+</div>*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="footer-form">
+            <div class="form-image">
+                <img class="bg-main" src="https://utschool.edu.vn/wp-content/themes/uts/page-templates/img/image-footer.png" alt="">
+            </div>
+            <div class="form-register">
+                <div role="form">
+                    <form asp-action="Create">
+                        <h3>Feedback</h3>
+                        <div class="wrapper-form">
+                            <div class="form-input">
+                                <span><input type="text" asp-for="Name" size="40" placeholder="Name"></span>
+                            </div>
+                            <div class="form-input">
+                                <span><input type="text" asp-for="Phone" size="40" placeholder="Phone number"></span><br>
+                            </div>
+                            <div class="form-input">
+                                <span><input type="text" asp-for="Email" size="40" placeholder="Email"></span>
+                            </div>
+                            <div class="form-input">
+                                <span>
+                                    <textarea type="text" asp-for="Message" size="40" placeholder="Write Message"></textarea>
+                                </span>
+                            </div>
+                            <div class="button-section">
+                                <p>
+                                    <input type="submit" value="SEND FEEDBACK" class="button3">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="wpcf7-response-output">@ViewBag.Error</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

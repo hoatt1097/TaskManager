@@ -41,11 +41,6 @@ namespace UTS_Portal.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Feedbacks>(entity =>
-            {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-            });
-
             modelBuilder.Entity<Menus>(entity =>
             {
                 entity.Property(e => e.Category)

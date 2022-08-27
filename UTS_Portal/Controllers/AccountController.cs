@@ -27,8 +27,8 @@ namespace UTS_Portal.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
-            var taikhoanID = HttpContext.Session.GetString("AccountId");
-            if (taikhoanID != null) return RedirectToAction("Index", "Home");
+            var taiuseroanID = HttpContext.Session.GetString("AccountId");
+            if (taiuseroanID != null) return RedirectToAction("Index", "Home");
 
             LoginViewModel loginViewModel = new LoginViewModel { AccountType = "Parent" };
             return View(loginViewModel);
@@ -42,49 +42,55 @@ namespace UTS_Portal.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Users kh = _context.Users
+                    Users user = _context.Users
                     .Include(p => p.Role)
                     .Where(p => p.Active == true)
                     .SingleOrDefault(p => p.Username.ToLower() == model.UserName.ToLower().Trim());
 
-                    if (kh == null)
+                    if (user == null)
                     {
                         ViewBag.Error = "Account is not correct. Please try again";
                         return View(model);
                     }
                     string pass = Utilities.MD5Hash(model.Password.Trim());
-                    if (kh.Password!= pass)
+                    if (user.Password!= pass)
                     {
                         ViewBag.Error = "Account is not correct. Please try again";
                         return View(model);
                     }
 
-                    kh.LastLogin = DateTime.Now;
-                    _context.Update(kh);
+                    user.LastLogin = DateTime.Now;
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
 
-                    HttpContext.Session.SetString("UserID", kh.Id.ToString());
-                    HttpContext.Session.SetString("UserCode", kh.Code.ToString());
-                    HttpContext.Session.SetString("Fullname", kh.Fullname);
-                    HttpContext.Session.SetString("Username", kh.Username);
+                    HttpContext.Session.SetString("UserID", user.Id.ToString());
+                    HttpContext.Session.SetString("UserCode", user.Code.ToString());
+                    HttpContext.Session.SetString("Fullname", user.Fullname);
+                    HttpContext.Session.SetString("Username", user.Username);
 
                     //identity
                     var userClaims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, kh.Username),
-                        new Claim(ClaimTypes.Email, kh.Email),
-                        new Claim("Id", kh.Id.ToString()),
-                        new Claim("Username", kh.Username.ToString()),
-                        new Claim("Code", kh.Code.ToString()),
-                        new Claim("Fullname", kh.Fullname.ToString()),
-                        new Claim("Email", kh.Email.ToString()),
-                        new Claim("RoleId", kh.RoleId.ToString()),
-                        new Claim("RoleName", kh.Role.Name),
-                        new Claim(ClaimTypes.Role, kh.Role.Name)
+                        new Claim(ClaimTypes.Name, user.Username),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim("Id", user.Id.ToString()),
+                        new Claim("Username", user.Username.ToString()),
+                        new Claim("Code", user.Code.ToString()),
+                        new Claim("Fullname", user.Fullname.ToString()),
+                        new Claim("Email", user.Email.ToString()),
+                        new Claim("RoleId", user.RoleId.ToString()),
+                        new Claim("RoleName", user.Role.Name),
+                        new Claim(ClaimTypes.Role, user.Role.Name)
                     };
                     var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");
                     var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
                     await HttpContext.SignInAsync(userPrincipal);
+
+                    if(user.Role.Name != "Parent")
+                    {
+                        var NotiCount = _context.Feedbacks.AsNoTracking().Where(x => x.IsView != 1).OrderByDescending(x => x.SubmittedDate).Count();
+                        HttpContext.Session.SetString("NotiCount", NotiCount.ToString());
+                    } 
 
                     return RedirectToAction("Index", "Home");
                 }

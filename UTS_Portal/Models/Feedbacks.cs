@@ -26,5 +26,6 @@ namespace UTS_Portal.Models
         public string Message { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime SubmittedDate { get; set; }
+        public int? IsView { get; set; }
     }
 }
