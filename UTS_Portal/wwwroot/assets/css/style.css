@@ -55,28 +55,28 @@
   /*--------------------------------------------------------------
   # Back to top button
   --------------------------------------------------------------*/
-  .back-to-top {
+.back-to-top {
 	position: fixed;
 	visibility: hidden;
 	opacity: 0;
 	right: 15px;
 	bottom: 15px;
 	z-index: 99999;
-	background: #4154f1;
+	background: #FF8302;
 	width: 40px;
 	height: 40px;
 	border-radius: 4px;
 	transition: all 0.4s;
-  }
+}
   .back-to-top i {
 	font-size: 24px;
 	color: #fff;
 	line-height: 0;
   }
-  .back-to-top:hover {
-	background: #6776f4;
-	color: #fff;
-  }
+	.back-to-top:hover {
+		background: #FF8302;
+		color: #fff;
+	}
   .back-to-top.active {
 	visibility: visible;
 	opacity: 1;
@@ -260,10 +260,10 @@
 	outline: 0;
 	box-shadow: none;
   }
-  .accordion-button:not(.collapsed) {
+.accordion-button:not(.collapsed) {
 	color: #012970;
-	background-color: #f6f9ff;
-  }
+	background-color: #FFF5E6;
+}
   
   .accordion-flush .accordion-button {
 	padding: 15px 0;
@@ -1053,13 +1053,13 @@
   /*--------------------------------------------------------------
   # Footer
   --------------------------------------------------------------*/
-  .footer {
+.footer {
 	padding: 5px 0;
 	font-size: 14px;
 	transition: all 0.3s;
-	border-top: 1px solid #cddfff;
+	border-top: 1px solid #FFF5E6;
 	background-color: #fff;
-  }
+}
   .footer .copyright {
 	text-align: center;
 	color: #012970;

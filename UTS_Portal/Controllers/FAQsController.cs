@@ -32,6 +32,18 @@ namespace UTS_Portal.Controllers
             return View(models);
         }
 
+        public async Task<IActionResult> List(int? page)
+        {
+            var pageNumber = page == null || page <= 0 ? 1 : page.Value;
+            var pageSize = 10;
+            var ls = _context.Faqs.AsNoTracking().OrderBy(x => x.OrderNo);
+            PagedList<Faqs> models = new PagedList<Faqs>(ls, pageNumber, pageSize);
+
+            ViewBag.CurrentPage = pageNumber;
+            ViewBag.Total = ls.Count();
+            return View(models);
+        }
+
         // GET: FAQ/Details/5
         public async Task<IActionResult> Details(int? id)
         {

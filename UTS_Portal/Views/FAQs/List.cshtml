@@ -1,0 +1,106 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<UTS_Portal.Models.Faqs>
+
+@{
+    int CurrentPage = ViewBag.CurrentPage;
+    int Total = ViewBag.Total;
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <style>
+        .wrapper-header h3 {
+            margin-bottom: 24px;
+            font-size: 40px;
+            line-height: 48px;
+            color: #804100;
+            text-align: center;
+            font-weight: 700;
+        }
+        .list-faq button {
+            color: #343434;
+            font-size: 18px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+            font-weight: 700;
+            transition: 0.4s;
+        }
+
+        .accordion-header {
+            display: flex;
+        }
+
+        .accordion-header button {
+            color: #804100;
+            line-height: 36px;
+            font-weight: 700;
+        }
+
+        .accordion-body {
+            color: #494949;
+            font-size: 18px;
+            line-height: 30px;
+            font-weight: 400;
+            transition: 0.4s;
+            pointer-events: none;
+            padding: 20px 25px;
+        }
+
+        .number {
+            width: 30px;
+            height: 30px;
+            color: #FFFFFF;
+            font-size: 24px;
+            line-height: 36px;
+            font-weight: 700;
+            padding: 2px 15px;
+            border-radius: 8px;
+            background-color: #FF8302;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Iphone */
+        @@media only screen and (max-width: 1600px) {
+            .bg-image img{
+                width: 100%;
+            }
+
+            .list-faq button {
+                font-size: 16px !important;
+                line-height: 24px !important;
+            }
+        }
+    </style>
+}
+<div class="card">
+    <div class="card-body">
+        <div class="bg-image text-center mb-4">
+            <img src="https://utschool.edu.vn/wp-content/themes/uts/page-templates/img/BG.png" alt="">
+        </div>
+        <div class="wrapper-header">
+            <h3>Frequently asked questions</h3>
+        </div>
+        <div class="accordion list-faq">
+            @if (Model != null)
+            {
+
+                var i = 1;
+                @foreach (var item in Model)
+                {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-@i">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@i" aria-expanded="false"> <div class="number mr-4">@i</div> @item.Title </button>
+                        </h2>
+                        <div id="collapse-@i" class="accordion-collapse collapse">
+                            <div class="accordion-body">@Html.Raw(item.Contents)</div>
+                        </div>
+                    </div>
+
+                    i++;
+                }
+            }
+        </div>
+    </div>
+</div>
