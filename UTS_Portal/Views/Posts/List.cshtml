@@ -1,0 +1,159 @@
+﻿@using PagedList.Core.Mvc
+@model PagedList.Core.IPagedList<UTS_Portal.Models.Posts>
+@{
+    int CurrentPage = ViewBag.CurrentPage;
+    int Total = ViewBag.Total;
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <style>
+        a {
+            text-decoration: none !important;
+        }
+
+        .main-blog img {
+            width: 200px !important;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .main-content a {
+            color: #804100;
+            line-height: 36px;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 25px;
+        }
+
+        .main-content a:hover {
+            color: #007bff;
+        }
+
+        .main-content p {
+            color: #494949;
+            font-size: 18px;
+            line-height: 30px;
+            font-weight: 400;
+            transition: 0.4s;
+            pointer-events: none;
+        }
+
+        .post-item p {
+            margin-bottom: 0;
+        }
+
+        /* Iphone */
+        @@media only screen and (max-width: 600px) {
+            .main-blog img {
+                width: 84px !important;
+            }
+
+            .main-content a {
+                font-size: 18px;
+            }
+
+            .main-content p {
+                font-size: 14px;
+                margin-bottom: 0;
+                line-height: 20px;
+            }
+        }
+    </style>
+}
+
+<div class="section dashboard">
+    <div class="row">
+        <div class="col-lg-8 main-blog">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"> News &amp; Updates <span> | Today</span> </h5>
+                    <div class="content">
+                        @if (Model != null)
+                        {
+
+                            var i = 1;
+                            @foreach (var item in Model)
+                            {
+                                <div class="d-flex mb-4">
+                                    <img  src="~/images/news/@item.Thumb" alt="">
+                                    <div class="main-content">
+                                        <a href="#">@item.Title</a>
+                                        <p>@item.Scontents</p>
+                                    </div>
+                                </div>
+                                i++;
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body pb-0">
+                    <h5 class="card-title"> News &amp; Updates <span> | Today</span> </h5>
+                    <div class="news">
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-1.jpg" alt="">
+                            <h4> <a href="#"> Nihil blanditiis at in nihil autem</a> </h4>
+                            <p> Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
+                        </div>
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-2.jpg" alt="">
+                            <h4> <a href="#"> Quidem autem et impedit</a> </h4>
+                            <p> Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
+                        </div>
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-3.jpg" alt="">
+                            <h4> <a href="#"> Id quia et et ut maxime similique occaecati ut</a> </h4>
+                            <p> Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
+                        </div>
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-4.jpg" alt="">
+                            <h4> <a href="#"> Laborum corporis quo dara net para</a> </h4>
+                            <p> Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
+                        </div>
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-5.jpg" alt="">
+                            <h4> <a href="#"> Et dolores corrupti quae illo quod dolor</a> </h4>
+                            <p> Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body pb-0">
+                    <h5 class="card-title"> News &amp; Updates <span> | Today</span> </h5>
+                    <div class="news">
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-1.jpg" alt="">
+                            <h4> <a href="#"> Nihil blanditiis at in nihil autem</a> </h4>
+                            <p> Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
+                        </div>
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-2.jpg" alt="">
+                            <h4> <a href="#"> Quidem autem et impedit</a> </h4>
+                            <p> Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
+                        </div>
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-3.jpg" alt="">
+                            <h4> <a href="#"> Id quia et et ut maxime similique occaecati ut</a> </h4>
+                            <p> Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
+                        </div>
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-4.jpg" alt="">
+                            <h4> <a href="#"> Laborum corporis quo dara net para</a> </h4>
+                            <p> Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
+                        </div>
+                        <div class="post-item clearfix">
+                            <img src="~/assets/img/news-5.jpg" alt="">
+                            <h4> <a href="#"> Et dolores corrupti quae illo quod dolor</a> </h4>
+                            <p> Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
