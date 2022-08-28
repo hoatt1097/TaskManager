@@ -157,7 +157,3 @@
 .order-qty.checked {
     display:  inline-block !important;
 }
-
-.day label:hover {
-    background-color:antiquewhite;
-}

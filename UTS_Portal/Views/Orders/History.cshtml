@@ -1,0 +1,88 @@
+﻿@using UTS_Portal.ViewModels;
+@{
+    string ParentId = ViewBag.ParentId;
+    string StudentName = ViewBag.StudentName;
+    var  SelectBoxOrderMonth = ViewBag.SelectBoxOrderMonth;
+    string RoleName = User.Claims.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value;
+    string isDisabled = RoleName == "Parent" ? "disabled" : "";
+
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link href="~/css/custom-order.css" rel="stylesheet" />
+    <style>
+
+    </style>
+}
+
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Orders</a>
+            <span class="breadcrumb-item active">User: @ParentId</span>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card order-table">
+            <div class="card-body">
+                <h1 class="pt-0 text-center">Order history</h1>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">Student:</label>
+                        <input name="studentName" id="studentName" class="form-control" value="@StudentName" @isDisabled/>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">Parent code:</label>
+                        <input name="parentId" id="parentId" class="form-control" value="@ParentId" disabled/>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">Month:</label>
+                        <select class="custom-select" id="txtMonth" name="txtMonth" asp-items="@SelectBoxOrderMonth">
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <label class="control-label">Action:</label>
+                        <label type="submit" class="form-control btn btn-primary" style="width: 100px">View</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        jQuery(document).ready(function () {
+            $("#studentName").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Common/GetAllParent",
+                        type: "POST",
+                        dataType: "json",
+                        data: { itemSearchText: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.name + " (" + item.parentId + ")",
+                                    value: item.name,
+                                    id: item.parentId
+                                };
+                            }))
+                        }
+                    })
+                },
+                select: function (event, ui) {
+                    if (!$(this).data('keyHandled')) {
+                        $("#parentId").val(ui.item.parentId);
+                        return true;
+                    }
+                    return false;
+                },
+            });
+        });
+    </script>
+}

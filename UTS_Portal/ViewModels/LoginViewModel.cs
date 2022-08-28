@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace UTS_Portal.Models
+namespace UTS_Portal.ViewModels
 {
     public class LoginViewModel
     {

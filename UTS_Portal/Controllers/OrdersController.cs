@@ -1,5 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,41 @@ namespace UTS_Portal.Controllers
             }
 
             ViewBag.CurrentMonth = month;
+            return View();
+        }
+
+        public IActionResult History(string? parentId, string? month)
+        {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (currentUser.RoleName == "Parent")
+            {
+                if(currentUser.Code != parentId)
+                {
+                    _notyfService.Error("User has not permission!");
+                    return RedirectToAction("Index", "Home");
+                }
+
+                // Defaul show data
+                ViewBag.ParentId = currentUser.Code;
+                ViewBag.StudentName = currentUser.Username;
+            }
+
+            //Format month from select: MM/yyyy
+            var ListParent = _context.Cscard.AsNoTracking().ToList();
+            var SelectBoxOrderMonth = BuildSelectBoxOrderMonth();
+            ViewBag.SelectBoxOrderMonth = SelectBoxOrderMonth;
+
+            if (parentId != null && month != null)
+            {
+                var orderHistory = _context.PreOrders.Where(x => x.UserCode == parentId && x.MonthYear == month.Replace("/", "")).ToList();
+                var a = 0;
+
+                // Defaul show data
+                var parent = _context.Cscard.AsNoTracking().Where(x => x.ParentId == parentId).FirstOrDefault();
+                ViewBag.ParentId = parent?.ParentId;
+                ViewBag.StudentName = parent?.Name;
+            }
+            
             return View();
         }
 
@@ -175,5 +211,19 @@ namespace UTS_Portal.Controllers
 
             return selectElm;
         }
+
+        public SelectList BuildSelectBoxOrderMonth()
+        {
+            var Month = _context.MenuInfos.OrderBy(x => x.Month).ToList();
+            var MonthList = new List<Object>();
+            string currentMonth = DateTime.Now.ToString("MM/yyyy");
+            foreach (var m in Month)
+            {
+                MonthList.Add(new { Id = m.Month.ToString("MM/yyyy"), Name = m.Month.ToString("MM/yyyy") });
+            }
+            return new SelectList(MonthList, "Id", "Name", currentMonth);
+        }
+
+
     }
 }

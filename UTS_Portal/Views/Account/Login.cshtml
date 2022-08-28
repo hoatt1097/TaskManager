@@ -1,4 +1,4 @@
-﻿@model UTS_Portal.Models.LoginViewModel
+﻿@model UTS_Portal.ViewModels.LoginViewModel
 @{ Layout = null; }
 
 <!DOCTYPE html>
@@ -207,7 +207,7 @@
                 <div class="textcontent">
                     <p class="title">Your are a school?</p>
                     <p>Log in to see all your collection.</p>
-                    <button id="switch1">LOGIN WITH SCHOOL ACCOUNT</button>
+                    <button id="login_with_school_account">LOGIN WITH SCHOOL ACCOUNT</button>
                 </div>
             </div>
             <div class="signupMsg visibility">
@@ -215,7 +215,7 @@
                 <div class="textcontent">
                     <p class="title">Your are a parent?</p>
                     <p>Log in to see all your collection.</p>
-                    <button id="switch2">LOGIN WITH PARENT ACCOUNT</button>
+                    <button id="login_with_parent_account">LOGIN WITH PARENT ACCOUNT</button>
                 </div>
             </div>
         </div>
@@ -224,7 +224,7 @@
         <div class="frontbox">
             <form class="row" asp-action="Login" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="AccountType" />
+                <input type="hidden" asp-for="AccountType" valu/>
                 <div class="login">
                     <h2>LOG IN</h2>
                     <p id="title_login">Parent account</p>
@@ -251,7 +251,7 @@
             $frontbox = $('.frontbox'),
             $title = $('#title_login');
 
-        $('#switch1').on('click', function () {
+        $('#login_with_school_account').on('click', function () {
             $loginMsg.toggleClass("visibility");
             $frontbox.addClass("moving");
             $signupMsg.toggleClass("visibility");
@@ -259,7 +259,7 @@
             $('#AccountType').val("School");
         })
 
-        $('#switch2').on('click', function () {
+        $('#login_with_parent_account').on('click', function () {
             $loginMsg.toggleClass("visibility");
             $frontbox.removeClass("moving");
             $signupMsg.toggleClass("visibility");
@@ -268,11 +268,11 @@
         })
 
         setTimeout(function () {
-            $('#switch1').click()
+            $('#login_with_school_account').click()
         }, 1000)
 
         setTimeout(function () {
-            $('#switch2').click()
+            $('#login_with_parent_account').click()
         }, 1000)
     </script>
 </body>

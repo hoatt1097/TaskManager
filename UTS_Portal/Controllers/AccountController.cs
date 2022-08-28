@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
 using UTS_Portal.Extension;
 using UTS_Portal.Models;
+using UTS_Portal.ViewModels;
 
 namespace UTS_Portal.Controllers
 {
@@ -42,57 +43,105 @@ namespace UTS_Portal.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Users user = _context.Users
-                    .Include(p => p.Role)
-                    .Where(p => p.Active == true)
-                    .SingleOrDefault(p => p.Username.ToLower() == model.UserName.ToLower().Trim());
-
-                    if (user == null)
+                    if(model.AccountType == "School")
                     {
-                        ViewBag.Error = "Account is not correct. Please try again";
-                        return View(model);
+                        Users user = _context.Users
+                       .Include(p => p.Role)
+                       .Where(p => p.Active == true)
+                       .SingleOrDefault(p => p.Username.ToLower() == model.UserName.ToLower().Trim());
+
+                        if (user == null)
+                        {
+                            ViewBag.Error = "Account is not correct. Please try again";
+                            return View(model);
+                        }
+                        string pass = Utilities.MD5Hash(model.Password.Trim());
+                        if (user.Password != pass)
+                        {
+                            ViewBag.Error = "Account is not correct. Please try again";
+                            return View(model);
+                        }
+
+                        user.LastLogin = DateTime.Now;
+                        _context.Update(user);
+                        await _context.SaveChangesAsync();
+
+                        HttpContext.Session.SetString("UserID", user.Id.ToString().Trim());
+                        HttpContext.Session.SetString("UserCode", user.Code.ToString().Trim());
+                        HttpContext.Session.SetString("Fullname", user.Fullname);
+                        HttpContext.Session.SetString("Username", user.Username);
+
+                        //identity
+                        var userClaims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, user.Username?.Trim()),
+                            new Claim(ClaimTypes.Email, user.Email?.Trim()),
+                            new Claim("Id", user.Id.ToString().Trim()),
+                            new Claim("Username", user.Username.ToString().Trim()),
+                            new Claim("Code", user.Code.ToString().Trim()),
+                            new Claim("Fullname", user.Fullname.ToString().Trim()),
+                            new Claim("Email", user.Email.ToString().Trim()),
+                            new Claim("RoleId", user.RoleId.ToString().Trim()),
+                            new Claim("RoleName", user.Role.Name.Trim()),
+                            new Claim(ClaimTypes.Role, user.Role.Name.Trim())
+                        };
+                        var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");
+                        var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
+                        await HttpContext.SignInAsync(userPrincipal);
+
+                        if (user.Role.Name != "Parent")
+                        {
+                            var NotiCount = _context.Feedbacks.AsNoTracking().Where(x => x.IsView != 1).OrderByDescending(x => x.SubmittedDate).Count();
+                            HttpContext.Session.SetString("NotiCount", NotiCount.ToString());
+                        }
+
+                        return RedirectToAction("Index", "Home");
                     }
-                    string pass = Utilities.MD5Hash(model.Password.Trim());
-                    if (user.Password!= pass)
+
+                    else
                     {
-                        ViewBag.Error = "Account is not correct. Please try again";
-                        return View(model);
+                        Cscard user = _context.Cscard
+                      .Where(p => p.Status == true)
+                      .SingleOrDefault(p => p.ParentId.ToLower() == model.UserName.ToLower().Trim());
+
+                        if (user == null)
+                        {
+                            ViewBag.Error = "Account is not correct. Please try again";
+                            return View(model);
+                        }
+                        string pass = model.Password.Trim();
+                        if (user.Password.Trim() != pass)
+                        {
+                            ViewBag.Error = "Account is not correct. Please try again";
+                            return View(model);
+                        }
+
+
+                        HttpContext.Session.SetString("UserID", user.ParentId.ToString().Trim());
+                        HttpContext.Session.SetString("UserCode", user.ParentId.ToString().Trim());
+                        HttpContext.Session.SetString("Fullname", user.Name.Trim());
+                        HttpContext.Session.SetString("Username", user.Name.Trim());
+
+                        //identity
+                        var userClaims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, user.Name?.Trim()),
+                            new Claim(ClaimTypes.Email, user.Email?.Trim()),
+                            new Claim("Id", user.ParentId.ToString().Trim()),
+                            new Claim("Username", user.Name.ToString().Trim()),
+                            new Claim("Code", user.ParentId.ToString().Trim()),
+                            new Claim("Fullname", user.Name.ToString().Trim()),
+                            new Claim("Email", user.Email.ToString().Trim()),
+                            new Claim("RoleId", (-1).ToString()),
+                            new Claim("RoleName", "Parent"),
+                            new Claim(ClaimTypes.Role, "Parent")
+                        };
+                        var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");
+                        var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
+                        await HttpContext.SignInAsync(userPrincipal);
+
+                        return RedirectToAction("Index", "Home");
                     }
-
-                    user.LastLogin = DateTime.Now;
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-
-                    HttpContext.Session.SetString("UserID", user.Id.ToString());
-                    HttpContext.Session.SetString("UserCode", user.Code.ToString());
-                    HttpContext.Session.SetString("Fullname", user.Fullname);
-                    HttpContext.Session.SetString("Username", user.Username);
-
-                    //identity
-                    var userClaims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Username),
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim("Id", user.Id.ToString()),
-                        new Claim("Username", user.Username.ToString()),
-                        new Claim("Code", user.Code.ToString()),
-                        new Claim("Fullname", user.Fullname.ToString()),
-                        new Claim("Email", user.Email.ToString()),
-                        new Claim("RoleId", user.RoleId.ToString()),
-                        new Claim("RoleName", user.Role.Name),
-                        new Claim(ClaimTypes.Role, user.Role.Name)
-                    };
-                    var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");
-                    var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
-                    await HttpContext.SignInAsync(userPrincipal);
-
-                    if(user.Role.Name != "Parent")
-                    {
-                        var NotiCount = _context.Feedbacks.AsNoTracking().Where(x => x.IsView != 1).OrderByDescending(x => x.SubmittedDate).Count();
-                        HttpContext.Session.SetString("NotiCount", NotiCount.ToString());
-                    } 
-
-                    return RedirectToAction("Index", "Home");
                 }
             }
             catch

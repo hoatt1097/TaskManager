@@ -8,33 +8,33 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace UTS_Portal.Models
 {
-    public partial class db_utsContext : DbContext
+    public partial class CK_POSContext : DbContext
     {
-        public db_utsContext()
+        public CK_POSContext()
         {
         }
 
-        public db_utsContext(DbContextOptions<db_utsContext> options)
+        public CK_POSContext(DbContextOptions<CK_POSContext> options)
             : base(options)
         {
         }
 
+        public virtual DbSet<Campus> Campus { get; set; }
+        public virtual DbSet<Crdtrans202207> Crdtrans202207 { get; set; }
+        public virtual DbSet<Cscard> Cscard { get; set; }
         public virtual DbSet<Faqs> Faqs { get; set; }
         public virtual DbSet<Feedbacks> Feedbacks { get; set; }
         public virtual DbSet<Functions> Functions { get; set; }
+        public virtual DbSet<Goods> Goods { get; set; }
         public virtual DbSet<Holidays> Holidays { get; set; }
         public virtual DbSet<MenuInfos> MenuInfos { get; set; }
         public virtual DbSet<Menus> Menus { get; set; }
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<PreOrders> PreOrders { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<Campus> Campus { get; set; }
-        public virtual DbSet<Crdtrans202207> Crdtrans202207 { get; set; }
-        public virtual DbSet<Cscard> Cscard { get; set; }
-        public virtual DbSet<Goods> Goods { get; set; }
         public virtual DbSet<Strans202207> Strans202207 { get; set; }
         public virtual DbSet<Sysvar> Sysvar { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -47,95 +47,16 @@ namespace UTS_Portal.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Menus>(entity =>
+            modelBuilder.Entity<Campus>(entity =>
             {
-                entity.Property(e => e.Category)
+                entity.Property(e => e.CampusId)
                     .IsUnicode(false)
-                    .IsFixedLength();
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
 
-                entity.Property(e => e.Ckcode)
-                    .IsUnicode(false)
-                    .IsFixedLength();
+                entity.Property(e => e.Address).HasDefaultValueSql("('')");
 
-                entity.Property(e => e.Class)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.ItemCode)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.MonthYear)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-            });
-
-            modelBuilder.Entity<PreOrders>(entity =>
-            {
-                entity.HasKey(e => new { e.UserCode, e.OrderDate, e.ItemCode, e.RepastId });
-
-                entity.Property(e => e.UserCode)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.ItemCode)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.CanteenId)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.CkCode)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.Class)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.CustId)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.ModiTime)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.ModiUser)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.MonthYear)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.PlcId)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.Post)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.SubmitTm)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-            });
-
-            modelBuilder.Entity<Users>(entity =>
-            {
-                entity.Property(e => e.Code)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Users_Roles");
+                entity.Property(e => e.Description).HasDefaultValueSql("('')");
             });
 
             modelBuilder.Entity<Crdtrans202207>(entity =>
@@ -469,6 +390,84 @@ namespace UTS_Portal.Models
                     .HasDefaultValueSql("('')");
             });
 
+            modelBuilder.Entity<Menus>(entity =>
+            {
+                entity.Property(e => e.Category)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Ckcode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Class)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.MonthYear)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<PreOrders>(entity =>
+            {
+                entity.HasKey(e => new { e.UserCode, e.OrderDate, e.ItemCode, e.RepastId });
+
+                entity.Property(e => e.UserCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CanteenId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CkCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Class)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CustId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.ModiTime)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModiUser)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.MonthYear)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.PlcId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Post)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.SubmitTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
             modelBuilder.Entity<Strans202207>(entity =>
             {
                 entity.HasKey(e => new { e.TransNum, e.GoodsId, e.Idx });
@@ -633,6 +632,57 @@ namespace UTS_Portal.Models
                     .IsUnicode(false)
                     .IsFixedLength()
                     .HasDefaultValueSql("('')");
+            });
+
+            modelBuilder.Entity<Sysvar>(entity =>
+            {
+                entity.Property(e => e.Varname)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.DepCode)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Descript).HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Inputmask)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Invalid)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Modify).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Type)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Value)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+            });
+
+            modelBuilder.Entity<Users>(entity =>
+            {
+                entity.HasIndex(e => e.RoleId);
+
+                entity.Property(e => e.Code)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Users_Roles");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -11,35 +11,35 @@ namespace UTS_Portal.Models
 {
     public partial class PreOrders
     {
-        [Column("ID")]
-        public int Id { get; set; }
         [Key]
         [StringLength(20)]
         public string UserCode { get; set; }
+        [Key]
+        [Column("Order_date", TypeName = "date")]
+        public DateTime OrderDate { get; set; }
+        [Key]
+        [StringLength(6)]
+        public string ItemCode { get; set; }
+        [Key]
+        [Column("Repast_ID")]
+        public int RepastId { get; set; }
+        [Column("ID")]
+        public int Id { get; set; }
         [Required]
         [StringLength(6)]
         public string MonthYear { get; set; }
         public int? Week { get; set; }
         public int? DoW { get; set; }
-        [Key]
-        [Column("Order_date", TypeName = "date")]
-        public DateTime OrderDate { get; set; }
         [Column("Submit_dt", TypeName = "date")]
         public DateTime SubmitDt { get; set; }
         [Required]
         [Column("Submit_TM")]
         [StringLength(5)]
         public string SubmitTm { get; set; }
-        [Key]
-        [StringLength(6)]
-        public string ItemCode { get; set; }
         [Column("CK_Code")]
         [StringLength(20)]
         public string CkCode { get; set; }
         public int Qty { get; set; }
-        [Key]
-        [Column("Repast_ID")]
-        public int RepastId { get; set; }
         [StringLength(20)]
         public string Class { get; set; }
         [Column("Is_Bundled")]

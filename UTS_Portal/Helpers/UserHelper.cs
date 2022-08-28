@@ -23,13 +23,13 @@ namespace UTS_Portal.Helpers
             var claims = httpContext.User.Claims.ToList();
             var currentUser = new CurrentUser
             {
-                Id = claims?.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value,
-                Username = claims?.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.OrdinalIgnoreCase))?.Value,
-                Code = claims?.FirstOrDefault(x => x.Type.Equals("Code", StringComparison.OrdinalIgnoreCase))?.Value,
-                Fullname = claims?.FirstOrDefault(x => x.Type.Equals("Fullname", StringComparison.OrdinalIgnoreCase))?.Value,
-                Email = claims?.FirstOrDefault(x => x.Type.Equals("Email", StringComparison.OrdinalIgnoreCase))?.Value,
-                RoleId = claims?.FirstOrDefault(x => x.Type.Equals("RoleId", StringComparison.OrdinalIgnoreCase))?.Value,
-                RoleName = claims?.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value,
+                Id = claims?.FirstOrDefault(x => x.Type.Equals("Id", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
+                Username = claims?.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
+                Code = claims?.FirstOrDefault(x => x.Type.Equals("Code", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
+                Fullname = claims?.FirstOrDefault(x => x.Type.Equals("Fullname", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
+                Email = claims?.FirstOrDefault(x => x.Type.Equals("Email", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
+                RoleId = claims?.FirstOrDefault(x => x.Type.Equals("RoleId", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
+                RoleName = claims?.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
             };
             return currentUser;
         }
