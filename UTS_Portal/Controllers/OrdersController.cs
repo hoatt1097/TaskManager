@@ -165,7 +165,7 @@ namespace UTS_Portal.Controllers
             var MonthActive = _context.MenuInfos.OrderBy(x => x.Month).Where(x => x.Status == true)
                 .Select(x=> x.Month.ToString("MM/yyyy")).ToList();
 
-            string selectElm = "<select class='custom-select' id='txtMonthSelect' name='txtMonthSelect' style='min-width: 200px;'>";
+            string selectElm = "<select class='custom-select' id='txtMonthSelect' name='txtMonthSelect'>";
 
             foreach(var m in MonthActive)
             {

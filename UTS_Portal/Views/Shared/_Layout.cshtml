@@ -114,14 +114,14 @@
                         <li> <a href="#"> <i class="bi bi-circle"></i><span>ECharts</span> </a></li>
                     </ul>
                 </li>*@
-            <li class="nav-item"> <a class="nav-link collapsed" asp-controller="FAQs" asp-action="List"> <i class="bi bi-question-circle"></i> <span>F.A.Q</span> </a></li>
-            <li class="nav-item"> <a class="nav-link collapsed" asp-controller="Feedbacks" asp-action="Create"> <i class="bi bi-envelope"></i> <span>Contact</span> </a></li>
+            <li class="nav-item @Html.IsSelected(controller: "FAQs", action: "List")"> <a class="nav-link collapsed" asp-controller="FAQs" asp-action="List"> <i class="bi bi-question-circle"></i> <span>F.A.Q</span> </a></li>
+            <li class="nav-item @Html.IsSelected(controller: "Feedbacks", action: "Create")"> <a class="nav-link collapsed" asp-controller="Feedbacks" asp-action="Create"> <i class="bi bi-envelope"></i> <span>Contact</span> </a></li>
         </ul>
     </aside>
     <main id="main" class="main">
         @RenderBody()
     </main>
-    <footer id="footer" class="footer fixed-bottom">
+    <footer id="footer" class="footer">
         <div class="copyright"> &copy; Copyright <strong><span>UTS School</span></strong>. All Rights Reserved</div>
     </footer>
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

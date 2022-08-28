@@ -26,9 +26,9 @@
             font-size: 25px;
         }
 
-        .main-content a:hover {
-            color: #007bff;
-        }
+            .main-content a:hover {
+                color: #FF8302;
+            }
 
         .main-content p {
             color: #494949;
@@ -50,13 +50,40 @@
             }
 
             .main-content a {
-                font-size: 18px;
+                font-size: 18px !important;
+                line-height: 0px !important;
             }
 
             .main-content p {
-                font-size: 14px;
-                margin-bottom: 0;
-                line-height: 20px;
+                font-size: 14px !important;
+                margin-bottom: 0 !important;
+                line-height: 20px !important;
+            }
+        }
+
+        @@media only screen and (max-width: 1600px) {
+            .main-content p {
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                -webkit-box-orient: vertical !important;
+            }
+
+            .post-item p {
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 1 !important;
+                -webkit-box-orient: vertical !important;
+            }
+
+            .post-item h4 {
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                -webkit-box-orient: vertical !important;
             }
         }
     </style>

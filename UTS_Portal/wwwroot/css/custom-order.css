@@ -63,6 +63,14 @@
     height: 40px !important;
 }
 
+.day label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
 @media only screen and (max-width: 1600px) {
     .order-table .day p, .order-table .day label, .order-table .meal-title p, .order-table .meal-title label {
         height: 80px;
@@ -70,6 +78,12 @@
 
     .order-table .breakfast-1 {
         height: 159px !important;
+    }
+}
+
+@media only screen and (max-width: 1600px) {
+    body {
+        
     }
 }
 
@@ -142,4 +156,8 @@
 
 .order-qty.checked {
     display:  inline-block !important;
+}
+
+.day label:hover {
+    background-color:antiquewhite;
 }
