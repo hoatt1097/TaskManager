@@ -36,15 +36,6 @@ namespace UTS_Portal.Models
         public virtual DbSet<Strans202207> Strans202207 { get; set; }
         public virtual DbSet<Sysvar> Sysvar { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=THIENHOA;Database=CK_POS;Integrated Security=True;");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Menus>(entity =>

@@ -12,7 +12,25 @@
 @section Styles {
     <link href="~/css/custom-order.css" rel="stylesheet" />
     <style>
+        .hide {
+            display: none;
+        }
 
+        .pre-order p {
+            margin-bottom: 0px;
+        }
+
+        .bx {
+            color: #4154f1;
+            font-size: 23px;
+            line-height: 0;
+        }
+
+        .order-qty {
+            padding: 0;
+            border: none;
+            background-color: antiquewhite;
+        }
     </style>
 }
 
@@ -47,6 +65,22 @@
                         <label class="control-label">Action:</label>
                         <label type="submit" class="form-control btn btn-primary" style="width: 100px">View</label>
                     </div>
+                    <div class="col-md-12 mt-4">
+                        <div class="row" style="padding-right: 10px">
+                            <div class="col-md-6"><div class="card info-card sales-card"><div class="card-body pre-order"><h5 class="card-title pt-1 pb-1">Day 1/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Stir-fried yellow noodle with seafood Test</p><p class="pl-5"><i class="bx bx-plus"></i>: Fresh milk</p></div><div><p><b>Lunch:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Seafood pasta</p><p class="pl-5"><i class="bx bx-plus"></i>: Boiled mixed vegetables, Tomato egg drop soup, Banana </p></div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i></p></div></div></div></div><div class="col-md-6"><div class="card info-card sales-card"><div class="card-body pre-order"><h5 class="card-title pt-1 pb-1">Day 2/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Baked cheese omelet</p><p class="pl-5"><i class="bx bx-plus"></i>: Soya milk</p></div><div><p><b>Lunch:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Chicken stew</p><p class="pl-5"><i class="bx bx-plus"></i>: Dragon fruit, Cauliflower soup with minced pork, Sautéed spinach </p></div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Orange juice</p></div></div></div></div><div class="col-md-6">
+                                <div class="card info-card sales-card">
+                                    <div class="card-body pre-order">
+                                        <h5 class="card-title pt-1 pb-1">Day 3/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Steamed rice roll with pork cold cut</p><p class="pl-5"><i class="bx bx-plus"></i>: Fresh milk</p></div><div>
+                                            <p><b>Lunch:</b></p><p class="pl-5">
+                                                <i class="bx bx-cart"></i>: Stir-fried beef with rice vecimelli
+
+                                            </p><p class="pl-5"><i class="bx bx-plus"></i>: Papaya, Vegetable soup with pork ribs, Boiled green beans </p>
+                                        </div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Kimbap</p></div>
+                                    </div>
+                                </div>
+                            </div><div class="col-md-6"><div class="card info-card sales-card"><div class="card-body pre-order"><h5 class="card-title pt-1 pb-1">Day 4/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Ham and cheese sandwich with lettuce and tomatoes</p><p class="pl-5"><i class="bx bx-plus"></i>: Corn milk</p></div><div><p><b>Lunch:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Pork cordon bleu with bread</p><p class="pl-5"><i class="bx bx-plus"></i>: Sautéed cabbage, Chinese cabbage soup with minced pork, Watermelon </p></div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Steamed egg yolk custard bun</p></div></div></div></div><div class="col-md-6"><div class="card info-card sales-card"><div class="card-body pre-order"><h5 class="card-title pt-1 pb-1">Day 5/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Pork meatball vermicelli noodle soup</p><p class="pl-5"><i class="bx bx-plus"></i>: Fresh milk</p></div><div><p><b>Lunch:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Roasted chicken</p><p class="pl-5"><i class="bx bx-plus"></i>: Sautéed choy sum, Minestrone soup, Banana sponge cake </p></div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Pear juice</p></div></div></div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,7 +111,7 @@
                 },
                 select: function (event, ui) {
                     if (!$(this).data('keyHandled')) {
-                        $("#parentId").val(ui.item.parentId);
+                        $("#parentId").val(ui.item.id);
                         return true;
                     }
                     return false;

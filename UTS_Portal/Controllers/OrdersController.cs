@@ -211,7 +211,6 @@ namespace UTS_Portal.Controllers
 
             return selectElm;
         }
-
         public SelectList BuildSelectBoxOrderMonth()
         {
             var Month = _context.MenuInfos.OrderBy(x => x.Month).ToList();

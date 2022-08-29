@@ -26,18 +26,19 @@ namespace UTS_Portal.Controllers
             {
                 var newP = new ParentView
                 {
-                    ParentId = x.ParentId,
-                    Name = x.Name,
-                    Email = x.Email,
-                    Password = x.Password,
-                    ClassName = x.ClassName,
-                    CardId = x.CardId,
-                    Phone = x.Phone
+                    ParentId = x.ParentId.Trim(),
+                    Name = x.Name.Trim(),
+                    Email = x.Email.Trim(),
+                    Password = x.Password.Trim(),
+                    ClassName = x.ClassName.Trim(),
+                    CardId = x.CardId.Trim(),
+                    Phone = x.Phone.Trim()
                 };
                 parentViews.Add(newP);
             }
 
-            return parentViews.Where(x => x.Name.Contains(itemSearchText, StringComparison.OrdinalIgnoreCase)).Take(10).ToList();
+            return parentViews.Where(x => x.Name.Contains(itemSearchText, StringComparison.OrdinalIgnoreCase) || x.ParentId.Contains(itemSearchText, StringComparison.OrdinalIgnoreCase))
+                .Take(10).ToList();
         }
     }
 }
