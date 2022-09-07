@@ -28,6 +28,7 @@ namespace UTS_Portal.Helpers
 				// Check day is holiday
 				bool IsWeekend = DoW.ToString() == "Saturday" || DoW.ToString() == "Sunday";
 				bool IsHoliday = holidays.Any(x => x.Day.ToString("dd/MM/yyyy") == date.ToString("dd/MM/yyyy"));
+				bool IsOffDay = _context.Menus.ToList().Where(x => x.Status == 1 && x.MenuDate.ToString("dd/MM/yyyy") == date.ToString("dd/MM/yyyy")).FirstOrDefault() == null ? true : false;
 				// Check day is holiday
 
 				CalendarMonth m = new CalendarMonth();
@@ -35,7 +36,7 @@ namespace UTS_Portal.Helpers
 				m.DateString = DoW.ToString();
 				m.Day = date.Day;
 				m.Week = StartWeek;
-				m.IsHoliday = IsWeekend || IsHoliday;
+				m.IsHoliday = IsWeekend || IsHoliday || IsOffDay;
 
 				calendarMonths.Add(m);
 			}

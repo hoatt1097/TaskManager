@@ -23,5 +23,6 @@ namespace UTS_Portal.ViewModels
         public string NameEn { get; set; }
         public int Qty { get; set; }
         public int Bundled { get; set; }
+        public int RepastId { get; set; }
     }
 }

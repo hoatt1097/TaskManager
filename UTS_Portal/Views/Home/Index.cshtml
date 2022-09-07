@@ -1,8 +1,39 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@section Styles {
+    <style>
+        .dashboard img {
+            width: 250px;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        .footer {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1030;
+        }
+    </style>
+}
+
+<div class="text-center dashboard">
+@*    <h1 class="display-4">Welcome</h1>*@
+    <div class="d-flex justify-content-evenly">
+        <div>
+            <a asp-controller="Orders" asp-action="Index">
+                <img src="~/images/logo/menu.png">
+            </a>
+        </div>
+        <div >
+            <a asp-controller="FAQs" asp-action="List">
+                <img src="~/images/logo/faq.png">
+            </a>
+        </div>
+        <div >
+            <a asp-controller="Feedbacks" asp-action="Create">
+                <img src="~/images/logo/feedback.png">
+            </a>
+        </div>
+    </div>
 </div>

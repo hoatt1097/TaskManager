@@ -74,8 +74,40 @@ namespace UTS_Portal.Controllers
 
             if (parentId != null && month != null)
             {
-                var orderHistory = _context.PreOrders.Where(x => x.UserCode == parentId && x.MonthYear == month.Replace("/", "")).ToList();
-                var a = 0;
+                List<OrderSubmit> listOrderSubmit = new List<OrderSubmit>();
+                var orderHistory = _context.PreOrders
+                    .Where(x => x.UserCode == parentId && x.MonthYear == month.Replace("/", ""))
+                    .ToList().OrderBy(x => x.OrderDate).ToList();
+                var listOrderDate = orderHistory.Select(x => x.OrderDate).Distinct();
+                foreach(var day in listOrderDate)
+                {
+                    var listOrderByDate = orderHistory.Where(x => x.OrderDate == day).ToList();
+                    foreach(var preOrder in listOrderByDate)
+                    {
+                        OrderSubmit orderSubmit = new OrderSubmit();
+
+                        Goods goods = _context.Goods.Where(x => x.GoodsId == preOrder.ItemCode).FirstOrDefault();
+
+                        int Day = day.Day;
+                        string CurrentMonth = month;
+                        List<OrderItem> Breakfast = new List<OrderItem>();
+                        List<OrderItem> Lunch = new List<OrderItem>();
+                        List<OrderItem> Afternoon = new List<OrderItem>();
+                        OrderItem orderItem = new OrderItem
+                        {
+                            Code = preOrder.ItemCode,
+                            Ckcode = preOrder.CkCode,
+                            OriginName = goods != null ? goods.OtherName : "",
+                            NameVn = goods != null ? goods.EnName : "",
+                            NameEn = goods != null ? goods.FullName : "",
+                            Qty = preOrder.Qty,
+                            Bundled = preOrder.IsBundled == true ? 1 : 0,
+                            RepastId = preOrder.RepastId
+                        };
+                    }
+                    
+
+                }
 
                 // Defaul show data
                 var parent = _context.Cscard.AsNoTracking().Where(x => x.ParentId == parentId).FirstOrDefault();
@@ -189,7 +221,7 @@ namespace UTS_Portal.Controllers
             }
             catch (DbUpdateException)
             {
-                return Json(new { success = false, message = $"Submit order unsuccessfully! Data is exist." });
+                return Json(new { success = false, message = $"Your pre-order already existed. Please contact canteen manager to revise!" });
             }
             catch (Exception)
             {

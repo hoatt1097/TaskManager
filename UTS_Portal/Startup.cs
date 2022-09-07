@@ -75,7 +75,7 @@ namespace UTS_Portal
                 app.UseHsts();
             }
 
-            db.Database.EnsureCreated();
+            // db.Database.EnsureCreated();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

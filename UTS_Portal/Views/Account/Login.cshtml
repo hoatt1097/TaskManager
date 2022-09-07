@@ -9,7 +9,7 @@
         body {
             height: 100vh;
             font-family: 'Roboto', sans-serif;
-            background-image: url(images/logo/UTS-overview-banner.jpg);
+            background-image: url(./images/logo/UTS-overview-banner.jpg);
             margin:0;
         }
 
@@ -53,7 +53,7 @@
             z-index: 10;
             position: absolute;
             right: 0;
-            margin-right: 3%;
+            margin-right: 2%;
             margin-left: 3%;
             transition: right .8s ease-in-out;
         }
@@ -196,6 +196,9 @@
             box-sizing: border-box;
         }
 
+        #login_with_parent_account {
+            width: 255px !important;
+            line-height: 20px;
         }
     </style>
 </head>
@@ -205,17 +208,17 @@
             <div class="loginMsg">
                 <img class="logo" style="margin-left: 25px" src="~/images/logo/uts-slogo.png" alt="">
                 <div class="textcontent">
-                    <p class="title">Your are a school?</p>
+                    <p class="title">Staff Account</p>
                     <p>Log in to see all your collection.</p>
-                    <button id="login_with_school_account">LOGIN WITH SCHOOL ACCOUNT</button>
+                    <button id="login_with_school_account">LOGIN TO MANAGE WEBSITE</button>
                 </div>
             </div>
             <div class="signupMsg visibility">
                 <img class="logo" style="margin-left: 30px" src="~/images/logo/uts-slogo.png" alt="">
                 <div class="textcontent">
-                    <p class="title">Your are a parent?</p>
+                    <p class="title">Parent Account</p>
                     <p>Log in to see all your collection.</p>
-                    <button id="login_with_parent_account">LOGIN WITH PARENT ACCOUNT</button>
+                    <button id="login_with_parent_account">LOGIN TO PLACE ORDER AND ACCESS OTHER INFORMATION</button>
                 </div>
             </div>
         </div>
@@ -255,7 +258,7 @@
             $loginMsg.toggleClass("visibility");
             $frontbox.addClass("moving");
             $signupMsg.toggleClass("visibility");
-            $title.html("School account");
+            $title.html("Staff account");
             $('#AccountType').val("School");
         })
 

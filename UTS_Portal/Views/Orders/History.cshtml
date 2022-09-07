@@ -48,7 +48,7 @@
             <div class="card-body">
                 <h1 class="pt-0 text-center">Order history</h1>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="control-label">Student:</label>
                         <input name="studentName" id="studentName" class="form-control" value="@StudentName" @isDisabled/>
                     </div>
@@ -94,7 +94,7 @@
             $("#studentName").autocomplete({
                 source: function (request, response) {
                     $.ajax({
-                        url: "/Common/GetAllParent",
+                        url: "@Url.Action("GetAllParent", "Common")",
                         type: "POST",
                         dataType: "json",
                         data: { itemSearchText: request.term },

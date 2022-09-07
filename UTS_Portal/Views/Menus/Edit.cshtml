@@ -187,7 +187,9 @@
                                                     </div>
                                                     @foreach (var day in CalendarMonth.Where(x => x.Week == Week).ToList())
                                                     {
+                                                        
                                                         if (@day.DateString == "Saturday" || @day.DateString == "Sunday") continue;
+
                                                         if (@day.IsHoliday)
                                                         {
                                                             <div class="day @day.DateString holiday">
@@ -219,9 +221,13 @@
                                                         {
                                                             @* Get data menus *@
                                                             var MenuDay = MenusByMonth.Where(x => x.DateMonth == day.DateMonth).First();
-                                                            var BfData = MenuDay.Noon.Where(x => x.Noon == 1).First().Menus;
-                                                            var LnData = MenuDay.Noon.Where(x => x.Noon == 2).First().Menus;
-                                                            var AfData = MenuDay.Noon.Where(x => x.Noon == 3).First().Menus;
+                                                            var BfData = MenuDay.Noon.Where(x => x.Noon == 1).FirstOrDefault()?.Menus;
+                                                            var LnData = MenuDay.Noon.Where(x => x.Noon == 2).FirstOrDefault()?.Menus;
+                                                            var AfData = MenuDay.Noon.Where(x => x.Noon == 3 || x.Noon == 4).FirstOrDefault()?.Menus;
+
+                                                            if (BfData == null) BfData = new List<Menus>();
+                                                            if (LnData == null) LnData = new List<Menus>();
+                                                            if (AfData == null) AfData = new List<Menus>();
 
                                                             <div class="day @day.DateString">
                                                                 <div class="tb-header font-weight-bold">
@@ -237,6 +243,11 @@
                                                                         <label class="en" for="breakfast-@i-@day.Day">@item.ItemNameEn</label>
                                                                         i++;
                                                                     }
+                                                                    @for (int k = i; k <= 2; k++)
+                                                                    {
+                                                                        <label class="text-white">No Item</label>
+                                                                    }
+
 
                                                                     @*Món phụ*@
                                                                     @{i = 1;}
@@ -247,20 +258,82 @@
                                                                         <label class="en breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameEn</label>
                                                                         i++;
                                                                     }
+                                                                    @for (int k = i; k <= 1; k++)
+                                                                    {
+                                                                        <label class="text-white">No Item</label>
+                                                                    }
                                                                 </div>
 
                                                                 <div class="lunch">
-                                                                    @{i = 1;}
-                                                                    @foreach (var item in LnData.Where(x => x.IsBundled == 0))
+                                                                    @{
+                                                                        var OptionNoodles = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Noodles").FirstOrDefault();
+                                                                        var OptionVietnam = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Vietnam").FirstOrDefault();
+                                                                        var OptionAsian = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Asian").FirstOrDefault();
+                                                                        var OptionWestern = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Western").FirstOrDefault();
+                                                                        var Other = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Vegetarian").FirstOrDefault();
+                                                                    }
+
+                                                                    @if (OptionNoodles != null)
                                                                     {
+                                                                        var @item = OptionNoodles;
                                                                         <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" value="@item.ItemCode" />
                                                                         <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn</label>
                                                                         <label class="en" for="lunch-@i-@day.Day">@item.ItemNameEn</label>
                                                                         i++;
                                                                     }
+                                                                    else
+                                                                    {
+                                                                        <label class="text-white">No Item</label>
+                                                                    }
 
+                                                                    @if (OptionVietnam != null)
+                                                                    {
+                                                                        var @item = OptionVietnam;
+                                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" value="@item.ItemCode" />
+                                                                        <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn</label>
+                                                                        <label class="en" for="lunch-@i-@day.Day">@item.ItemNameEn</label>
+                                                                        i++;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <label class="text-white">No Item</label>
+                                                                    }
 
-                                                                    @for (int k = i; k <= 5; k++)
+                                                                    @if (OptionAsian != null)
+                                                                    {
+                                                                        var @item = OptionAsian;
+                                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" value="@item.ItemCode" />
+                                                                        <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn</label>
+                                                                        <label class="en" for="lunch-@i-@day.Day">@item.ItemNameEn</label>
+                                                                        i++;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <label class="text-white">No Item</label>
+                                                                    }
+
+                                                                    @if (OptionWestern != null)
+                                                                    {
+                                                                        var @item = OptionWestern;
+                                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" value="@item.ItemCode" />
+                                                                        <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn</label>
+                                                                        <label class="en" for="lunch-@i-@day.Day">@item.ItemNameEn</label>
+                                                                        i++;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <label class="text-white">No Item</label>
+                                                                    }
+
+                                                                    @if (Other != null)
+                                                                    {
+                                                                        var @item = Other;
+                                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" value="@item.ItemCode" />
+                                                                        <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn</label>
+                                                                        <label class="en" for="lunch-@i-@day.Day">@item.ItemNameEn</label>
+                                                                        i++;
+                                                                    }
+                                                                    else
                                                                     {
                                                                         <label class="text-white">No Item</label>
                                                                     }
@@ -276,6 +349,10 @@
                                                                         <label class="en" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameEn</label>
                                                                         i++;
                                                                     }
+                                                                    @for (int k = i; k <= 3; k++)
+                                                                    {
+                                                                        <label class="text-white">No Item</label>
+                                                                    }
                                                                 </div>
 
                                                                 <div class="afternoon">
@@ -286,6 +363,10 @@
                                                                         <label class="vn" for="afternoon-@i-@day.Day">@item.ItemNameVn</label>
                                                                         <label class="en" for="afternoon-@i-@day.Day">@item.ItemNameEn</label>
                                                                         i++;
+                                                                    }
+                                                                    @for (int k = i; k <= 2; k++)
+                                                                    {
+                                                                        <label class="text-white">No Item</label>
                                                                     }
                                                                 </div>
                                                             </div>

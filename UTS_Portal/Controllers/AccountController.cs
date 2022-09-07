@@ -140,6 +140,9 @@ namespace UTS_Portal.Controllers
                         var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
                         await HttpContext.SignInAsync(userPrincipal);
 
+
+                        var NotiCount = 0;
+                        HttpContext.Session.SetString("NotiCount", NotiCount.ToString());
                         return RedirectToAction("Index", "Home");
                     }
                 }

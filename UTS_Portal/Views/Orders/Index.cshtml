@@ -15,6 +15,7 @@
         .hide {
             display: none;
         }
+
         .pre-order p {
             margin-bottom: 0px;
         }
@@ -129,6 +130,7 @@
                                     @foreach (var day in CalendarMonth.Where(x => x.Week == Week).ToList())
                                     {
                                         if (@day.DateString == "Saturday" || @day.DateString == "Sunday") continue;
+
                                         if (@day.IsHoliday)
                                         {
                                             <div class="day @day.DateString holiday">
@@ -160,9 +162,13 @@
                                         {
                                             @* Get data menus *@
                                             var MenuDay = MenusByMonth.Where(x => x.DateMonth == day.DateMonth).First();
-                                            var BfData = MenuDay.Noon.Where(x => x.Noon == 1).First().Menus;
-                                            var LnData = MenuDay.Noon.Where(x => x.Noon == 2).First().Menus;
-                                            var AfData = MenuDay.Noon.Where(x => x.Noon == 3).First().Menus;
+                                            var BfData = MenuDay.Noon.Where(x => x.Noon == 1).FirstOrDefault()?.Menus;
+                                            var LnData = MenuDay.Noon.Where(x => x.Noon == 2).FirstOrDefault()?.Menus;
+                                            var AfData = MenuDay.Noon.Where(x => x.Noon == 3 || x.Noon == 4).FirstOrDefault()?.Menus;
+
+                                            if (BfData == null) BfData = new List<Menus>();
+                                            if (LnData == null) LnData = new List<Menus>();
+                                            if (AfData == null) AfData = new List<Menus>();
 
                                             <div class="day @day.DateString">
                                                 <div class="tb-header font-weight-bold">
@@ -174,15 +180,16 @@
                                                     @foreach (var item in BfData.Where(x => x.IsBundled == 0))
                                                     {
                                                         <input type="radio"
-                                                           id="breakfast-@i-@day.Day"
-                                                           name="breakfast-@day.Day"
-                                                           origin-name="@item.OriginalName"
-                                                           name-vn="@item.ItemNameVn"
-                                                           name-en="@item.ItemNameEn"
-                                                           qty="@item.Qty"
-                                                           Ckcode="@item.Ckcode"
-                                                           value="@item.ItemCode" />
-                                                        <label class="vn" for="breakfast-@i-@day.Day">@item.ItemNameVn
+                                                               id="breakfast-@i-@day.Day"
+                                                               name="breakfast-@day.Day"
+                                                               origin-name="@item.OriginalName"
+                                                               name-vn="@item.ItemNameVn"
+                                                               name-en="@item.ItemNameEn"
+                                                               qty="@item.Qty"
+                                                               Ckcode="@item.Ckcode"
+                                                               value="@item.ItemCode" />
+                                                        <label class="vn" for="breakfast-@i-@day.Day">
+                                                            @item.ItemNameVn
                                                             <select class="order-qty" name="breakfast-@i-@day.Day">
                                                                 <option value="1" selected>1</option>
                                                                 <option value="2">2</option>
@@ -191,7 +198,8 @@
                                                                 <option value="5">5</option>
                                                             </select>
                                                         </label>
-                                                        <label class="en" for="breakfast-@i-@day.Day">@item.ItemNameEn
+                                                        <label class="en" for="breakfast-@i-@day.Day">
+                                                            @item.ItemNameEn
                                                             <select class="order-qty" name="breakfast-@i-@day.Day">
                                                                 <option value="1" selected>1</option>
                                                                 <option value="2">2</option>
@@ -201,6 +209,10 @@
                                                             </select>
                                                         </label>
                                                         i++;
+                                                    }
+                                                    @for (int k = i; k <= 2; k++)
+                                                    {
+                                                        <label class="text-white">No Item</label>
                                                     }
 
                                                     @*Món phụ*@
@@ -212,39 +224,176 @@
                                                         <label class="en breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameEn</label>
                                                         i++;
                                                     }
-                                                </div>
-
-                                                <div class="lunch">
-                                                    @{i = 1;}
-                                                    @foreach (var item in LnData.Where(x => x.IsBundled == 0))
-                                                    {
-                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
-                                                        <label class="vn" for="lunch-@i-@day.Day">@item.ItemNameVn
-                                                            <select class="order-qty" name="lunch-@i-@day.Day">
-                                                                <option value="1" selected>1</option>
-                                                                <option value="2">2</option>
-                                                                <option value="3">3</option>
-                                                                <option value="4">4</option>
-                                                                <option value="5">5</option>
-                                                            </select>
-                                                        </label>
-                                                        <label class="en" for="lunch-@i-@day.Day">@item.ItemNameEn
-                                                            <select class="order-qty" name="lunch-@i-@day.Day">
-                                                                <option value="1" selected>1</option>
-                                                                <option value="2">2</option>
-                                                                <option value="3">3</option>
-                                                                <option value="4">4</option>
-                                                                <option value="5">5</option>
-                                                            </select>
-                                                        </label>
-                                                        i++;
-                                                    }
-
-
-                                                    @for (int k = i; k <= 5; k++)
+                                                    @for (int k = i; k <= 1; k++)
                                                     {
                                                         <label class="text-white">No Item</label>
                                                     }
+                                                </div>
+
+                                                <div class="lunch">
+                                                    @{
+                                                        var OptionNoodles = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Noodles").FirstOrDefault();
+                                                        var OptionVietnam = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Vietnam").FirstOrDefault();
+                                                        var OptionAsian = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Asian").FirstOrDefault();
+                                                        var OptionWestern = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Western").FirstOrDefault();
+                                                        var Other = LnData.Where(x => x.IsBundled == 0 && x.Category.Trim() == "Option Vegetarian").FirstOrDefault();
+                                                    }
+
+                                                    @if (OptionNoodles != null)
+                                                    {
+                                                        var @item = OptionNoodles;
+                                                        i = 1;
+                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
+                                                        <label class="vn" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameVn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                        <label class="en" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameEn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="text-white">No Item</label>
+                                                    }
+
+                                                    @if (OptionVietnam != null)
+                                                    {
+                                                        var @item = OptionVietnam;
+                                                        i = 2;
+                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
+                                                        <label class="vn" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameVn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                        <label class="en" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameEn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="text-white">No Item</label>
+                                                    }
+
+                                                    @if (OptionAsian != null)
+                                                    {
+                                                        var @item = OptionAsian;
+                                                        i = 3;
+                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
+                                                        <label class="vn" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameVn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                        <label class="en" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameEn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="text-white">No Item</label>
+                                                    }
+
+                                                    @if (OptionWestern != null)
+                                                    {
+                                                        var @item = OptionWestern;
+                                                        i = 4;
+                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
+                                                        <label class="vn" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameVn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                        <label class="en" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameEn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="text-white">No Item</label>
+                                                    }
+
+                                                    @if (Other != null)
+                                                    {
+                                                        var @item = Other;
+                                                        i = 5;
+                                                        <input type="radio" id="lunch-@i-@day.Day" name="lunch-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
+                                                        <label class="vn" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameVn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                        <label class="en" for="lunch-@i-@day.Day">
+                                                            @item.ItemNameEn
+                                                            <select class="order-qty" name="lunch-@i-@day.Day">
+                                                                <option value="1" selected>1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                            </select>
+                                                        </label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="text-white">No Item</label>
+                                                    }
+
 
 
 
@@ -252,10 +401,14 @@
                                                     @{i = 1;}
                                                     @foreach (var item in LnData.Where(x => x.IsBundled == 1))
                                                     {
-                                                        <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
+                                                        <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
                                                         <label class="vn" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameVn</label>
                                                         <label class="en" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameEn</label>
                                                         i++;
+                                                    }
+                                                    @for (int k = i; k <= 3; k++)
+                                                    {
+                                                        <label class="text-white">No Item</label>
                                                     }
                                                 </div>
 
@@ -263,10 +416,14 @@
                                                     @{i = 1;}
                                                     @foreach (var item in AfData.Where(x => x.IsBundled == 0))
                                                     {
-                                                        <input type="radio" id="afternoon-@i-@day.Day" name="afternoon-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en ="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
+                                                        <input type="radio" id="afternoon-@i-@day.Day" name="afternoon-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
                                                         <label class="vn" for="afternoon-@i-@day.Day">@item.ItemNameVn</label>
                                                         <label class="en" for="afternoon-@i-@day.Day">@item.ItemNameEn</label>
                                                         i++;
+                                                    }
+                                                    @for (int k = i; k <= 2; k++)
+                                                    {
+                                                        <label class="text-white">No Item</label>
                                                     }
                                                 </div>
                                             </div>
@@ -278,17 +435,17 @@
 
                         @*Review order modal*@
                         @*<div class="modal fade" id="ReviewOrder" tabindex="-1" aria-hidden="true" style="display: none;">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Review your order</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Review your order</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body OrderContent"></div>
+                                        <div class="modal-footer"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <button type="button" class="btn btn-primary">Save changes</button></div>
                                     </div>
-                                    <div class="modal-body OrderContent"></div>
-                                    <div class="modal-footer"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> <button type="button" class="btn btn-primary">Save changes</button></div>
                                 </div>
-                            </div>
-                        </div>*@
+                            </div>*@
                         <div class="hide">
                             <div class="ReviewOrder">
                                 <div class="row">
@@ -357,6 +514,8 @@
                 var listDayStr = $("#ListDaySelect").val();
                 var listDay = listDayStr.split(",");
                 listDay.forEach(function (day) {
+                    var isChooseBf = false;
+                    var isChooseLn = false;
                     var list_bf = [];
                     var list_ln = [];
                     var list_af = [];
@@ -373,6 +532,7 @@
                             Bundled: 0
                         }
                         list_bf.push(bf)
+                        isChooseBf = true;
                     }
 
                     var br_op_selected = $('input[name=breakfast-op-' + day + ']:checked');
@@ -402,6 +562,7 @@
                             Bundled: 0
                         }
                         list_ln.push(ln);
+                        isChooseLn = true;
                     }
 
                     $('input[name=lunch-op-' + day + ']:checked').each(function () {
@@ -433,11 +594,11 @@
                     }
 
 
-                    if (list_bf.length != 2) {
+                    if (!isChooseBf ) {
                         errors.push("You need to choose a breakfast dish for " + day + "/" + CurrentMonth);
                     }
 
-                    if (list_ln.length != 4) {
+                    if (!isChooseLn) {
                         errors.push("You need to choose a lunch dish for " + day + "/" + CurrentMonth);
                     }
 

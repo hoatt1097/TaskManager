@@ -377,7 +377,7 @@ namespace UTS_Portal.Controllers
 
                     var FIRST_ROW_NUMBER = 1;
 
-                    ISheet sheet = workbook.GetSheetAt(1);
+                    ISheet sheet = workbook.GetSheetAt(0);
                     // Example: var firstCellRow = (int)sheet.GetRow(0).GetCell(0).NumericCellValue;
 
                     // Check data
@@ -407,38 +407,43 @@ namespace UTS_Portal.Controllers
 
                         var df = new DataFormatter();
 
+                        if (currentRow.GetCell(6) == null || currentRow.GetCell(6).ToString() == "") continue;
+
+                        var Ckcode = currentRow.GetCell(6).ToString();
+                        Goods goods = _context.Goods.Where(x => x.Ref == Ckcode).FirstOrDefault();
+
                         var MonthYear = MonthImport;
-                        var Week = (int?)currentRow.GetCell(1).NumericCellValue;
-                        var Dow = (int?)currentRow.GetCell(2).NumericCellValue;
+                        /*var Week = (int?)currentRow.GetCell(1).NumericCellValue;
+                        var Dow = (int?)currentRow.GetCell(2).NumericCellValue;*/
                         var MenuDate = DateTime.ParseExact(currentRow.GetCell(3)?.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
                         var Category = currentRow.GetCell(4).ToString();
-                        var ItemCode = (currentRow.GetCell(5) != null && currentRow.GetCell(5).ToString() != "") ? currentRow.GetCell(5).ToString() : rowIdx.ToString();
-                        var Ckcode = (currentRow.GetCell(6) != null && currentRow.GetCell(6).ToString() != "") ? currentRow.GetCell(6).ToString() : (rowIdx + 10000).ToString();
-                        var OriginalName = currentRow.GetCell(7).ToString();
-                        var ItemNameVn = currentRow.GetCell(8).RichStringCellValue.ToString(); // Fomular
-                        var ItemNameEn = currentRow.GetCell(9).RichStringCellValue.ToString(); // Fomular
+                        var ItemCode = goods != null ? goods.GoodsId : "";
+                        var OriginalName = goods != null ? goods.OtherName : currentRow.GetCell(7).ToString();
+                        var ItemNameVn = goods != null ? goods.ShortName : currentRow.GetCell(8).RichStringCellValue.ToString(); // Fomular
+                        var ItemNameEn = goods != null ? goods.EnName : currentRow.GetCell(9).RichStringCellValue.ToString(); // Fomular
                         var Qty = (int?)currentRow.GetCell(10).NumericCellValue;
                         var Repast = (int)currentRow.GetCell(11).NumericCellValue;
                         var Class = currentRow.GetCell(12) != null ? currentRow.GetCell(12).ToString() : "";
                         var Bundled = (int)currentRow.GetCell(13).NumericCellValue;
                         var IsOrdered = (int)currentRow.GetCell(14).NumericCellValue;
-                        var Status = (int)currentRow.GetCell(15).NumericCellValue;
+                        /*var Status = (int)currentRow.GetCell(15).NumericCellValue;*/
+                        var Status = 1;
 
                         Menus menu = new Menus
                         {
-                            MonthYear = MonthYear,
-                            Week = Week,
-                            DoW = Dow,
+                            MonthYear = MonthYear.Trim(),
+                            /*Week = Week,
+                            DoW = Dow,*/
                             MenuDate = MenuDate,
-                            Category = Category,
-                            ItemCode = ItemCode,
-                            Ckcode = Ckcode,
-                            OriginalName = OriginalName,
-                            ItemNameVn = ItemNameVn, // Fomular
-                            ItemNameEn = ItemNameEn, // Fomular
+                            Category = Category.Trim(),
+                            ItemCode = ItemCode.Trim(),
+                            Ckcode = Ckcode.Trim(),
+                            OriginalName = OriginalName.Trim(),
+                            ItemNameVn = ItemNameVn.Trim(), // Fomular
+                            ItemNameEn = ItemNameEn.Trim(), // Fomular
                             Qty = Qty,
                             RepastId = Repast,
-                            Class = Class,
+                            Class = Class.Trim(),
                             IsBundled = Bundled,
                             IsOrdered = IsOrdered,
                             Status = Status,
