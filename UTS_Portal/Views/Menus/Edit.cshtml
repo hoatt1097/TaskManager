@@ -177,12 +177,15 @@
                                                                 <p class="title-en">Soup</p>
 
                                                                 <p class="title-vn">Tráng miệng</p>
-                                                                <p class="title-en">Deser</p>
+                                                                <p class="title-en">Desert</p>
                                                             </div>
                                                         </div>
                                                         <div class="title-afternoon">
-                                                            <p class="breakfast-1 title-vn">Ăn nhẹ</p>
-                                                            <p class="breakfast-1 title-en">Afternoon snack</p>
+                                                            <p class="afternoon-1 title-vn">Bữa chiều chọn 1 trong 2</p>
+                                                            <p class="afternoon-1 title-en">Afternoon choose 1 of 2</p>
+
+                                                            <p class="title-vn">Ăn nhẹ</p>
+                                                            <p class="title-en">Afternoon snack</p>
                                                         </div>
                                                     </div>
                                                     @foreach (var day in CalendarMonth.Where(x => x.Week == Week).ToList())
@@ -197,6 +200,7 @@
                                                                     <p>@day.DateString.Substring(0, 3) (@day.DateMonth)</p>
                                                                 </div>
                                                                 <div class="breakfast">
+                                                                    <p class="noteat"></p>
                                                                     <p></p>
                                                                     <p></p>
                                                                     <p class="breakfast-op"></p>
@@ -212,6 +216,8 @@
                                                                     <p></p>
                                                                 </div>
                                                                 <div class="afternoon">
+                                                                    <p class="noteat"></p>
+                                                                    <p></p>
                                                                     <p></p>
                                                                     <p></p>
                                                                 </div>
@@ -235,6 +241,10 @@
                                                                 </div>
 
                                                                 <div class="breakfast">
+                                                                    <input type="radio" id="breakfast-noteat-@day.Day" name="breakfast-@day.Day" value="0" />
+                                                                    <label class="vn noteat" for="breakfast-noteat-@day.Day">Không ăn </label>
+                                                                    <label class="en noteat" for="breakfast-noteat-@day.Day">Do not eat</label>
+
                                                                     @{int i = 1;}
                                                                     @foreach (var item in BfData.Where(x => x.IsBundled == 0))
                                                                     {
@@ -356,6 +366,10 @@
                                                                 </div>
 
                                                                 <div class="afternoon">
+                                                                    <input type="radio" id="afternoon-noteat-@day.Day" name="afternoon-@day.Day" value="0" />
+                                                                    <label class="vn noteat" for="afternoon-noteat-@day.Day">Không ăn </label>
+                                                                    <label class="en noteat" for="afternoon-noteat-@day.Day">Do not eat</label>
+
                                                                     @{i = 1;}
                                                                     @foreach (var item in AfData.Where(x => x.IsBundled == 0))
                                                                     {
@@ -365,6 +379,20 @@
                                                                         i++;
                                                                     }
                                                                     @for (int k = i; k <= 2; k++)
+                                                                    {
+                                                                        <label class="text-white">No Item</label>
+                                                                    }
+
+                                                                    @*Món phụ*@
+                                                                    @{i = 1;}
+                                                                    @foreach (var item in AfData.Where(x => x.IsBundled == 1))
+                                                                    {
+                                                                        <input type="checkbox" id="afternoon-op-@i-@day.Day" name="afternoon-op-@day.Day" value="@item.ItemCode" />
+                                                                        <label class="vn" for="afternoon-op-@i-@day.Day" name="afternoon-op-@day.Day">@item.ItemNameVn</label>
+                                                                        <label class="en" for="afternoon-op-@i-@day.Day" name="afternoon-op-@day.Day">@item.ItemNameEn</label>
+                                                                        i++;
+                                                                    }
+                                                                    @for (int k = i; k <= 1; k++)
                                                                     {
                                                                         <label class="text-white">No Item</label>
                                                                     }

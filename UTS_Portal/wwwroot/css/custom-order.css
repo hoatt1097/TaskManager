@@ -21,18 +21,24 @@
     min-width: 115px;
 }
 
-.order-table .day p, .order-table .day label, .order-table .meal-title p, .order-table .meal-title label {
-    width: 100%;
-    border: solid 1px #ddd;
-    border-right: 0;
-    margin: 0;
-    margin-top: -1px;
-    padding: 0 2px;
-    height: 75px;
-}
+    .order-table .day p, .order-table .day label, .order-table .meal-title p, .order-table .meal-title label {
+        width: 100%;
+        border: solid 1px #ddd;
+        border-right: 0;
+        margin: 0;
+        margin-top: -1px;
+        padding: 0 2px;
+        height: var(--cell_lg);
+    }
 
 .order-table .breakfast-1 {
-    height: 149px !important;
+    height: var(--title_bf_cell_lg) !important;
+    padding-top: calc(var(--title_bf_cell_lg) / 2 - 10px) !important;
+}
+
+.order-table .afternoon-1 {
+    height: var(--title_af_cell_lg) !important;
+    padding-top: calc(var(--title_af_cell_lg) / 2 - 10px) !important;
 }
 
 /*.order-table .holiday p, .order-table .holiday label {
@@ -63,6 +69,10 @@
     height: 40px !important;
 }
 
+.order-table .noteat {
+    height: var(--cell_noteat) !important;
+}
+
 .day label {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -73,11 +83,17 @@
 
 @media only screen and (max-width: 1600px) {
     .order-table .day p, .order-table .day label, .order-table .meal-title p, .order-table .meal-title label {
-        height: 80px;
+        height: var(--cell_md);
     }
 
     .order-table .breakfast-1 {
-        height: 159px !important;
+        height: var(--title_bf_cell_md) !important;
+        padding-top: calc(var(--title_bf_cell_md) / 2 - 10px) !important;
+    }
+
+    .order-table .afternoon-1 {
+        height: var(--title_af_cell_md) !important;
+        padding-top: calc(var(--title_af_cell_md) / 2 - 10px) !important;
     }
 }
 
@@ -90,11 +106,25 @@
 /* Ipad */
 @media only screen and (max-width: 820px) {
     .order-table .day p, .order-table .day label, .order-table .meal-title p, .order-table .meal-title label {
-        height: 145px;
+        height: var(--cell_xs);
     }
 
     .order-table .breakfast-1 {
-        height: 289px !important;
+        height: var(--title_bf_cell_xs) !important;
+        padding-top: calc(var(--title_bf_cell_xs) / 2 - 10px) !important;
+    }
+
+    .order-table .afternoon-1 {
+        height: var(--title_af_cell_xs) !important;
+        padding-top: calc(var(--title_af_cell_xs) / 2 - 10px) !important;
+    }
+
+    .day label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 4 !important;
+        -webkit-box-orient: vertical;
     }
 }
 

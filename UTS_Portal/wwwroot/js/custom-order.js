@@ -1,6 +1,8 @@
 ﻿jQuery(document).ready(function () {
     $('input[type="radio"]').on('change', function () {
         var name = $(this).attr('name');
+        var value = $(this).val();
+        console.log(value)
 
         $("input[name=" + name + "]").not(':checked').each(function () {
             var func = 'removeClass';
@@ -18,20 +20,39 @@
         $('label[for="hide-' + $(this).attr('id') + '"] select')[func]('checked');
 
 
-        // Auto check all option order
-        const NameInputArr = name.split("-");
-        var NameOptionCb = NameInputArr[0] + "-op-" + NameInputArr[1]; // breakfast-op-@day.Day
-        $('input[name="' + NameOptionCb + '"]').each(function () {
-            $(this).prop('checked', 'checked');
+        if (value != 0) {
+            // Auto check all option order
+            const NameInputArr = name.split("-");
+            var NameOptionCb = NameInputArr[0] + "-op-" + NameInputArr[1]; // breakfast-op-@day.Day
+            $('input[name="' + NameOptionCb + '"]').each(function () {
+                $(this).prop('checked', 'checked');
 
-            var func = 'addClass';
-            $('label[name="' + NameOptionCb + '"]')[func]('checked');
-            $('label[name="hide-' + NameOptionCb + '"]')[func]('checked');
+                var func = 'addClass';
+                $('label[name="' + NameOptionCb + '"]')[func]('checked');
+                $('label[name="hide-' + NameOptionCb + '"]')[func]('checked');
 
-            $('label[name="' + NameOptionCb + '"] select')[func]('checked');
-            $('label[name="hide-' + NameOptionCb + '"] select')[func]('checked');
+                $('label[name="' + NameOptionCb + '"] select')[func]('checked');
+                $('label[name="hide-' + NameOptionCb + '"] select')[func]('checked');
 
-        });
+            });
+        } else {
+            // Remove
+            const NameInputArr = name.split("-");
+            var NameOptionCb = NameInputArr[0] + "-op-" + NameInputArr[1]; // breakfast-op-@day.Day
+            $('input[name="' + NameOptionCb + '"]').each(function () {
+                $(this).prop('checked', false);
+
+                var func = 'removeClass';
+                $('label[name="' + NameOptionCb + '"]')[func]('checked');
+                $('label[name="hide-' + NameOptionCb + '"]')[func]('checked');
+
+                $('label[name="' + NameOptionCb + '"] select')[func]('checked');
+                $('label[name="hide-' + NameOptionCb + '"] select')[func]('checked');
+
+            });
+        }
+        
+        
 
     });
 

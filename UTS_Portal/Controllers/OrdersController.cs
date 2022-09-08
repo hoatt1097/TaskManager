@@ -138,6 +138,8 @@ namespace UTS_Portal.Controllers
                     {
                         foreach (var item in day.Breakfast)
                         {
+                            if (item.Ckcode == "0") break;
+
                             PreOrders order = new PreOrders
                             {
                                 UserCode = currentUser.Code,
@@ -165,6 +167,8 @@ namespace UTS_Portal.Controllers
                     {
                         foreach (var item in day.Lunch)
                         {
+                            if (item.Ckcode == "0") break;
+
                             PreOrders order = new PreOrders
                             {
                                 UserCode = currentUser.Code,
@@ -192,6 +196,8 @@ namespace UTS_Portal.Controllers
                     {
                         foreach (var item in day.Afternoon)
                         {
+                            if (item.Ckcode == "0") break;
+
                             PreOrders order = new PreOrders
                             {
                                 UserCode = currentUser.Code,
