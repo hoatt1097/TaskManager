@@ -216,7 +216,6 @@
                                                                     <p></p>
                                                                 </div>
                                                                 <div class="afternoon">
-                                                                    <p class="noteat"></p>
                                                                     <p></p>
                                                                     <p></p>
                                                                     <p></p>
@@ -352,7 +351,7 @@
 
                                                                     @*Món phụ*@
                                                                     @{i = 1;}
-                                                                    @foreach (var item in LnData.Where(x => x.IsBundled == 1))
+                                                                    @foreach (var item in LnData.Where(x => x.IsBundled == 1).OrderByDescending(x => x.Category))
                                                                     {
                                                                         <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" value="@item.ItemCode" />
                                                                         <label class="vn" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameVn</label>
@@ -366,9 +365,9 @@
                                                                 </div>
 
                                                                 <div class="afternoon">
-                                                                    <input type="radio" id="afternoon-noteat-@day.Day" name="afternoon-@day.Day" value="0" />
+                                                                    @*<input type="radio" id="afternoon-noteat-@day.Day" name="afternoon-@day.Day" value="0" />
                                                                     <label class="vn noteat" for="afternoon-noteat-@day.Day">Không ăn </label>
-                                                                    <label class="en noteat" for="afternoon-noteat-@day.Day">Do not eat</label>
+                                                                    <label class="en noteat" for="afternoon-noteat-@day.Day">Do not eat</label>*@
 
                                                                     @{i = 1;}
                                                                     @foreach (var item in AfData.Where(x => x.IsBundled == 0))

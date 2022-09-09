@@ -10,7 +10,7 @@
     --title_bf_cell_md: calc(var(--cell_md) * var(--number_bf_dish) - 2px + var(--cell_noteat));
     --title_bf_cell_xs: calc(var(--cell_xs) * var(--number_bf_dish) - 2px + var(--cell_noteat));
     /*-----Calc for affternoon title -----*/
-    --title_af_cell_lg: calc(var(--cell_lg) * var(--number_af_dish) - 2px + var(--cell_noteat));
-    --title_af_cell_md: calc(var(--cell_md) * var(--number_af_dish) - 2px + var(--cell_noteat));
-    --title_af_cell_xs: calc(var(--cell_xs) * var(--number_af_dish) - 2px + var(--cell_noteat));
+    --title_af_cell_lg: calc(var(--cell_lg) * var(--number_af_dish) - 2px );
+    --title_af_cell_md: calc(var(--cell_md) * var(--number_af_dish) - 2px );
+    --title_af_cell_xs: calc(var(--cell_xs) * var(--number_af_dish) - 2px );
 }
