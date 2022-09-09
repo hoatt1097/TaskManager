@@ -33,6 +33,7 @@
                         <th>STT</th>
                         <th>Image</th>
                         <th>Title</th>
+                        <th>Views</th>
                         <th style="width: 120px">Status</th>
                         <th style="width: 200px">Created Date</th>
                         <th style="width: 180px">Action</th>
@@ -45,33 +46,34 @@
                         var i = 1;
                         foreach (var item in Model)
                         {
-                            <tr>
-                                <td>@i</td>
-                                <td><img src="~/images/news/@item.Thumb" alt="@item.Title" style="height:40px" /></td>
-                                <td><a asp-controller="Posts" asp-action="Details" asp-route-id="@item.Id">@item.Title</a></td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        @if (item.Published == true)
-                                        {
-                                            <div class="badge badge-success badge-dot mt-1">
-                                                <span>Public</span>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="badge badge-secondary badge-dot mt-1">
-                                                <span>Non-Public</span>
-                                            </div>
-                                        }
+                    <tr>
+                        <td>@i</td>
+                        <td><img src="~/images/news/@item.Thumb" alt="@item.Title" style="height:40px" /></td>
+                        <td><a asp-controller="Posts" asp-action="Details" asp-route-id="@item.Alias">@item.Title</a></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                @if (item.Published == true)
+                                {
+                                    <div class="badge badge-success badge-dot mt-1">
+                                        <span>Public</span>
                                     </div>
-                                </td>
-                                <td>@item.CreatedDate</td>
-                                <td>
-                                    <a href="/#" target="_blank" class="btn btn-primary btn-sm">View</a>
-                                    <a class="btn btn-secondary btn-sm" asp-controller="Posts" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","Posts")/@item.Id')">Delete</a>
-                                </td>
-                            </tr>
+                                }
+                                else
+                                {
+                                    <div class="badge badge-secondary badge-dot mt-1">
+                                        <span>Non-Public</span>
+                                    </div>
+                                }
+                            </div>
+                        </td>
+                        <td>@item.Views</td>
+                        <td>@item.CreatedDate</td>
+                        <td>
+                            <a href="@Url.Action("Details", "Posts")/@item.Alias" target="_blank" class="btn btn-primary btn-sm">View</a>
+                            <a class="btn btn-secondary btn-sm" asp-controller="Posts" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-danger btn-sm text-white" onclick="Delete('@Url.Action("Delete","Posts")/@item.Id')">Delete</a>
+                        </td>
+                    </tr>
                             i++;
                         }
                     }

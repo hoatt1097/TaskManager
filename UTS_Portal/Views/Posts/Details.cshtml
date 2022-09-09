@@ -4,70 +4,75 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section Styles {
+    <style>
+        .main-blog {
+            padding: 0 60px;
+            text-align: justify;
+            background-image: url(https://utschool.edu.vn/wp-content/themes/uts/page-templates/img/bg-events1.png);
+        }
 
-<h1>Details</h1>
+            .main-blog img {
+                width: 100% !important;
+                border-radius: 5px;
+                object-fit: cover;
+            }
 
-<div>
-    <h4>Posts</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Scontents)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Scontents)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Contents)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Contents)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Thumb)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Thumb)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Published)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Published)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Views)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Views)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsHot)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsHot)
-        </dd>
-    </dl>
+        .text1 {
+            color: rgba(255, 131, 2, 1);
+            font-size: 18px;
+            line-height: 24px;
+            letter-spacing: 0.02em;
+            font-weight: 700;
+        }
+
+        .background {
+            height: 300px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+            .background:hover {
+                opacity: 0.9;
+                cursor: pointer;
+            }
+
+        .time {
+            color: rgba(133, 133, 133, 1);
+            font-size: 18px;
+            line-height: 30px;
+            font-weight: 400;
+        }
+
+        /* Iphone */
+        @@media only screen and (max-width: 600px) {
+            .main-blog {
+                padding: 0 20px;
+            }
+        }
+    </style>
+}
+
+<div class="section dashboard main-blog">
+    <div class="row">
+        <div class="col-lg-12 ">
+            <h1>@Model.Title</h1>
+            <div class="d-flex">
+                <div class="p-2 flex-grow-1"><p class="text1">TIN TỨC</p></div>
+                <div class="p-2 time">@Model.CreatedDate?.ToString("yyyy/MM/dd hh:MM")</div>
+            </div>
+            @if (@Model.Thumb != null && @Model.Thumb != "" )
+            {
+                <img src="~/images/news/@Model.Thumb" alt="@Model.Title" class="background"/>
+            }
+
+            @Html.Raw(Model.Contents)
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="List">Back to List</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

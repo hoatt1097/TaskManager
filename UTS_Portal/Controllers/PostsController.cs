@@ -54,37 +54,29 @@ namespace UTS_Portal.Controllers
 
         public async Task<IActionResult> List(int? page)
         {
-            var collection = _context.Posts.AsNoTracking().ToList();
-            foreach (var item in collection)
-            {
-                if (item.CreatedDate == null)
-                {
-                    item.CreatedDate = DateTime.Now;
-                    _context.Update(item);
-                    _context.SaveChanges();
-                }
-            }
-
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;
-            var pageSize = 10;
-            var ls = _context.Posts.AsNoTracking().OrderByDescending(x => x.CreatedDate);
+            var pageSize = 7;
+            var ls = _context.Posts.AsNoTracking().Where(x => x.Published == true).OrderByDescending(x => x.CreatedDate);
             PagedList<Posts> models = new PagedList<Posts>(ls, pageNumber, pageSize);
+
+            var listPopular = _context.Posts.AsNoTracking().Where(x => x.Published == true).OrderByDescending(x => x.Views).Take(5).ToList();
 
             ViewBag.CurrentPage = pageNumber;
             ViewBag.Total = ls.Count();
+
+            ViewBag.ListPopular = listPopular;
             return View(models);
         }
 
         // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var posts = await _context.Posts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var posts = await _context.Posts.FirstOrDefaultAsync(m => m.Alias == id);
             if (posts == null)
             {
                 return NotFound();

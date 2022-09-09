@@ -3,17 +3,41 @@
 @{
     int CurrentPage = ViewBag.CurrentPage;
     int Total = ViewBag.Total;
+    var ListPopular = ViewBag.ListPopular;
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section Styles {
     <style>
+        .page-item.active span {
+            background-color: #FF8302 !important;
+            border-color: #FF8302 !important;
+            color: white !important;
+        }
+
+        .page-link {
+            color: #FF8302 !important;
+        }
+
+        .page-item.disabled a {
+            color: grey !important;
+        }
+
         a {
             text-decoration: none !important;
         }
 
         .main-blog img {
+            height: 100%;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .main-blog .image {
             width: 200px !important;
+            height: 150px;
+            background-color: antiquewhite;
+            float: left;
             border-radius: 5px;
             margin-right: 20px;
         }
@@ -24,6 +48,11 @@
             font-weight: 600;
             transition: 0.3s;
             font-size: 25px;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
         }
 
             .main-content a:hover {
@@ -43,10 +72,15 @@
             margin-bottom: 0;
         }
 
+        .clearfix.mb-4:hover {
+            background-color: antiquewhite;
+        }
+
         /* Iphone */
         @@media only screen and (max-width: 600px) {
-            .main-blog img {
-                width: 84px !important;
+            .main-blog .image {
+                width: 120px !important;
+                height: 120px !important;
             }
 
             .main-content a {
@@ -94,7 +128,7 @@
         <div class="col-lg-8 main-blog">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"> News &amp; Updates <span> | Today</span> </h5>
+                    <h5 class="card-title"> News &amp; Events <span> | Today</span> </h5>
                     <div class="content">
                         @if (Model != null)
                         {
@@ -102,10 +136,12 @@
                             var i = 1;
                             @foreach (var item in Model)
                             {
-                                <div class="d-flex mb-4">
-                                    <img  src="~/images/news/@item.Thumb" alt="">
+                                <div class="clearfix mb-4">
+                                    <div class="image">
+                                        <img src="~/images/news/@item.Thumb" alt="" />
+                                    </div>
                                     <div class="main-content">
-                                        <a href="#">@item.Title</a>
+                                        <a href="@Url.Action("Details", "Posts")/@item.Alias">@item.Title</a>
                                         <p>@item.Scontents</p>
                                     </div>
                                 </div>
@@ -113,71 +149,27 @@
                             }
                         }
                     </div>
+                    <div>
+                        <ul class="pagination justify-content-end">
+                            <pager class="pager-container" list="@Model" asp-controller="Posts" asp-action="List" />
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-4">
             <div class="card">
-                <div class="card-body pb-0">
-                    <h5 class="card-title"> News &amp; Updates <span> | Today</span> </h5>
+                <div class="card-body pb-4">
+                    <h5 class="card-title"> News &amp; Favorite <span> | Popular</span> </h5>
                     <div class="news">
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-1.jpg" alt="">
-                            <h4> <a href="#"> Nihil blanditiis at in nihil autem</a> </h4>
-                            <p> Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
-                        </div>
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-2.jpg" alt="">
-                            <h4> <a href="#"> Quidem autem et impedit</a> </h4>
-                            <p> Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
-                        </div>
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-3.jpg" alt="">
-                            <h4> <a href="#"> Id quia et et ut maxime similique occaecati ut</a> </h4>
-                            <p> Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
-                        </div>
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-4.jpg" alt="">
-                            <h4> <a href="#"> Laborum corporis quo dara net para</a> </h4>
-                            <p> Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
-                        </div>
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-5.jpg" alt="">
-                            <h4> <a href="#"> Et dolores corrupti quae illo quod dolor</a> </h4>
-                            <p> Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body pb-0">
-                    <h5 class="card-title"> News &amp; Updates <span> | Today</span> </h5>
-                    <div class="news">
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-1.jpg" alt="">
-                            <h4> <a href="#"> Nihil blanditiis at in nihil autem</a> </h4>
-                            <p> Sit recusandae non aspernatur laboriosam. Quia enim eligendi sed ut harum...</p>
-                        </div>
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-2.jpg" alt="">
-                            <h4> <a href="#"> Quidem autem et impedit</a> </h4>
-                            <p> Illo nemo neque maiores vitae officiis cum eum turos elan dries werona nande...</p>
-                        </div>
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-3.jpg" alt="">
-                            <h4> <a href="#"> Id quia et et ut maxime similique occaecati ut</a> </h4>
-                            <p> Fugiat voluptas vero eaque accusantium eos. Consequuntur sed ipsam et totam...</p>
-                        </div>
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-4.jpg" alt="">
-                            <h4> <a href="#"> Laborum corporis quo dara net para</a> </h4>
-                            <p> Qui enim quia optio. Eligendi aut asperiores enim repellendusvel rerum cuder...</p>
-                        </div>
-                        <div class="post-item clearfix">
-                            <img src="~/assets/img/news-5.jpg" alt="">
-                            <h4> <a href="#"> Et dolores corrupti quae illo quod dolor</a> </h4>
-                            <p> Odit ut eveniet modi reiciendis. Atque cupiditate libero beatae dignissimos eius...</p>
-                        </div>
+                        @foreach (var item in ListPopular)
+                        {
+                            <div class="post-item clearfix">
+                                <img src="~/images/news/@item.Thumb" style="height: 60px">
+                                <h4> <a href="@Url.Action("Details", "Posts")/@item.Alias">@item.Title</a> </h4>
+                                <p>@item.Scontents</p>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

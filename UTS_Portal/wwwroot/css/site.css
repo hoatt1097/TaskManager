@@ -47,6 +47,10 @@
 .bxs-error {
     color: red !important;
 }
+
+.notify:hover {
+    cursor: pointer;
+}
 /* Iphone */
 @media only screen and (max-width: 414px) {
     main {
