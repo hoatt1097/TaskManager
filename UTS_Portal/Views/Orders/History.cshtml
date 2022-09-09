@@ -2,9 +2,11 @@
 @{
     string ParentId = ViewBag.ParentId;
     string StudentName = ViewBag.StudentName;
-    var  SelectBoxOrderMonth = ViewBag.SelectBoxOrderMonth;
+    var SelectBoxOrderMonth = ViewBag.SelectBoxOrderMonth;
     string RoleName = User.Claims.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value;
     string isDisabled = RoleName == "Parent" ? "disabled" : "";
+
+    List<OrderSubmit> listOrderSubmit = ViewBag.ListOrderSubmit;
 
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -50,11 +52,11 @@
                 <div class="row">
                     <div class="col-md-4">
                         <label class="control-label">Student:</label>
-                        <input name="studentName" id="studentName" class="form-control" value="@StudentName" @isDisabled/>
+                        <input name="studentName" id="studentName" class="form-control" value="@StudentName" @isDisabled />
                     </div>
                     <div class="col-md-2">
                         <label class="control-label">Parent code:</label>
-                        <input name="parentId" id="parentId" class="form-control" value="@ParentId" disabled/>
+                        <input name="parentId" id="parentId" class="form-control" value="@ParentId" disabled />
                     </div>
                     <div class="col-md-2">
                         <label class="control-label">Month:</label>
@@ -63,25 +65,139 @@
                     </div>
                     <div class="col-md-2 d-grid">
                         <label class="control-label">Action:</label>
-                        <label type="submit" class="form-control btn btn-primary" style="width: 100px">View</label>
+                        <label class="form-control btn btn-primary" id="ViewHistory" style="width: 100px">View</label>
                     </div>
-                    <div class="col-md-12 mt-4">
-                        <div class="row" style="padding-right: 10px">
-                            <div class="col-md-6"><div class="card info-card sales-card"><div class="card-body pre-order"><h5 class="card-title pt-1 pb-1">Day 1/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Stir-fried yellow noodle with seafood Test</p><p class="pl-5"><i class="bx bx-plus"></i>: Fresh milk</p></div><div><p><b>Lunch:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Seafood pasta</p><p class="pl-5"><i class="bx bx-plus"></i>: Boiled mixed vegetables, Tomato egg drop soup, Banana </p></div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i></p></div></div></div></div><div class="col-md-6"><div class="card info-card sales-card"><div class="card-body pre-order"><h5 class="card-title pt-1 pb-1">Day 2/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Baked cheese omelet</p><p class="pl-5"><i class="bx bx-plus"></i>: Soya milk</p></div><div><p><b>Lunch:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Chicken stew</p><p class="pl-5"><i class="bx bx-plus"></i>: Dragon fruit, Cauliflower soup with minced pork, Sautéed spinach </p></div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Orange juice</p></div></div></div></div><div class="col-md-6">
-                                <div class="card info-card sales-card">
-                                    <div class="card-body pre-order">
-                                        <h5 class="card-title pt-1 pb-1">Day 3/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Steamed rice roll with pork cold cut</p><p class="pl-5"><i class="bx bx-plus"></i>: Fresh milk</p></div><div>
-                                            <p><b>Lunch:</b></p><p class="pl-5">
-                                                <i class="bx bx-cart"></i>: Stir-fried beef with rice vecimelli
 
-                                            </p><p class="pl-5"><i class="bx bx-plus"></i>: Papaya, Vegetable soup with pork ribs, Boiled green beans </p>
-                                        </div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Kimbap</p></div>
+                    @if (listOrderSubmit != null && listOrderSubmit.Count > 0)
+                    {
+                        <div class="col-md-12 mt-4">
+                            <label>Choose language: </label>
+                            <select class="custom-select mt-3 mb-3 mr-3" id="language" name="language" style="width: 200px;">
+                                <option value="vn">Vietnamese</option>
+                                <option value="en" selected>English</option>
+                            </select>
+                            <div class="row en" style="padding-right: 10px">
+                                @foreach (var day in listOrderSubmit)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="card info-card sales-card">
+                                            <div class="card-body pre-order">
+                                                <h5 class="card-title pt-1 pb-1">Day @day.Day/@day.CurrentMonth</h5>
+                                                <div>
+                                                    <p><b>Breakfast:</b></p>
+                                                    @if (day.Breakfast.Count == 0)
+                                                    {
+                                                        <p class="pl-5"><i class="bx bxs-error"></i>: Do not choose breakfast</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="pl-5">
+                                                            <i class="bx bx-cart"></i>: @day.Breakfast[0].NameEn
+                                                            @if (day.Breakfast[0].Qty > 10)
+                                                            {<b>(#@day.Breakfast[0].Qty)</b>}
+                                                        </p>
+                                                        <p class="pl-5"><i class="bx bx-plus"></i>: @day.Breakfast[1].NameEn</p>
+                                                    }
+
+                                                </div>
+                                                <div>
+                                                    <p><b>Lunch:</b></p>
+                                                    <p class="pl-5">
+                                                        <i class="bx bx-cart"></i>: @day.Lunch[0].NameEn
+                                                        @if (day.Lunch[0].Qty > 10)
+                                                        {<b>(#@day.Lunch[0].Qty)</b>}
+                                                    </p>
+                                                    <p class="pl-5"><i class="bx bx-plus"></i>: @day.Lunch[1].NameEn, @day.Lunch[2].NameEn, @day.Lunch[3].NameEn</p>
+                                                </div>
+                                                <div>
+                                                    <p><b>Afternoon:</b></p>
+                                                    <p class="pl-5">
+                                                        <i class="bx bx-cart"></i>: @day.Afternoon[0].NameEn
+                                                        @if (day.Afternoon[0].Qty > 10)
+                                                        {<b>(#@day.Afternoon[0].Qty)</b>}
+                                                    </p>
+                                                    <p class="pl-5"><i class="bx bx-plus"></i>: @day.Afternoon[1].NameEn</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div><div class="col-md-6"><div class="card info-card sales-card"><div class="card-body pre-order"><h5 class="card-title pt-1 pb-1">Day 4/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Ham and cheese sandwich with lettuce and tomatoes</p><p class="pl-5"><i class="bx bx-plus"></i>: Corn milk</p></div><div><p><b>Lunch:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Pork cordon bleu with bread</p><p class="pl-5"><i class="bx bx-plus"></i>: Sautéed cabbage, Chinese cabbage soup with minced pork, Watermelon </p></div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Steamed egg yolk custard bun</p></div></div></div></div><div class="col-md-6"><div class="card info-card sales-card"><div class="card-body pre-order"><h5 class="card-title pt-1 pb-1">Day 5/08/2022</h5><div><p><b>Breakfast:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Pork meatball vermicelli noodle soup</p><p class="pl-5"><i class="bx bx-plus"></i>: Fresh milk</p></div><div><p><b>Lunch:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Roasted chicken</p><p class="pl-5"><i class="bx bx-plus"></i>: Sautéed choy sum, Minestrone soup, Banana sponge cake </p></div><div><p><b>Afternoon:</b></p><p class="pl-5"><i class="bx bx-cart"></i>: Pear juice</p></div></div></div></div>
+                                }
+
+                            </div>
+
+                            <div class="row vn" style="padding-right: 10px">
+                                @foreach (var day in listOrderSubmit)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="card info-card sales-card">
+                                            <div class="card-body pre-order">
+                                                <h5 class="card-title pt-1 pb-1">Day @day.Day/@day.CurrentMonth</h5>
+                                                <div>
+                                                    <p><b>Breakfast:</b></p>
+                                                    @if (day.Breakfast.Count == 0)
+                                                    {
+                                                        <p class="pl-5"><i class="bx bxs-error"></i>: Không chọn ăn sáng</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="pl-5">
+                                                            <i class="bx bx-cart"></i>: @day.Breakfast[0].NameVn
+                                                            @if (day.Breakfast[0].Qty > 10)
+                                                            {<b>(#@day.Breakfast[0].Qty)</b>}
+                                                        </p>
+                                                        <p class="pl-5"><i class="bx bx-plus"></i>: @day.Breakfast[1].NameVn</p>
+                                                    }
+
+                                                </div>
+                                                <div>
+                                                    <p><b>Lunch:</b></p>
+                                                    <p class="pl-5">
+                                                        <i class="bx bx-cart"></i>: @day.Lunch[0].NameVn
+                                                        @if (day.Lunch[0].Qty > 10)
+                                                        {<b>(#@day.Lunch[0].Qty)</b>}
+                                                    </p>
+                                                    <p class="pl-5"><i class="bx bx-plus"></i>: @day.Lunch[1].NameVn, @day.Lunch[2].NameVn, @day.Lunch[3].NameVn</p>
+                                                </div>
+                                                <div>
+                                                    <p><b>Afternoon:</b></p>
+                                                    <p class="pl-5">
+                                                        <i class="bx bx-cart"></i>: @day.Afternoon[0].NameVn
+                                                        @if (day.Afternoon[0].Qty > 10)
+                                                        {<b>(#@day.Afternoon[0].Qty)</b>}
+                                                    </p>
+                                                    <p class="pl-5"><i class="bx bx-plus"></i>: @day.Afternoon[1].NameVn</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
                         </div>
-                    </div>
+                    }
+
+                    else
+                    {
+                        @if (listOrderSubmit == null)
+                        {
+                            <div class="row">
+                                <div class="col-md-12 mt-4">
+                                    <p>Please choose month and click View button</p>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="col-md-12 mt-4">
+                                    <p>No data for month and day. Please contact the canteen manager to order</p>
+                                </div>
+                            </div>
+                        }
+                    }
+
                 </div>
+
             </div>
         </div>
 
@@ -116,6 +232,37 @@
                     }
                     return false;
                 },
+            });
+
+
+            $("#ViewHistory").click(function () {
+                var parentId = $("#parentId").val().trim();
+                var monthSelected = $("#txtMonth").val().trim();
+                window.location.href = "@Url.Action("History", "Orders")?parentId=" + parentId + "&month=" + monthSelected;
+            });
+
+
+
+            // Init Language
+            if ($("#language").val() === "vn") {
+                $(".title-en").hide();
+                $(".en").hide();
+            }
+            else {
+                $(".title-vn").hide();
+                $(".vn").hide();
+            }
+
+            // Language handle
+            $('#language').on('change', function (e) {
+                var language = $("#language").val();
+                if (language === "vn") {
+                    $(".en").hide();
+                    $(".vn").show();
+                } else {
+                    $(".vn").hide();
+                    $(".en").show();
+                }
             });
         });
     </script>
