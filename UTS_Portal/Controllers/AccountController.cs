@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
 using UTS_Portal.Extension;
+using UTS_Portal.Helpers;
 using UTS_Portal.Models;
 using UTS_Portal.ViewModels;
 
@@ -166,6 +167,69 @@ namespace UTS_Portal.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+        }
+
+        public IActionResult MyProfile(string? tab)
+        {
+            ViewBag.TabView = tab != null ? tab : "info";
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (currentUser.RoleName?.Trim() == "Parent")
+            {
+                Cscard user = _context.Cscard
+                      .Where(p => p.Status == true)
+                      .SingleOrDefault(p => p.ParentId.ToLower() == currentUser.Id.ToLower().Trim());
+
+                if (user == null)
+                {
+                    ViewBag.Error = "Account is not correct. Please try again";
+                    return View();
+                }
+
+                MyProfile myProfile = new MyProfile
+                {
+                    Id = user.ParentId,
+                    Fullname = user.Name,
+                    Username = user.ParentId,
+                    Password = user.Password,
+                    Role = "Parent",
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    CreatedDate = user.LastDate?.ToString("yyyy/MM/dd"),
+                    Sex = user.Sex,
+                    Address = user.Address,
+                    Class = user.Class,
+                    ClassName = user.ClassName
+                };
+                ViewBag.MyProfile = myProfile;
+            } 
+            else
+            {
+                Users user = _context.Users
+                      .Include(p => p.Role)
+                      .Where(p => p.Active == true)
+                      .SingleOrDefault(p => p.Id.ToString() == currentUser.Id.ToLower().Trim());
+
+                if (user == null)
+                {
+                    ViewBag.Error = "Account is not correct. Please try again";
+                    return View();
+                }
+
+                MyProfile myProfile = new MyProfile
+                {
+                    Id = user.Code,
+                    Fullname = user.Fullname,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Role = user.Role.Name,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    CreatedDate = user.CreatedDate?.ToString("yyyy/MM/dd"),
+                    LastLogin = user.LastLogin?.ToString("yyyy/MM/dd")
+                };
+                ViewBag.MyProfile = myProfile;
+            }
+            return View();
         }
     }
 }

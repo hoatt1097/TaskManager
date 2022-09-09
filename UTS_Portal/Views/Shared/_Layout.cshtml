@@ -73,11 +73,11 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li> <a class="dropdown-item d-flex align-items-center" href="#"> <i class="bi bi-person"></i> <span>My Profile</span> </a></li>
+                        <li> <a class="dropdown-item d-flex align-items-center" asp-controller="Account" asp-action="MyProfile"> <i class="bi bi-person"></i> <span>My Profile</span> </a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li> <a class="dropdown-item d-flex align-items-center" href="#"> <i class="bi bi-gear"></i> <span>Change Password</span> </a></li>
+                        <li> <a class="dropdown-item d-flex align-items-center" href="@Url.Action("MyProfile", "Account")?tab=change-password"> <i class="bi bi-gear"></i> <span>Change Password</span> </a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
