@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UTS_Portal.Helpers;
@@ -144,6 +147,133 @@ namespace UTS_Portal.Controllers
             }
             
             return View();
+        }
+
+        public IActionResult ExportFile(string? parentId, string? month, string? selectDay, string? type)
+        {
+            List<PreOrders> data = new List<PreOrders>();
+            if(type == "Parent")
+            {
+                if(selectDay == "all")
+                {
+                    data = _context.PreOrders.ToList().Where(x => x.MonthYear == month.Trim() && x.UserCode.Trim() == parentId.Trim())
+                                                .OrderBy(x => x.OrderDate)
+                                                .ThenBy(n => n.RepastId).ToList();
+                } 
+                else
+                {
+                    data = _context.PreOrders.ToList().Where(x => x.OrderDate.ToString("dd/MM/yyyy") == selectDay.Trim() && x.UserCode.Trim() == parentId.Trim())
+                                                .OrderBy(x => x.OrderDate)
+                                                .ThenBy(n => n.RepastId).ToList();
+                }
+            } 
+            else
+            {
+                if (selectDay == "all")
+                {
+                    data = _context.PreOrders.ToList().Where(x => x.MonthYear == month.Trim())
+                                                .OrderBy(x => x.UserCode)
+                                                .ThenBy(n => n.OrderDate)
+                                                .ThenBy(n => n.RepastId).ToList();
+                }
+                else
+                {
+                    data = _context.PreOrders.ToList().Where(x => x.OrderDate.ToString("dd/MM/yyyy") == selectDay.Trim())
+                                                .OrderBy(x => x.UserCode)
+                                                .ThenBy(n => n.OrderDate)
+                                                .ThenBy(n => n.RepastId).ToList();
+                }
+            }
+
+            List<string> columns = new List<string>(new string[] {
+                "Submit date",
+                "Submit time",
+                "Account Code",
+                "Canteen Code",
+                "Account name",
+                "Class/Title",
+                "Period",
+                "Menu date",
+                "Week",
+                "DoW",
+                "Category",
+                "Item Code",
+                "CK code",
+                "Item Name (VN)",
+                "Item Name (EN)",
+                "Qty",
+                "Repast #",
+                "Bundled Qty",
+                "Repast Date",
+                "Repast time",
+            });
+
+            using (var fs = new FileStream("Order.xlsx", FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("Sheet1");
+
+                IRow row = excelSheet.CreateRow(0);
+                int columnIndex = 0;
+
+                foreach (string col in columns)
+                {
+                    row.CreateCell(columnIndex).SetCellValue(col);
+                    columnIndex++;
+                }
+
+                int rowIndex = 1;
+                foreach (PreOrders item in data)
+                {
+                    Cscard cscard = _context.Cscard.Where(x => x.ParentId == item.UserCode).FirstOrDefault();
+                    Goods goods = _context.Goods.Where(x => x.Ref == item.CkCode).FirstOrDefault();
+                    Menus menus = _context.Menus.Where(x => x.MenuDate == item.OrderDate && x.ItemCode == item.ItemCode).FirstOrDefault();
+
+                    row = excelSheet.CreateRow(rowIndex);
+                    row.CreateCell(0).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(1).SetCellValue(item.SubmitTm); // Submit time
+                    row.CreateCell(2).SetCellValue(item.UserCode); // Account Code
+                    row.CreateCell(3).SetCellValue(item.CanteenId); // Canteen Code
+                    row.CreateCell(4).SetCellValue(cscard.Name); // Account name
+                    row.CreateCell(5).SetCellValue(item.Class); // Class/Title
+                    row.CreateCell(6).SetCellValue(item.MonthYear); // Period
+                    row.CreateCell(7).SetCellValue(item.OrderDate); // Menu date
+                    row.CreateCell(8).SetCellValue(item.Week?.ToString()); // Week
+                    row.CreateCell(9).SetCellValue(item.DoW?.ToString()); // DoW
+                    row.CreateCell(10).SetCellValue(menus.Category); // Category
+                    row.CreateCell(11).SetCellValue(item.SubmitDt); // Item Code
+                    row.CreateCell(12).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(13).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(14).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(15).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(16).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(17).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(18).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(19).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(20).SetCellValue(item.SubmitDt); // Submit date
+
+                    rowIndex++;
+                }
+                workbook.Write(fs);
+            }
+
+
+            return Json(new { success = true, message = "Export Successfully!" });
+        }
+
+        public IActionResult GetListDayExport(string? month)
+        {
+            var ListDays = _context.Menus.Where(x => x.MonthYear == month.Trim().Replace("/", "")).OrderBy(x => x.MenuDate).Select(x => x.MenuDate).Distinct();
+            string html = "";
+            html += "<label>Export Days: </label>";
+            html += "<select class='custom-select mt-3 mb-3 ml-3' id='SelectDay' name='SelectDay' style='width: 160px;'>";
+            html += "<option value ='all'>All month</option>";
+            foreach(var day in ListDays)
+            {
+                html += "<option value ='" + day.ToString("dd/MM/yyyy") + "'>" + day.ToString("dd/MM/yyyy") + "</option>";
+            }
+            html += "</select>";
+            return Json(new { success = true, html });
         }
 
         [HttpPost]

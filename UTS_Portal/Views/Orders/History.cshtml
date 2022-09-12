@@ -33,6 +33,13 @@
             border: none;
             background-color: antiquewhite;
         }
+
+        .btn-export {
+            background: none !important;
+            padding-right: 12px;
+            width: fit-content;
+            border-color: #007bff;
+        }
     </style>
 }
 
@@ -70,110 +77,113 @@
 
                     @if (listOrderSubmit != null && listOrderSubmit.Count > 0)
                     {
-                        <div class="col-md-12 mt-4">
-                            <label>Choose language: </label>
-                            <select class="custom-select mt-3 mb-3 mr-3" id="language" name="language" style="width: 200px;">
-                                <option value="vn">Vietnamese</option>
-                                <option value="en" selected>English</option>
-                            </select>
-                            <div class="row en" style="padding-right: 10px">
-                                @foreach (var day in listOrderSubmit)
-                                {
-                                    <div class="col-md-6">
-                                        <div class="card info-card sales-card">
-                                            <div class="card-body pre-order">
-                                                <h5 class="card-title pt-1 pb-1">Day @day.Day/@day.CurrentMonth</h5>
-                                                <div>
-                                                    <p><b>Breakfast:</b></p>
-                                                    @if (day.Breakfast.Count == 0)
-                                                    {
-                                                        <p class="pl-5"><i class="bx bxs-error"></i>: Do not choose breakfast</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p class="pl-5">
-                                                            <i class="bx bx-cart"></i>: @day.Breakfast[0].NameEn
-                                                            @if (day.Breakfast[0].Qty > 10)
-                                                            {<b>(#@day.Breakfast[0].Qty)</b>}
-                                                        </p>
-                                                        <p class="pl-5"><i class="bx bx-plus"></i>: @day.Breakfast[1].NameEn</p>
-                                                    }
+                <div class="col-md-12 mt-4">
+                    <label>Choose language: </label>
+                    <select class="custom-select mt-3 mb-3 mr-3" id="language" name="language" style="width: 200px;">
+                        <option value="vn">Vietnamese</option>
+                        <option value="en" selected>English</option>
+                    </select>
 
-                                                </div>
-                                                <div>
-                                                    <p><b>Lunch:</b></p>
-                                                    <p class="pl-5">
-                                                        <i class="bx bx-cart"></i>: @day.Lunch[0].NameEn
-                                                        @if (day.Lunch[0].Qty > 10)
-                                                        {<b>(#@day.Lunch[0].Qty)</b>}
-                                                    </p>
-                                                    <p class="pl-5"><i class="bx bx-plus"></i>: @day.Lunch[1].NameEn, @day.Lunch[2].NameEn, @day.Lunch[3].NameEn</p>
-                                                </div>
-                                                <div>
-                                                    <p><b>Afternoon:</b></p>
-                                                    <p class="pl-5">
-                                                        <i class="bx bx-cart"></i>: @day.Afternoon[0].NameEn
-                                                        @if (day.Afternoon[0].Qty > 10)
-                                                        {<b>(#@day.Afternoon[0].Qty)</b>}
-                                                    </p>
-                                                    <p class="pl-5"><i class="bx bx-plus"></i>: @day.Afternoon[1].NameEn</p>
-                                                </div>
-                                            </div>
+                    <label class="btn btn-primary mt-3 mb-3 mr-3" onclick="ExportFile('Parent')">Export Excel</label>
+
+                    <div class="row en" style="padding-right: 10px">
+                        @foreach (var day in listOrderSubmit)
+                        {
+                            <div class="col-md-6">
+                                <div class="card info-card sales-card">
+                                    <div class="card-body pre-order">
+                                        <h5 class="card-title pt-1 pb-1">Day @day.Day/@day.CurrentMonth</h5>
+                                        <div>
+                                            <p><b>Breakfast:</b></p>
+                                            @if (day.Breakfast.Count == 0)
+                                            {
+                                                <p class="pl-5"><i class="bx bxs-error"></i>: Do not choose breakfast</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="pl-5">
+                                                    <i class="bx bx-cart"></i>: @day.Breakfast[0].NameEn
+                                                    @if (day.Breakfast[0].Qty > 10)
+                                                    {<b>(#@day.Breakfast[0].Qty)</b>}
+                                                </p>
+                                                <p class="pl-5"><i class="bx bx-plus"></i>: @day.Breakfast[1].NameEn</p>
+                                            }
+
+                                        </div>
+                                        <div>
+                                            <p><b>Lunch:</b></p>
+                                            <p class="pl-5">
+                                                <i class="bx bx-cart"></i>: @day.Lunch[0].NameEn
+                                                @if (day.Lunch[0].Qty > 10)
+                                                {<b>(#@day.Lunch[0].Qty)</b>}
+                                            </p>
+                                            <p class="pl-5"><i class="bx bx-plus"></i>: @day.Lunch[1].NameEn, @day.Lunch[2].NameEn, @day.Lunch[3].NameEn</p>
+                                        </div>
+                                        <div>
+                                            <p><b>Afternoon:</b></p>
+                                            <p class="pl-5">
+                                                <i class="bx bx-cart"></i>: @day.Afternoon[0].NameEn
+                                                @if (day.Afternoon[0].Qty > 10)
+                                                {<b>(#@day.Afternoon[0].Qty)</b>}
+                                            </p>
+                                            <p class="pl-5"><i class="bx bx-plus"></i>: @day.Afternoon[1].NameEn</p>
                                         </div>
                                     </div>
-                                }
-
+                                </div>
                             </div>
+                        }
 
-                            <div class="row vn" style="padding-right: 10px">
-                                @foreach (var day in listOrderSubmit)
-                                {
-                                    <div class="col-md-6">
-                                        <div class="card info-card sales-card">
-                                            <div class="card-body pre-order">
-                                                <h5 class="card-title pt-1 pb-1">Day @day.Day/@day.CurrentMonth</h5>
-                                                <div>
-                                                    <p><b>Breakfast:</b></p>
-                                                    @if (day.Breakfast.Count == 0)
-                                                    {
-                                                        <p class="pl-5"><i class="bx bxs-error"></i>: Không chọn ăn sáng</p>
-                                                    }
-                                                    else
-                                                    {
-                                                        <p class="pl-5">
-                                                            <i class="bx bx-cart"></i>: @day.Breakfast[0].NameVn
-                                                            @if (day.Breakfast[0].Qty > 10)
-                                                            {<b>(#@day.Breakfast[0].Qty)</b>}
-                                                        </p>
-                                                        <p class="pl-5"><i class="bx bx-plus"></i>: @day.Breakfast[1].NameVn</p>
-                                                    }
+                    </div>
 
-                                                </div>
-                                                <div>
-                                                    <p><b>Lunch:</b></p>
-                                                    <p class="pl-5">
-                                                        <i class="bx bx-cart"></i>: @day.Lunch[0].NameVn
-                                                        @if (day.Lunch[0].Qty > 10)
-                                                        {<b>(#@day.Lunch[0].Qty)</b>}
-                                                    </p>
-                                                    <p class="pl-5"><i class="bx bx-plus"></i>: @day.Lunch[1].NameVn, @day.Lunch[2].NameVn, @day.Lunch[3].NameVn</p>
-                                                </div>
-                                                <div>
-                                                    <p><b>Afternoon:</b></p>
-                                                    <p class="pl-5">
-                                                        <i class="bx bx-cart"></i>: @day.Afternoon[0].NameVn
-                                                        @if (day.Afternoon[0].Qty > 10)
-                                                        {<b>(#@day.Afternoon[0].Qty)</b>}
-                                                    </p>
-                                                    <p class="pl-5"><i class="bx bx-plus"></i>: @day.Afternoon[1].NameVn</p>
-                                                </div>
-                                            </div>
+                    <div class="row vn" style="padding-right: 10px">
+                        @foreach (var day in listOrderSubmit)
+                        {
+                            <div class="col-md-6">
+                                <div class="card info-card sales-card">
+                                    <div class="card-body pre-order">
+                                        <h5 class="card-title pt-1 pb-1">Day @day.Day/@day.CurrentMonth</h5>
+                                        <div>
+                                            <p><b>Breakfast:</b></p>
+                                            @if (day.Breakfast.Count == 0)
+                                            {
+                                                <p class="pl-5"><i class="bx bxs-error"></i>: Không chọn ăn sáng</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="pl-5">
+                                                    <i class="bx bx-cart"></i>: @day.Breakfast[0].NameVn
+                                                    @if (day.Breakfast[0].Qty > 10)
+                                                    {<b>(#@day.Breakfast[0].Qty)</b>}
+                                                </p>
+                                                <p class="pl-5"><i class="bx bx-plus"></i>: @day.Breakfast[1].NameVn</p>
+                                            }
+
+                                        </div>
+                                        <div>
+                                            <p><b>Lunch:</b></p>
+                                            <p class="pl-5">
+                                                <i class="bx bx-cart"></i>: @day.Lunch[0].NameVn
+                                                @if (day.Lunch[0].Qty > 10)
+                                                {<b>(#@day.Lunch[0].Qty)</b>}
+                                            </p>
+                                            <p class="pl-5"><i class="bx bx-plus"></i>: @day.Lunch[1].NameVn, @day.Lunch[2].NameVn, @day.Lunch[3].NameVn</p>
+                                        </div>
+                                        <div>
+                                            <p><b>Afternoon:</b></p>
+                                            <p class="pl-5">
+                                                <i class="bx bx-cart"></i>: @day.Afternoon[0].NameVn
+                                                @if (day.Afternoon[0].Qty > 10)
+                                                {<b>(#@day.Afternoon[0].Qty)</b>}
+                                            </p>
+                                            <p class="pl-5"><i class="bx bx-plus"></i>: @day.Afternoon[1].NameVn</p>
                                         </div>
                                     </div>
-                                }
-
+                                </div>
                             </div>
-                        </div>
+                        }
+
+                    </div>
+                </div>
                     }
 
                     else
@@ -265,5 +275,86 @@
                 }
             });
         });
+
+
+        function ExportFile(type) {
+            var parentId = $("#parentId").val().trim();
+            var monthSelected = $("#txtMonth").val().trim();
+            $.confirm({
+                closeIcon: true,
+                type: 'green',
+                typeAnimated: true,
+                boxWidth: '350px',
+                useBootstrap: false,
+                offsetTop: 0,
+                title: 'Export order: ' + monthSelected,
+                content: function () {
+                    var self = this;
+                    return $.ajax({
+                        url: '@Url.Action("GetListDayExport", "Orders")',
+                        data: { month: monthSelected },
+                        dataType: 'json',
+                        method: 'GET'
+                    }).done(function (response) {
+                        self.setContent(response.html);
+                    })
+                },
+                buttons: {
+                    ChooseAgain: {
+                        text: 'Cancel',
+                        btnClass: 'btn-red',
+                        action: function () {
+                        }
+                    },
+                    Submit: {
+                        text: 'Export',
+                        btnClass: 'btn-success',
+                        action: function () {
+                            var SelectDay = $("#SelectDay").val();
+                            $.ajax({
+                                url: '@Url.Action("ExportFile", "Orders")',
+                                type: "POST",
+                                dataType: "json",
+                                data: { parentId: parentId, month: monthSelected, selectDay: SelectDay, type: type},
+                                success: function (data) {
+                                    if (data.success) {
+                                        $.confirm({
+                                            title: 'Successfully!',
+                                            content: data.message,
+                                            type: 'green',
+                                            typeAnimated: true,
+                                            buttons: {
+                                                Ok: {
+                                                    btnClass: 'btn-success',
+                                                    action: function () {
+
+                                                    }
+                                                },
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        $.confirm({
+                                            title: 'Error!',
+                                            content: data.message,
+                                            type: 'red',
+                                            typeAnimated: true,
+                                            buttons: {
+                                                Ok: {
+                                                    btnClass: 'btn-red',
+                                                    action: function () {
+
+                                                    }
+                                                },
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    },
+                }
+            });
+        }
     </script>
 }
