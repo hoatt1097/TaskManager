@@ -420,10 +420,10 @@ namespace UTS_Portal.Controllers
             return new SelectList(MonthList, "Id", "Name", currentMonth);
         }
 
-        public IActionResult GetItemDetail(string ItemCode, string Day, string CurrentMonth)
+        public IActionResult GetItemDetail(string Ckcode, string Day, string CurrentMonth)
         {
             DateTime date = DateTime.Parse(CurrentMonth + "/" + Day);
-            Menus menu = _context.Menus.ToList().Where(x => x.ItemCode.Trim() == ItemCode.Trim() && x.MenuDate.ToString("dd/MM/yyyy") == date.ToString("dd/MM/yyyy")).FirstOrDefault();
+            Menus menu = _context.Menus.ToList().Where(x => x.Ckcode.Trim() == Ckcode.Trim() && x.MenuDate.ToString("dd/MM/yyyy") == date.ToString("dd/MM/yyyy")).FirstOrDefault();
 
 
             List<string> allImages = Utilities.GetAllFiles("menus/" + date.ToString("MMyyyy"));
@@ -431,7 +431,7 @@ namespace UTS_Portal.Controllers
             var imagePath = "";
             if(menu != null)
             {
-                imagePath = "menus/" + date.ToString("MMyyyy") + "/" + ItemCode + ".jpg";
+                imagePath = "menus/" + date.ToString("MMyyyy") + "/" + Ckcode.Trim() + ".jpg";
                 if (!allImages.Contains(imagePath))
                 {
                     imagePath = "logo/profile-img.jpg";
@@ -441,12 +441,12 @@ namespace UTS_Portal.Controllers
             ItemDetail itemDetail = new ItemDetail
             {
                 ImagePath = imagePath,
-                OriginalName = menu?.OriginalName,
-                ItemNameEn = menu?.ItemNameEn,
-                ItemNameVn = menu?.ItemNameVn,
-                ItemCode = menu?.ItemCode,
-                Category = menu?.Category,
-                Ckcode = menu?.Ckcode
+                OriginalName = menu?.OriginalName?.Trim(),
+                ItemNameEn = menu?.ItemNameEn?.Trim(),
+                ItemNameVn = menu?.ItemNameVn?.Trim(),
+                ItemCode = menu?.ItemCode?.Trim(),
+                Category = menu?.Category?.Trim(),
+                Ckcode = menu?.Ckcode?.Trim()
             };
 
             return Json(new { success = false, itemDetail = itemDetail });
