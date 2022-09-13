@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -23,11 +24,14 @@ namespace UTS_Portal.Controllers
 
         public INotyfService _notyfService { get; }
 
-        public OrdersController(db_utsContext context, INotyfService notyfService)
+        public OrdersController(db_utsContext context, INotyfService notyfService, IConfiguration configuration)
         {
             _context = context;
             _notyfService = notyfService;
+            Configuration = configuration;
         }
+
+        public IConfiguration Configuration { get; }
 
         public IActionResult Index(string? month)
         {
@@ -422,6 +426,11 @@ namespace UTS_Portal.Controllers
 
         public IActionResult GetItemDetail(string Ckcode, string Day, string CurrentMonth)
         {
+            var hostname = Configuration.GetValue<string>("AppConfig:HostName");
+            if(!hostname.EndsWith("/"))
+            {
+                hostname = hostname + "/";
+            }
             DateTime date = DateTime.Parse(CurrentMonth + "/" + Day);
             Menus menu = _context.Menus.ToList().Where(x => x.Ckcode.Trim() == Ckcode.Trim() && x.MenuDate.ToString("dd/MM/yyyy") == date.ToString("dd/MM/yyyy")).FirstOrDefault();
 
@@ -431,10 +440,14 @@ namespace UTS_Portal.Controllers
             var imagePath = "";
             if(menu != null)
             {
-                imagePath = "menus/" + date.ToString("MMyyyy") + "/" + Ckcode.Trim() + ".jpg";
-                if (!allImages.Contains(imagePath))
+                var path = "menus/" + date.ToString("MMyyyy") + "/" + Ckcode.Trim() + ".jpg";
+                if (allImages.Contains(path))
                 {
-                    imagePath = "logo/food-default.jpg";
+                    imagePath = hostname + "images/menus/" + date.ToString("MMyyyy") + "/" + Ckcode.Trim() + ".jpg";
+                    
+                } else
+                {
+                    imagePath = hostname + "images/logo/food-default.jpg";
                 }
             }
 
