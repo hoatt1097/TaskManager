@@ -434,7 +434,7 @@ namespace UTS_Portal.Controllers
                 imagePath = "menus/" + date.ToString("MMyyyy") + "/" + Ckcode.Trim() + ".jpg";
                 if (!allImages.Contains(imagePath))
                 {
-                    imagePath = "logo/profile-img.jpg";
+                    imagePath = "logo/food-default.jpg";
                 }
             }
 
