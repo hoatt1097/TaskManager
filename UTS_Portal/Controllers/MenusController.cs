@@ -180,10 +180,34 @@ namespace UTS_Portal.Controllers
             return View();
         }
 
-            // POST: Menus/Edit/5
-            // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-            // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-            [HttpPost]
+        public async Task<IActionResult> ImagesView(string? month)
+        {
+            //Format month from select: MM/yyyy
+            // Get selectbox select month
+            string SelectBoxElement = BuildTxtMonth();
+            ViewBag.SelectBoxElement = SelectBoxElement;
+
+            if (month != null)
+            {
+                // Get all images in folder
+                var menuInfos = _context.MenuInfos.ToList().Where(x => x.Month.ToString("MM/yyyy") == month && x.Status == true).FirstOrDefault();
+                if (menuInfos == null)
+                {
+                    return NotFound();
+                }
+                ViewBag.MenuId = menuInfos.Id;
+                ViewBag.CurrentMonth = menuInfos.Month.ToString("MM/yyyy");
+                ViewBag.MenuFileNames = Utilities.GetAllFiles("menus/" + menuInfos.Month.ToString("MMyyyy"));
+            }
+
+            ViewBag.CurrentMonth = month;
+            return View();
+        }
+
+        // POST: Menus/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Month,Images,Status")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> fThumbs)
         {
@@ -467,5 +491,23 @@ namespace UTS_Portal.Controllers
 
             return RedirectToAction("Edit", new { id = id, tab = "import_menu" });
         }
+
+        public string BuildTxtMonth()
+        {
+            var MonthActive = _context.MenuInfos.OrderBy(x => x.Month).Where(x => x.Status == true)
+                .Select(x => x.Month.ToString("MM/yyyy")).ToList();
+
+            string selectElm = "<select class='custom-select' id='txtMonthSelect' name='txtMonthSelect'>";
+
+            foreach (var m in MonthActive)
+            {
+                selectElm += "<option value='" + m + "'>" + m + "</option>";
+            }
+            selectElm += "</select >";
+
+            return selectElm;
+        }
     }
+
+   
 }

@@ -1,0 +1,73 @@
+﻿@model UTS_Portal.Models.MenuInfos
+@using UTS_Portal.ViewModels;
+
+@{
+    ViewData["Title"] = "Images";
+    string CurrentMonth = ViewBag.CurrentMonth;
+    string SelectBoxElement = ViewBag.SelectBoxElement;
+    List<string> MenuFileNames = ViewBag.MenuFileNames;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <link href="~/css/custom-order.css" rel="stylesheet" />
+    <style>
+        .lazy {
+            width: 100%;
+        }
+            .lazy:hover {
+                cursor: pointer;
+            }
+    </style>
+}
+@if (@CurrentMonth != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title pt-0">Menu image @CurrentMonth</h5>
+                    <div class="row">
+                        @foreach (var image in MenuFileNames)
+                        {
+                            <div class="col-md-3 pr-1 pl-1 pb-2">
+                                <img class="lazy" src="~/images/@image" alt="@image">
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section Scripts{
+    <script>
+        jQuery(document).ready(function () {
+            if ('@CurrentMonth' == '') {
+                $.confirm({
+                    title: 'Select month to view images!',
+                    content: "@Html.Raw(SelectBoxElement)",
+                    buttons: {
+                        confirm: function () {
+                            var monthSelected = $("#txtMonthSelect").val();
+                            window.location.href = "@Url.Action("ImagesView", "Menus")?month=" + monthSelected;
+                        },
+                        cancel: function () {
+                            window.location.href = "@Url.Action("Index","Home")";
+                        },
+                    }
+                });
+            }
+        })
+
+       @* $(window).on('scroll', function () {
+            $('.lazy').each(function () {
+                if ($(this).isInViewport()) {
+                    $(this).attr("src", $(this).attr("data-src") + "?" + $.now());
+                }
+            });
+        });*@
+    </script>
+}

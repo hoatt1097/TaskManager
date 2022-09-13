@@ -84,7 +84,7 @@
                         <option value="en" selected>English</option>
                     </select>
 
-                    <label class="btn btn-primary mt-3 mb-3 mr-3" onclick="ExportFile('Parent')">Export Excel</label>
+                    @*<label class="btn btn-primary mt-3 mb-3 mr-3" onclick="ExportFile('Parent')">Export Excel</label>*@
 
                     <div class="row en" style="padding-right: 10px">
                         @foreach (var day in listOrderSubmit)
@@ -200,7 +200,7 @@
                         {
                             <div class="row">
                                 <div class="col-md-12 mt-4">
-                                    <p>No data for month and day. Please contact the canteen manager to order</p>
+                                    <p>You have not made an order for this month. Please contact the canteen manager to order</p>
                                 </div>
                             </div>
                         }

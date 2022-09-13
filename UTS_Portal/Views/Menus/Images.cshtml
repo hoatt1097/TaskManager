@@ -11,6 +11,15 @@
 }
 @section Styles {
     <link href="~/css/custom-order.css" rel="stylesheet" />
+    <style>
+        .lazy {
+            width: 100%;
+        }
+
+        .lazy:hover {
+            cursor: pointer;
+        }
+    </style>
 }
 <div class="page-header">
     <div class="header-sub-title">
@@ -26,10 +35,14 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title pt-0">Menu image @CurrentMonth</h5>
-                @foreach (var image in MenuFileNames)
-                {
-                    <img src="~/images/@image" style="height:200px" alt="@image">
-                }
+                <div class="row">
+                    @foreach (var image in MenuFileNames)
+                    {
+                        <div class="col-md-3 pr-1 pl-1 pb-2">
+                            <img class="lazy" src="~/images/@image" alt="@image">
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>

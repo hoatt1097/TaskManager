@@ -164,16 +164,16 @@
     display: none;
 }
 
-.order-table input[type=checkbox]:checked + label {
-    background-color: cyan;
-    /*border-color: #2f80ed;
+    .order-table input[type=checkbox]:checked + label {
+        background-color: #A86ED4;
+        /*border-color: #2f80ed;
     color: #2f80ed;
     border: 2px solid #2f80ed;
     border-bottom: 3px solid #2f80ed;*/
-}
+    }
 
 .order-table label.checked {
-    background-color: cyan;
+    background-color: #A86ED4;
     /*border-color: #2f80ed;
     color: #2f80ed;
     border: 2px solid #2f80ed;

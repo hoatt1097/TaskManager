@@ -114,14 +114,16 @@
             }
 
             <li class="nav-item @Html.IsSelected(controller: "Posts", action: "List")"> <a class="nav-link collapsed" asp-controller="Posts" asp-action="List"> <i class="bi bi-collection"></i> <span>Blogs</span> </a></li>
-            
+
             @if (RoleName != "Parent")
             {
-                <li class="nav-item @Html.IsSelected(controller: "Menus")"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="Index"> <i class="bi bi-layout-text-window-reverse"></i> <span>Menu</span> </a></li>
+                <li class="nav-item @Html.IsSelected(controller: "Menus", action: "Index")"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="Index"> <i class="bi bi-layout-text-window-reverse"></i> <span>Menu</span> </a></li>
             }
 
+            <li class="nav-item @Html.IsSelected(controller: "Menus", action: "ImagesView")"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="ImagesView"> <i class="bi bi-card-image"></i> <span>Menu Images</span> </a></li>
+
             <li class="nav-item @Html.IsSelected(controller: "Orders", action: "Index")"> <a class="nav-link collapsed" asp-controller="Orders" asp-action="Index"> <i class="bi bi-journal-text"></i> <span>Order</span> </a></li>
-            
+
             @if (RoleName == "Parent")
             {
                 <li class="nav-item @Html.IsSelected(controller: "Orders", action: "History")"> <a class="nav-link collapsed" asp-controller="Orders" asp-action="History" asp-route-parentId="@parentCode.Trim()"> <i class="bi bi-clock-history"></i> <span>Order History</span> </a></li>
