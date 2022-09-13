@@ -1,8 +1,18 @@
 ﻿jQuery(document).ready(function () {
+
+    // ✅ Show hidden DIV on hover
+    $("label").mouseover(function () {
+        $(this).find('i').show();
+    });
+    // ✅ (optionally) Hide DIV on mouse out
+    $("label").mouseout(function () {
+        $(this).find('i').hide();
+    });
+
+
     $('input[type="radio"]').on('change', function () {
         var name = $(this).attr('name');
         var value = $(this).val();
-        console.log(value)
 
         $("input[name=" + name + "]").not(':checked').each(function () {
             var func = 'removeClass';

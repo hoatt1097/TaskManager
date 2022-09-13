@@ -10,6 +10,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using UTS_Portal.Extension;
 using UTS_Portal.Helpers;
 using UTS_Portal.Models;
 using UTS_Portal.ViewModels;
@@ -419,6 +420,37 @@ namespace UTS_Portal.Controllers
             return new SelectList(MonthList, "Id", "Name", currentMonth);
         }
 
+        public IActionResult GetItemDetail(string ItemCode, string Day, string CurrentMonth)
+        {
+            DateTime date = DateTime.Parse(CurrentMonth + "/" + Day);
+            Menus menu = _context.Menus.ToList().Where(x => x.ItemCode.Trim() == ItemCode.Trim() && x.MenuDate.ToString("dd/MM/yyyy") == date.ToString("dd/MM/yyyy")).FirstOrDefault();
+
+
+            List<string> allImages = Utilities.GetAllFiles("menus/" + date.ToString("MMyyyy"));
+
+            var imagePath = "";
+            if(menu != null)
+            {
+                imagePath = "menus/" + date.ToString("MMyyyy") + "/" + ItemCode + ".jpg";
+                if (!allImages.Contains(imagePath))
+                {
+                    imagePath = "logo/profile-img.jpg";
+                }
+            }
+
+            ItemDetail itemDetail = new ItemDetail
+            {
+                ImagePath = imagePath,
+                OriginalName = menu?.OriginalName,
+                ItemNameEn = menu?.ItemNameEn,
+                ItemNameVn = menu?.ItemNameVn,
+                ItemCode = menu?.ItemCode,
+                Category = menu?.Category,
+                Ckcode = menu?.Ckcode
+            };
+
+            return Json(new { success = false, itemDetail = itemDetail });
+        }
 
     }
 }

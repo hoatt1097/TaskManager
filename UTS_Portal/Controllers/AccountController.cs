@@ -178,6 +178,7 @@ namespace UTS_Portal.Controllers
                 Cscard user = _context.Cscard
                       .Where(p => p.Status == true)
                       .SingleOrDefault(p => p.ParentId.ToLower() == currentUser.Id.ToLower().Trim());
+                UserType userType = _context.UserType.Where(x => x.CrdType == user.CrdType && x.Status == 1).FirstOrDefault();
 
                 if (user == null)
                 {
@@ -187,11 +188,12 @@ namespace UTS_Portal.Controllers
 
                 MyProfile myProfile = new MyProfile
                 {
+                    Type = "SchoolAccount",
                     Id = user.ParentId,
                     Fullname = user.Name,
                     Username = user.ParentId,
                     Password = user.Password,
-                    Role = "Parent",
+                    Role = userType != null ? userType.Descript : "",
                     Email = user.Email,
                     Phone = user.Phone,
                     CreatedDate = user.LastDate?.ToString("yyyy/MM/dd"),
@@ -217,6 +219,7 @@ namespace UTS_Portal.Controllers
 
                 MyProfile myProfile = new MyProfile
                 {
+                    Type = "SchoolStaff",
                     Id = user.Code,
                     Fullname = user.Fullname,
                     Username = user.Username,
@@ -230,6 +233,11 @@ namespace UTS_Portal.Controllers
                 ViewBag.MyProfile = myProfile;
             }
             return View();
+        }
+
+        public IActionResult ChangePasswordStaff(string? tab)
+        {
+            return Json(new { success = true, message = "Change password Successfully" });
         }
     }
 }

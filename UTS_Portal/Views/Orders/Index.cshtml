@@ -32,6 +32,25 @@
             border: none;
             background-color: antiquewhite;
         }
+
+        label.en, label.vn {
+            position: relative;
+            
+        }
+
+        label.en i, label.vn i {
+            position: absolute;
+            bottom: 2px;
+            font-size: 15px;
+            right: 5px;
+            border: solid 1px #92C353;
+            padding: 0 4px;
+            border-radius: 50%;
+            background-color: #92C353;
+            color: white;
+            z-index: 1;
+            display: none;
+        }
     </style>
 }
 
@@ -214,22 +233,24 @@
                                                             <label class="vn" for="breakfast-@i-@day.Day">
                                                                 @item.ItemNameVn
                                                                 @*<select class="order-qty" name="breakfast-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                             <label class="en" for="breakfast-@i-@day.Day">
                                                                 @item.ItemNameEn
                                                                 @*<select class="order-qty" name="breakfast-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                             i++;
                                                         }
@@ -243,8 +264,8 @@
                                                         @foreach (var item in BfData.Where(x => x.IsBundled == 1))
                                                         {
                                                             <input type="checkbox" id="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
-                                                            <label class="vn breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameVn</label>
-                                                            <label class="en breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameEn</label>
+                                                            <label class="vn breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameVn<i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i></label>
+                                                            <label class="en breakfast-op" for="breakfast-op-@i-@day.Day" name="breakfast-op-@day.Day">@item.ItemNameEn<i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i></label>
                                                             i++;
                                                         }
                                                         @for (int k = i; k <= 1; k++)
@@ -270,22 +291,24 @@
                                                             <label class="vn" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameVn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                             <label class="en" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameEn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                         }
                                                         else
@@ -301,22 +324,24 @@
                                                             <label class="vn" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameVn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                             <label class="en" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameEn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                         }
                                                         else
@@ -332,22 +357,24 @@
                                                             <label class="vn" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameVn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                             <label class="en" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameEn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                         }
                                                         else
@@ -363,22 +390,24 @@
                                                             <label class="vn" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameVn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                             <label class="en" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameEn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                         }
                                                         else
@@ -394,22 +423,24 @@
                                                             <label class="vn" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameVn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                             <label class="en" for="lunch-@i-@day.Day">
                                                                 @item.ItemNameEn
                                                                 @*<select class="order-qty" name="lunch-@i-@day.Day">
-                                                                    <option value="1" selected>1</option>
-                                                                    <option value="2">2</option>
-                                                                    <option value="3">3</option>
-                                                                    <option value="4">4</option>
-                                                                    <option value="5">5</option>
-                                                                </select>*@
+                                                                        <option value="1" selected>1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                        <option value="4">4</option>
+                                                                        <option value="5">5</option>
+                                                                    </select>*@
+                                                                <i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i>
                                                             </label>
                                                         }
                                                         else
@@ -425,8 +456,8 @@
                                                         @foreach (var item in LnData.Where(x => x.IsBundled == 1).OrderByDescending(x => x.Category))
                                                         {
                                                             <input type="checkbox" id="lunch-op-@i-@day.Day" name="lunch-op-@day.Day" origin-name="@item.OriginalName" name-vn="@item.ItemNameVn" name-en="@item.ItemNameEn" qty="@item.Qty" Ckcode="@item.Ckcode" value="@item.ItemCode" />
-                                                            <label class="vn" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameVn</label>
-                                                            <label class="en" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameEn</label>
+                                                            <label class="vn" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameVn<i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i></label>
+                                                            <label class="en" for="lunch-op-@i-@day.Day" name="lunch-op-@day.Day">@item.ItemNameEn<i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i></label>
                                                             i++;
                                                         }
                                                         @for (int k = i; k <= 3; k++)
@@ -460,8 +491,8 @@
                                                                    qty="@item.Qty"
                                                                    Ckcode="@item.Ckcode"
                                                                    value="@item.ItemCode" />
-                                                            <label class="vn" for="afternoon-@i-@day.Day">@item.ItemNameVn</label>
-                                                            <label class="en" for="afternoon-@i-@day.Day">@item.ItemNameEn</label>
+                                                            <label class="vn" for="afternoon-@i-@day.Day">@item.ItemNameVn<i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i></label>
+                                                            <label class="en" for="afternoon-@i-@day.Day">@item.ItemNameEn<i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i></label>
                                                             i++;
                                                         }
                                                         @for (int k = i; k <= 2; k++)
@@ -482,8 +513,9 @@
                                                                    qty="@item.Qty"
                                                                    Ckcode="@item.Ckcode"
                                                                    value="@item.ItemCode" />
-                                                            <label class="vn" for="afternoon-op-@i-@day.Day" name="afternoon-op-@day.Day">@item.ItemNameVn</label>
-                                                            <label class="en" for="afternoon-op-@i-@day.Day" name="afternoon-op-@day.Day">@item.ItemNameEn</label>
+                                                            <label class="vn" for="afternoon-op-@i-@day.Day" name="afternoon-op-@day.Day">@item.ItemNameVn<i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i></label>
+                                                            <label class="en" for="afternoon-op-@i-@day.Day" name="afternoon-op-@day.Day">@item.ItemNameEn<i class="bi bi-eye" value="@item.ItemCode" day="@day.Day"></i></label>
+                                                            
                                                             i++;
                                                         }
                                                         @for (int k = i; k <= 1; k++)
@@ -526,6 +558,41 @@
                     }
                 });
             }
+
+            $("label i").click(function () {
+                var ItemCode = $(this).attr("value");
+                var Day = $(this).attr("day");
+                var CurrentMonth = $("#CurrentMonth").val();
+                $.confirm({
+                    title: 'Menu details',
+                    columnClass: 'col-md-8 col-md-offset-2',
+                    content: function () {
+                        var self = this;
+                        return $.ajax({
+                            url: '@Url.Action("GetItemDetail", "Orders")',
+                            dataType: 'json',
+                            method: 'GET',
+                            data: { ItemCode: ItemCode, Day: Day, CurrentMonth: CurrentMonth}
+                        }).done(function (rs) {
+                            var html = "";
+                            html += "<div class='contain'>";
+                            html += "<img class='image-view pb-3' src='/images/" + rs.itemDetail.imagePath + "'>";
+                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Name(English):</div><div class='col-md-7'>" + rs.itemDetail.itemNameEn + "</div></div>"
+                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Name(Vietnamese):</div><div class='col-md-7'>" + rs.itemDetail.itemNameVn + "</div></div>";
+                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Category:</div><div class='col-md-7'>" + rs.itemDetail.category + "</div></div>";
+                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Information:</div><div class='col-md-7'>" + "" + "</div></div>";
+                            html += "</div>";
+                            self.setContent(html);
+                            @*self.setContentAppend('<br>Version: ' + response.version);
+                            self.setTitle(response.name);*@
+                        });
+                    },
+                    buttons: {
+                        Exit: function () {
+                        },
+                    }
+                });
+            })
 
             //Handle submition
             $("#btn-submit").click(function () {

@@ -28,6 +28,7 @@ namespace UTS_Portal.Models
         public virtual DbSet<Posts> Posts { get; set; }
         public virtual DbSet<PreOrders> PreOrders { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<UserType> UserType { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Campus> Campus { get; set; }
         public virtual DbSet<Crdtrans202207> Crdtrans202207 { get; set; }
@@ -112,6 +113,19 @@ namespace UTS_Portal.Models
                     .IsFixedLength();
 
                 entity.Property(e => e.SubmitTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<UserType>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.CrdType)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Prefix)
                     .IsUnicode(false)
                     .IsFixedLength();
             });

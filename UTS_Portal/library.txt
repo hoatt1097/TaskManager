@@ -16,8 +16,10 @@ https://flatpickr.js.org/examples/
 
 
 
-// Sinh model tu database
+// Sinh model tu database - Các anotation ở trong config
 Scaffold-DBContext "Server=THIENHOA;Database=db_uts;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
 Scaffold-DBContext "Server=THIENHOA;Database=db_uts;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
 
+// Sinh model tu database - Các anotation ở trong class (Chọn cách này cho trực quan)
 Scaffold-DBContext "Server=THIENHOA;Database=db_uts;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -DataAnnotations -OutputDir Models -Force
+Scaffold-DBContext "Server=THIENHOA;Database=CK_POS_TEST;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -DataAnnotations -OutputDir Models -Force

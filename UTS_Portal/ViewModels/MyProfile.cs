@@ -7,6 +7,7 @@ namespace UTS_Portal.ViewModels
 {
     public class MyProfile
     {
+        public string Type { get; set; }
         public string Id { get; set; }
         public string Fullname { get; set; }
         public string Username { get; set; }
