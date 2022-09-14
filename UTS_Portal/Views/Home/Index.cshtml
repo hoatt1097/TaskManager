@@ -4,7 +4,8 @@
 @section Styles {
     <style>
         .dashboard img {
-            width: 250px;
+            width: 100%;
+            max-width: 250px;
         }
 
         .footer {
@@ -18,19 +19,18 @@
 }
 
 <div class="text-center dashboard">
-@*    <h1 class="display-4">Welcome</h1>*@
-    <div class="d-flex justify-content-evenly">
-        <div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
             <a asp-controller="Orders" asp-action="Index">
                 <img src="~/images/logo/menu.png">
             </a>
         </div>
-        <div >
+        <div class="col-md-4 mb-3">
             <a asp-controller="FAQs" asp-action="List">
                 <img src="~/images/logo/faq.png">
             </a>
         </div>
-        <div >
+        <div class="col-md-4 mb-3">
             <a asp-controller="Feedbacks" asp-action="Create">
                 <img src="~/images/logo/feedback.png">
             </a>
