@@ -400,7 +400,7 @@ namespace UTS_Portal.Controllers
                     var MonthExist = _context.Menus.Where(x => x.MonthYear == sheet.GetRow(1).GetCell(0).ToString()).FirstOrDefault();
                     if (MonthExist != null)
                     {
-                        string error = "Menu " + sheet.GetRow(1).GetCell(0).ToString() + " is exist! Please delete DB before import";
+                        string error = "Order data exists, not allowed to import !";
                         _notyfService.Error(error);
                         return RedirectToAction("Edit", new { id = id, tab = "import_menu" });
                     }
@@ -445,7 +445,7 @@ namespace UTS_Portal.Controllers
                         var ItemNameVn = goods != null ? goods.ShortName : currentRow.GetCell(8).RichStringCellValue.ToString(); // Fomular
                         var ItemNameEn = goods != null ? goods.EnName : currentRow.GetCell(9).RichStringCellValue.ToString(); // Fomular
                         var Qty = (int?)currentRow.GetCell(10).NumericCellValue;
-                        var Repast = (int)currentRow.GetCell(11).NumericCellValue;
+                        var Repast = (int)currentRow.GetCell(11).NumericCellValue <= 3 ? (int)currentRow.GetCell(11).NumericCellValue : 3;
                         var Class = currentRow.GetCell(12) != null ? currentRow.GetCell(12).ToString() : "";
                         var Bundled = (int)currentRow.GetCell(13).NumericCellValue;
                         var IsOrdered = (int)currentRow.GetCell(14).NumericCellValue;

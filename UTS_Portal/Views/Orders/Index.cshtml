@@ -90,7 +90,7 @@
                         <input type="hidden" id="ListDaySelect" value="@string.Join( ',', CalendarMonth.Where(x => !x.IsHoliday).Select(x => x.Day).ToList())" />
                         <input type="hidden" id="CurrentMonth" value="@CurrentMonth" />
 
-                        <label>Choose language: </label>
+                        <label>Menu language: </label>
                         <select class="custom-select mt-3 mb-3 mr-3" id="language" name="language" style="width: 200px;">
                             <option value="vn">Vietnamese</option>
                             <option value="en" selected>English</option>
