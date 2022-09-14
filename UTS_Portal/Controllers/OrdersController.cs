@@ -433,7 +433,20 @@ namespace UTS_Portal.Controllers
             }
             DateTime date = DateTime.Parse(CurrentMonth + "/" + Day);
             Menus menu = _context.Menus.ToList().Where(x => x.Ckcode.Trim() == Ckcode.Trim() && x.MenuDate.ToString("dd/MM/yyyy") == date.ToString("dd/MM/yyyy")).FirstOrDefault();
-
+            Goods goods = _context.Goods.Where(x => x.Ref.Trim() == Ckcode).FirstOrDefault();
+            string info = "";
+            if(goods?.Allergy1 != null && goods?.Allergy1 != string.Empty)
+            {
+                info += "- " + goods?.Allergy1 + "<br/>";
+            }
+            if (goods?.Allergy2 != null && goods?.Allergy2 != string.Empty)
+            {
+                info += "- " + goods?.Allergy2 + "<br/>";
+            }
+            if (goods?.Allergy3 != null && goods?.Allergy3 != string.Empty)
+            {
+                info += "- " + goods?.Allergy3;
+            }
 
             List<string> allImages = Utilities.GetAllFiles("menus/" + date.ToString("MMyyyy"));
 
@@ -459,7 +472,8 @@ namespace UTS_Portal.Controllers
                 ItemNameVn = menu?.ItemNameVn?.Trim(),
                 ItemCode = menu?.ItemCode?.Trim(),
                 Category = menu?.Category?.Trim(),
-                Ckcode = menu?.Ckcode?.Trim()
+                Ckcode = menu?.Ckcode?.Trim(),
+                Information = info
             };
 
             return Json(new { success = false, itemDetail = itemDetail });

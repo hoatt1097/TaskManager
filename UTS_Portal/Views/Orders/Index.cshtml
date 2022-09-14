@@ -559,7 +559,9 @@
                 });
             }
 
-            $("label i").click(function () {
+            $("label i").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
                 var Ckcode = $(this).attr("value");
                 var Day = $(this).attr("day");
                 var CurrentMonth = $("#CurrentMonth").val();
@@ -580,7 +582,7 @@
                             html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Name(English):</div><div class='col-md-7'>" + rs.itemDetail.itemNameEn + "</div></div>"
                             html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Name(Vietnamese):</div><div class='col-md-7'>" + rs.itemDetail.itemNameVn + "</div></div>";
                             html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Category:</div><div class='col-md-7'>" + rs.itemDetail.category + "</div></div>";
-                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Information:</div><div class='col-md-7'>" + "" + "</div></div>";
+                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Information:</div><div class='col-md-7'>" + rs.itemDetail.information + "</div></div>";
                             html += "</div>";
                             self.setContent(html);
                             @*self.setContentAppend('<br>Version: ' + response.version);

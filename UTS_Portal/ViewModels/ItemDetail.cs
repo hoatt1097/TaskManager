@@ -15,5 +15,6 @@ namespace UTS_Portal.ViewModels
         public string ItemNameVn { get; set; }
         public string ItemNameEn { get; set; }
         public string MenuDate { get; set; }
+        public string Information { get; set; }
     }
 }
