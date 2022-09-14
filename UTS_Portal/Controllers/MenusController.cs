@@ -397,6 +397,14 @@ namespace UTS_Portal.Controllers
                     }
 
                     // Check data
+                    var MonthExist = _context.Menus.Where(x => x.MonthYear == sheet.GetRow(1).GetCell(0).ToString()).FirstOrDefault();
+                    if (MonthExist != null)
+                    {
+                        string error = "Menu " + sheet.GetRow(1).GetCell(0).ToString() + " is exist! Please delete DB before import";
+                        _notyfService.Error(error);
+                        return RedirectToAction("Edit", new { id = id, tab = "import_menu" });
+                    }
+
                     if (sheet.GetRow(1).GetCell(0).ToString() != MonthImport)
                     {
                         string error = "Data " + sheet.GetRow(1).GetCell(0).ToString() + " not correct!";
@@ -420,6 +428,12 @@ namespace UTS_Portal.Controllers
 
                         var Ckcode = currentRow.GetCell(6).ToString();
                         Goods goods = _context.Goods.Where(x => x.Ref == Ckcode).FirstOrDefault();
+                        if(goods == null)
+                        {
+                            string error = "Ckcode " + Ckcode + " number line " + (rowIdx + 1) + " not exist in Gooods table. Please fix it!";
+                            _notyfService.Error(error);
+                            return RedirectToAction("Edit", new { id = id, tab = "import_menu" });
+                        }
 
                         var MonthYear = MonthImport;
                         /*var Week = (int?)currentRow.GetCell(1).NumericCellValue;
