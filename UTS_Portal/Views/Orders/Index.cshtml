@@ -69,7 +69,7 @@
             <div class="card order-table">
                 <div class="card-body">
                     <h1 class="pt-0 text-center">Menu @CurrentMonth</h1>
-                    <h4 class="pt-0 text-center">(@CalendarMonth.First().DateMonth - @CalendarMonth.Last().DateMonth)</h4>
+                    <h4 class="pt-0 text-center">(@CalendarMonth.Where(x => !x.IsHoliday).First().DateMonth - @CalendarMonth.Where(x => !x.IsHoliday).Last().DateMonth)</h4>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         @for (int Week = 1; Week <= CalendarMonth.Last().Week; Week++)
                         {
