@@ -479,5 +479,46 @@ namespace UTS_Portal.Controllers
             return Json(new { success = false, itemDetail = itemDetail });
         }
 
+
+        public IActionResult GetUpdateOrder(string language, string usercode, string orderday, string currentmonth, string breakfast, string lunch, string afternoon)
+        {
+            DateTime date = DateTime.Parse(currentmonth + "/" + orderday);
+            List<Menus> listMenu = _context.Menus.ToList().Where(x => x.MenuDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")).ToList();
+            List<PreOrders> listOrder = _context.PreOrders.ToList().Where(x => x.UserCode.Trim() == usercode.Trim() && x.OrderDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")).ToList();
+
+            List<Menus> bf = listMenu.Where(x => x.RepastId == 1 && x.IsBundled == 0 ).ToList();
+            List<Menus> bf_op = listMenu.Where(x => x.RepastId == 1 && x.IsBundled == 1).ToList();
+
+            List<Menus> ln = listMenu.Where(x => x.RepastId == 2 && x.IsBundled == 0).ToList();
+            List<Menus> ln_op = listMenu.Where(x => x.RepastId == 2 && x.IsBundled == 1).ToList();
+
+            List<Menus> af = listMenu.Where(x => x.RepastId == 3 && x.IsBundled == 0).ToList();
+            List<Menus> af_op = listMenu.Where(x => x.RepastId == 3 && x.IsBundled == 1).ToList();
+
+            var bf_Select = new List<Object>();
+            var ln_Select = new List<Object>();
+            var af_Select = new List<Object>();
+            foreach (var item in bf)
+            {
+                bf_Select.Add(new { Id = item.Ckcode, Name = item.ItemNameEn });
+            }
+            var bf_html = new SelectList(bf_Select, "Id", "Name", breakfast);
+
+            foreach (var item in ln)
+            {
+                ln_Select.Add(new { Id = item.Ckcode, Name = item.ItemNameEn });
+            }
+            var ln_html = new SelectList(ln_Select, "Id", "Name", lunch);
+
+            foreach (var item in af)
+            {
+                af_Select.Add(new { Id = item.Ckcode, Name = item.ItemNameEn });
+            }
+            var af_html = new SelectList(af_Select, "Id", "Name", afternoon);
+
+
+
+            return Json(new { success = false, itemDetail = "OK" });
+        }
     }
 }

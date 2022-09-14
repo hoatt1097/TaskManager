@@ -108,24 +108,17 @@ namespace UTS_Portal.Controllers
                 }
 
                 //Handle Images
-                var listImagePath = new List<string>();
                 if (fThumbs != null && fThumbs.Count() > 0)
                 {
-                    int fileNumber = 1;
-                    foreach(var image in fThumbs)
+                    string folder = "menus/" + menuInfos.Month.ToString("MMyyyy");
+                    foreach (var image in fThumbs)
                     {
-                        string newFilename = "menus_" + menuInfos.Month.ToString("MMyyyy") + "_" + fileNumber;
-                        string folder = "menus/" + menuInfos.Month.ToString("MMyyyy");
-                        string extension = Path.GetExtension(image.FileName);
-                        string imageName = newFilename + extension;
-                        var imagePath = await Utilities.UploadFile(image, folder, imageName.ToLower());
-
-                        listImagePath.Add(folder.ToLower() + "/" + imagePath);
-                        fileNumber++;
+                        string imageName = image.FileName.ToUpper().Replace("JPG", "jpg").Replace("PNG", "jpg");
+                        var imagePath = await Utilities.UploadFile(image, folder, imageName);
                     }
-                    menuInfos.Images = string.Join(";", listImagePath);
+                    menuInfos.Images = folder;
                 }
-
+                
                 _context.Add(menuInfos);
                 await _context.SaveChangesAsync();
 
@@ -225,18 +218,10 @@ namespace UTS_Portal.Controllers
                     if (fThumbs != null && fThumbs.Count() > 0)
                     {
                         string folder = "menus/" + menuInfos.Month.ToString("MMyyyy");
-                        // Delete all images
-                        if (menuInfos.Month != null)
-                        {
-                            Utilities.DeleteAllFiles(folder);
-                        }
-
                         foreach (var image in fThumbs)
                         {
-                            string imageName = image.FileName;
-                            var imagePath = await Utilities.UploadFile(image, folder, imageName.ToLower());
-
-                            listImagePath.Add(folder.ToLower() + "/" + imagePath);
+                            string imageName = image.FileName.ToUpper().Replace("JPG", "jpg").Replace("PNG", "jpg");
+                            var imagePath = await Utilities.UploadFile(image, folder, imageName);
                         }
                         menuInfos.Images = folder;
                     }

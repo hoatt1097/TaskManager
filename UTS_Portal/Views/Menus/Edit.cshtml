@@ -41,7 +41,6 @@
                                     <input type="hidden" asp-for="Id" />
                                     <input type="hidden" asp-for="Month" />
                                     <input type="hidden" name="Images" value="@Model.Images" />
-                                    <p>When updating the menu, old photos will be deleted</p>
                                     <div class="col-md-10 mb-2">
                                         <label class="control-label">Change Images</label>
                                         <div class="d-flex">
@@ -60,7 +59,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-md-5" style="border-left: 1px solid rgba(0,0,0,.125)">
+                            @*<div class="col-md-5" style="border-left: 1px solid rgba(0,0,0,.125)">
                                 <h5 class="card-title">Add photos to the menu</h5>
                                 <form class="row" asp-action="AddPhoto" enctype="multipart/form-data">
                                     <input type="hidden" asp-for="Id" />
@@ -77,7 +76,7 @@
                                 </form>
                                 <div>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                         <hr />
                         <div class="row">
@@ -155,20 +154,20 @@
                                                                 <p class="h-100 border-bottom-0 title-en">Lunch</p>
                                                             </div>
                                                             <div class="flex-fill w-75">
-                                                                <p class="title-vn">Lựa chọn món nước</p>
-                                                                <p class="title-en">Option Noodle</p>
+                                                                <p class="title-vn">Món nước</p>
+                                                                <p class="title-en">Noodle</p>
 
-                                                                <p class="title-vn">Lựa chọn món Việt </p>
+                                                                <p class="title-vn">Món Việt </p>
                                                                 <p class="title-en"> Option VietNam</p>
 
-                                                                <p class="title-vn">Lựa chọn món Á</p>
-                                                                <p class="title-en">Option Asian</p>
+                                                                <p class="title-vn">Món Á</p>
+                                                                <p class="title-en">Asian</p>
 
-                                                                <p class="title-vn">Lựa chọn món Tây</p>
-                                                                <p class="title-en">Option Western</p>
+                                                                <p class="title-vn">Món Tây</p>
+                                                                <p class="title-en">Western</p>
 
-                                                                <p class="title-vn">Lựa chọn món Chay</p>
-                                                                <p class="title-en">Option Vegetarian</p>
+                                                                <p class="title-vn">Món Chay</p>
+                                                                <p class="title-en">Vegetarian</p>
 
                                                                 <p class="title-vn">Món Rau</p>
                                                                 <p class="title-en">Vegetable</p>

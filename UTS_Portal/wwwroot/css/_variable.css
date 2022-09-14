@@ -1,4 +1,6 @@
 ﻿:root {
+    --menu_checked_color: #FFE9C4;
+    /*Css for custom order*/
     --number_bf_dish: 2;
     --number_af_dish: 2;
     --cell_lg: 75px;

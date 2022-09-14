@@ -51,6 +51,14 @@
 .notify:hover {
     cursor: pointer;
 }
+
+.preorder-show .info-card {
+    height: 100%;
+}
+
+.preorder-show .col-md-6 {
+    margin-bottom: 30px;
+}
 /* Iphone */
 @media only screen and (max-width: 414px) {
     main {

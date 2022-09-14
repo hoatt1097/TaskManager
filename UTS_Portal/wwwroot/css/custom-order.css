@@ -181,7 +181,7 @@
 }
 
     .order-table input[type=checkbox]:checked + label {
-        background-color: #ede9c4;
+        background-color: var(--menu_checked_color);
         /*border-color: #2f80ed;
     color: #2f80ed;
     border: 2px solid #2f80ed;
@@ -189,7 +189,7 @@
     }
 
 .order-table label.checked {
-    background-color: #ede9c4;
+    background-color: var(--menu_checked_color);
     /*border-color: #2f80ed;
     color: #2f80ed;
     border: 2px solid #2f80ed;
