@@ -506,6 +506,33 @@ namespace UTS_Portal.Controllers
 
             return selectElm;
         }
+
+        public IActionResult DeleteImage(string path)
+        {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (currentUser.RoleName?.Trim() == "Parent")
+            {
+                return Json(new { success = true, message = "User has no permission!" });
+            }
+
+            if (path == null || path == "")
+            {
+                return Json(new { success = true, message = "Image path not exist" });
+            }
+
+            bool result = Utilities.DeleteFile(path);
+
+            if(result)
+            {
+                return Json(new { success = true, message = "Delete image sucessfully" });
+            } 
+            else
+            {
+                return Json(new { success = false, message = "Delete image unsucessfully" });
+            }
+
+            
+        }
     }
 
    

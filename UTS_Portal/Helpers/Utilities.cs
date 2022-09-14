@@ -128,6 +128,24 @@ namespace UTS_Portal.Extension
             }
         }
 
+        public static bool DeleteFile(string path)
+        {
+            path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", path);
+            if (File.Exists(path))
+            {
+                try
+                {
+                    File.Delete(path);
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
         public static List<string> GetAllFiles(string sDirectory)
         {
             try
