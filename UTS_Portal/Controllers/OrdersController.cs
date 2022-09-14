@@ -135,9 +135,9 @@ namespace UTS_Portal.Controllers
                     {
                         Day = Day,
                         CurrentMonth = CurrentMonth,
-                        Breakfast = Breakfast,
-                        Lunch = Lunch,
-                        Afternoon = Afternoon
+                        Breakfast = Breakfast.OrderBy(x => x.Bundled).ToList(),
+                        Lunch = Lunch.OrderBy(x => x.Bundled).ToList(),
+                        Afternoon = Afternoon.OrderBy(x => x.Bundled).ToList()
                     };
 
                     listOrderSubmit.Add(orderDay);
@@ -479,7 +479,6 @@ namespace UTS_Portal.Controllers
             return Json(new { success = false, itemDetail = itemDetail });
         }
 
-
         public IActionResult GetUpdateOrder(string language, string usercode, string orderday, string currentmonth, string breakfast, string lunch, string afternoon)
         {
             DateTime date = DateTime.Parse(currentmonth + "/" + orderday);
@@ -495,30 +494,331 @@ namespace UTS_Portal.Controllers
             List<Menus> af = listMenu.Where(x => x.RepastId == 3 && x.IsBundled == 0).ToList();
             List<Menus> af_op = listMenu.Where(x => x.RepastId == 3 && x.IsBundled == 1).ToList();
 
-            var bf_Select = new List<Object>();
-            var ln_Select = new List<Object>();
-            var af_Select = new List<Object>();
-            foreach (var item in bf)
+            if(language == "en")
             {
-                bf_Select.Add(new { Id = item.Ckcode, Name = item.ItemNameEn });
-            }
-            var bf_html = new SelectList(bf_Select, "Id", "Name", breakfast);
+                var bf_Select = new List<Object>();
+                var ln_Select = new List<Object>();
+                var af_Select = new List<Object>();
 
-            foreach (var item in ln)
+                bf_Select.Add(new { Id = "0", Name = "Do not eat" });
+                foreach (var item in bf)
+                {
+                    bf_Select.Add(new { Id = item.Ckcode.Trim(), Name = item.ItemNameEn });
+                }
+                var bf_html = new SelectList(bf_Select, "Id", "Name", breakfast);
+
+                foreach (var item in ln)
+                {
+                    ln_Select.Add(new { Id = item.Ckcode.Trim(), Name = item.ItemNameEn });
+                }
+                var ln_html = new SelectList(ln_Select, "Id", "Name", lunch);
+
+                foreach (var item in af)
+                {
+                    af_Select.Add(new { Id = item.Ckcode.Trim(), Name = item.ItemNameEn });
+                }
+                var af_html = new SelectList(af_Select, "Id", "Name", afternoon);
+
+
+                // Option food
+                var bf_op_text = "";
+                foreach(var item in bf_op)
+                {
+                    bf_op_text += "-" + item.ItemNameEn + "</br>";
+                }
+
+                var ln_op_text = "";
+                foreach (var item in ln_op)
+                {
+                    ln_op_text += "-" + item.ItemNameEn + "</br>";
+                }
+
+                var af_op_text = "";
+                foreach (var item in af_op)
+                {
+                    af_op_text += "-" + item.ItemNameEn + "</br>";
+                }
+
+                return Json(new { success = true, bf_html, bf_op_text, ln_html, ln_op_text, af_html, af_op_text });
+            } 
+            else
             {
-                ln_Select.Add(new { Id = item.Ckcode, Name = item.ItemNameEn });
-            }
-            var ln_html = new SelectList(ln_Select, "Id", "Name", lunch);
+                var bf_Select = new List<Object>();
+                var ln_Select = new List<Object>();
+                var af_Select = new List<Object>();
 
-            foreach (var item in af)
+                bf_Select.Add(new { Id = "0", Name = "Không ăn" });
+                foreach (var item in bf)
+                {
+                    bf_Select.Add(new { Id = item.Ckcode.Trim(), Name = item.ItemNameVn });
+                }
+                var bf_html = new SelectList(bf_Select, "Id", "Name", breakfast);
+
+                foreach (var item in ln)
+                {
+                    ln_Select.Add(new { Id = item.Ckcode.Trim(), Name = item.ItemNameVn });
+                }
+                var ln_html = new SelectList(ln_Select, "Id", "Name", lunch);
+
+                foreach (var item in af)
+                {
+                    af_Select.Add(new { Id = item.Ckcode.Trim(), Name = item.ItemNameVn });
+                }
+                var af_html = new SelectList(af_Select, "Id", "Name", afternoon);
+
+
+                // Option food
+                var bf_op_text = "";
+                foreach (var item in bf_op)
+                {
+                    bf_op_text += "-" + item.ItemNameVn + "</br>";
+                }
+
+                var ln_op_text = "";
+                foreach (var item in ln_op)
+                {
+                    ln_op_text += "-" + item.ItemNameVn + "</br>";
+                }
+
+                var af_op_text = "";
+                foreach (var item in af_op)
+                {
+                    af_op_text += "-" + item.ItemNameVn + "</br>";
+                }
+
+                return Json(new { success = true, bf_html, bf_op_text, ln_html, ln_op_text, af_html, af_op_text });
+            }            
+        }
+
+        public async Task<IActionResult> UpdateOrder(string usercode, string orderday, string currentmonth, string breakfast, string lunch, string afternoon)
+        {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            DateTime date = DateTime.Parse(currentmonth + "/" + orderday);
+
+            PreOrders bf = _context.PreOrders.ToList().Where(x =>
+                                        x.OrderDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")
+                                        && x.UserCode.Trim() == usercode.Trim()
+                                        && x.RepastId == 1
+                                        && x.IsBundled == false).FirstOrDefault();
+
+            PreOrders bf_op = _context.PreOrders.ToList().Where(x =>
+                                        x.OrderDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")
+                                        && x.UserCode.Trim() == usercode.Trim()
+                                        && x.RepastId == 1
+                                        && x.IsBundled == true).FirstOrDefault();
+            if (breakfast == "0")
             {
-                af_Select.Add(new { Id = item.Ckcode, Name = item.ItemNameEn });
+                if(bf != null)
+                {
+                    _context.PreOrders.Remove(bf);
+                }
+                if(bf_op != null)
+                {
+                    _context.PreOrders.Remove(bf_op);
+                }
+            } 
+            else
+            {
+                Goods goodsBf = _context.Goods.ToList().Where(x => x.Ref.Trim() == breakfast.Trim()).FirstOrDefault();
+                if(bf != null)
+                {
+                    PreOrders newBf = new PreOrders
+                    {
+                        UserCode = usercode.Trim(),
+                        MonthYear = date.ToString("MMyyyy"),
+                        Week = null,
+                        DoW = null,
+                        OrderDate = date,
+                        SubmitDt = bf.SubmitDt,
+                        SubmitTm = bf.SubmitTm,
+                        ItemCode = goodsBf.GoodsId.Trim(),
+                        CkCode = goodsBf.Ref.Trim(),
+                        Qty = 1,
+                        RepastId = 1,
+                        Class = "",
+                        IsBundled = false,
+                        IsChoosen = true,
+                        Status = true,
+                        IsModified = true,
+                        ModiDate = DateTime.Now,
+                        ModiTime = DateTime.Now.ToString("HH:mm"),
+                        ModiUser = currentUser.Code
+                    };
+                    _context.PreOrders.Remove(bf);
+                    _context.PreOrders.Add(newBf);
+                } 
+                else
+                {
+                    PreOrders newBf = new PreOrders
+                    {
+                        UserCode = usercode.Trim(),
+                        MonthYear = date.ToString("MMyyyy"),
+                        Week = null,
+                        DoW = null,
+                        OrderDate = date,
+                        SubmitDt = DateTime.Now,
+                        SubmitTm = DateTime.Now.ToString("HH:mm"),
+                        ItemCode = goodsBf.GoodsId.Trim(),
+                        CkCode = goodsBf.Ref.Trim(),
+                        Qty = 1,
+                        RepastId = 1,
+                        Class = "",
+                        IsBundled = false,
+                        IsChoosen = true,
+                        Status = true,
+                        IsModified = true,
+                        ModiDate = DateTime.Now,
+                        ModiTime = DateTime.Now.ToString("HH:mm"),
+                        ModiUser = currentUser.Code
+                    };
+
+                    _context.PreOrders.Add(newBf);
+                }
+                
+                if(bf_op != null)
+                {
+                    bf_op.IsModified = true;
+                    bf_op.ModiDate = DateTime.Now;
+                    bf_op.ModiTime = DateTime.Now.ToString("HH:mm");
+                    bf_op.ModiUser = currentUser.Code;
+                    _context.PreOrders.Update(bf_op);
+                } 
+                else
+                {
+                    Menus option = _context.Menus.ToList().Where(x =>
+                                        x.MenuDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")
+                                        && x.RepastId == 1
+                                        && x.IsBundled == 1).FirstOrDefault();
+                    PreOrders newBfOp = new PreOrders
+                    {
+                        UserCode = usercode.Trim(),
+                        MonthYear = date.ToString("MMyyyy"),
+                        Week = null,
+                        DoW = null,
+                        OrderDate = date,
+                        SubmitDt = DateTime.Now,
+                        SubmitTm = DateTime.Now.ToString("HH:mm"),
+                        ItemCode = option.ItemCode.Trim(),
+                        CkCode = option.Ckcode.Trim(),
+                        Qty = 1,
+                        RepastId = 1,
+                        Class = "",
+                        IsBundled = true,
+                        IsChoosen = true,
+                        Status = true,
+                        IsModified = true,
+                        ModiDate = DateTime.Now,
+                        ModiTime = DateTime.Now.ToString("HH:mm"),
+                        ModiUser = currentUser.Code
+                    };
+                    _context.PreOrders.Add(newBfOp);
+                }            
             }
-            var af_html = new SelectList(af_Select, "Id", "Name", afternoon);
+
+            // Lunch
+            PreOrders ln = _context.PreOrders.ToList().Where(x =>
+                                    x.OrderDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")
+                                    && x.UserCode.Trim() == usercode.Trim()
+                                    && x.RepastId == 2
+                                    && x.IsBundled == false).FirstOrDefault();
+
+            List<PreOrders> ln_ops = _context.PreOrders.ToList().Where(x =>
+                                        x.OrderDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")
+                                        && x.UserCode.Trim() == usercode.Trim()
+                                        && x.RepastId == 2
+                                        && x.IsBundled == true).ToList();
+            if (ln.CkCode.Trim() != lunch.Trim())
+            {
+                Goods goodsLn = _context.Goods.ToList().Where(x => x.Ref.Trim() == lunch.Trim()).FirstOrDefault();
+                PreOrders newLn = new PreOrders
+                {
+                    UserCode = usercode.Trim(),
+                    MonthYear = date.ToString("MMyyyy"),
+                    Week = null,
+                    DoW = null,
+                    OrderDate = date,
+                    SubmitDt = ln.SubmitDt,
+                    SubmitTm = ln.SubmitTm,
+                    ItemCode = goodsLn.GoodsId.Trim(),
+                    CkCode = goodsLn.Ref.Trim(),
+                    Qty = 1,
+                    RepastId = 2,
+                    Class = "",
+                    IsBundled = false,
+                    IsChoosen = true,
+                    Status = true,
+                    IsModified = true,
+                    ModiDate = DateTime.Now,
+                    ModiTime = DateTime.Now.ToString("HH:mm"),
+                    ModiUser = currentUser.Code
+                };
+                _context.PreOrders.Remove(ln);
+                _context.PreOrders.Add(newLn);
+
+                foreach (var item in ln_ops)
+                {
+                    item.IsModified = true;
+                    item.ModiDate = DateTime.Now;
+                    item.ModiTime = DateTime.Now.ToString("HH:mm");
+                    item.ModiUser = currentUser.Code;
+                    _context.PreOrders.Update(item);
+                }
+            }
 
 
+            // afternoon
+            PreOrders af = _context.PreOrders.ToList().Where(x =>
+                                    x.OrderDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")
+                                    && x.UserCode.Trim() == usercode.Trim()
+                                    && x.RepastId == 3
+                                    && x.IsBundled == false).FirstOrDefault();
 
-            return Json(new { success = false, itemDetail = "OK" });
+            List<PreOrders> af_ops = _context.PreOrders.ToList().Where(x =>
+                                        x.OrderDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")
+                                        && x.UserCode.Trim() == usercode.Trim()
+                                        && x.RepastId == 3
+                                        && x.IsBundled == true).ToList();
+            if (af.CkCode.Trim() != afternoon.Trim())
+            {
+                Goods goodsAf = _context.Goods.ToList().Where(x => x.Ref.Trim() == afternoon.Trim()).FirstOrDefault();
+                PreOrders newAf = new PreOrders
+                {
+                    UserCode = usercode.Trim(),
+                    MonthYear = date.ToString("MMyyyy"),
+                    Week = null,
+                    DoW = null,
+                    OrderDate = date,
+                    SubmitDt = af.SubmitDt,
+                    SubmitTm = af.SubmitTm,
+                    ItemCode = goodsAf.GoodsId.Trim(),
+                    CkCode = goodsAf.Ref.Trim(),
+                    Qty = 1,
+                    RepastId = 3,
+                    Class = "",
+                    IsBundled = false,
+                    IsChoosen = true,
+                    Status = true,
+                    IsModified = true,
+                    ModiDate = DateTime.Now,
+                    ModiTime = DateTime.Now.ToString("HH:mm"),
+                    ModiUser = currentUser.Code
+                };
+                _context.PreOrders.Remove(af);
+                _context.PreOrders.Add(newAf);
+
+                foreach (var item in af_ops)
+                {
+                    item.IsModified = true;
+                    item.ModiDate = DateTime.Now;
+                    item.ModiTime = DateTime.Now.ToString("HH:mm");
+                    item.ModiUser = currentUser.Code;
+                    _context.PreOrders.Update(item);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Json(new { success = true, message = "Update order sucessfully" });
         }
     }
 }

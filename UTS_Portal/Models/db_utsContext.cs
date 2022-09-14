@@ -90,8 +90,6 @@ namespace UTS_Portal.Models
                     .IsUnicode(false)
                     .IsFixedLength();
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
-
                 entity.Property(e => e.ModiTime)
                     .IsUnicode(false)
                     .IsFixedLength();

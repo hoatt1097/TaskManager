@@ -59,6 +59,14 @@
             .btn-update:hover {
                 opacity: 0.9;
             }
+
+        .jconfirm-content p {
+            margin-bottom: 4px;
+        }
+
+        #bf_Select, #ln_Select, #af_Select {
+            margin-bottom: 4px;
+        }
     </style>
 }
 
@@ -300,7 +308,6 @@
             $(".btn-update").click(function () {
                 var usercode = $("#parentId").val();
                 var orderday = $(this).attr("orderday");
-                var orderday = $(this).attr("orderday");
                 var currentmonth = $(this).attr("currentmonth");
                 var breakfast = $(this).attr("breakfast");
                 var lunch = $(this).attr("lunch");
@@ -308,6 +315,7 @@
                 var language = $("#language").val();
 
                 $.confirm({
+                    closeIcon: true,
                     title: 'Update order day: ' + orderday + "/" + currentmonth,
                     columnClass: 'col-md-8 col-md-offset-2',
                     content: function () {
@@ -326,23 +334,125 @@
                                afternoon: afternoon
                             }
                         }).done(function (rs) {
+                            var bf_Select_op = "<div class='pl-4 bf_Select_op'>" + rs.bf_op_text + "</div>";
+                            var bf_Select = "<p><b>Breakfast:</b></p><select class='custom-select' id='bf_Select' name='bf_Select'>";
+                            rs.bf_html.forEach((item) => {
+                                if (breakfast == item.value) {
+                                    bf_Select = bf_Select + "<option value='" + item.value + "' selected>" + item.text + "</option>";
+                                } else {
+                                    bf_Select = bf_Select + "<option value='" + item.value + "'>" + item.text + "</option>";
+                                }
+                            })
+                            bf_Select = bf_Select + "</select>";
+
+
+                            var ln_Select_op = "<div class='pl-4'>" + rs.ln_op_text + "</div>";
+                            var ln_Select = "<p><b>Lunch:</b></p><select class='custom-select' id='ln_Select' name='ln_Select'>";
+                            rs.ln_html.forEach((item) => {
+                                if (lunch == item.value) {
+                                    ln_Select = ln_Select + "<option value='" + item.value + "' selected>" + item.text + "</option>";
+                                } else {
+                                    ln_Select = ln_Select + "<option value='" + item.value + "'>" + item.text + "</option>";
+                                }
+                            })
+                            ln_Select = ln_Select + "</select>"
+
+
+                            var af_Select_op = "<div class='pl-4'>" + rs.af_op_text + "</div>";
+                            var af_Select = "<p><b>Afternoon:</b></p><select class='custom-select' id='af_Select' name='af_Select'>";
+                            rs.af_html.forEach((item) => {
+                                if (afternoon == item.value) {
+                                    af_Select = af_Select + "<option value='" + item.value + "' selected>" + item.text + "</option>";
+                                } else {
+                                    af_Select = af_Select + "<option value='" + item.value + "'>" + item.text + "</option>";
+                                }
+                            })
+                            af_Select = af_Select + "</select>"
+
+
                             var html = "";
-                           @* html += "<div class='contain'>";
-                            html += "<img class='image-view pb-3' src='" + rs.itemDetail.imagePath + "'>";
-                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Name(English):</div><div class='col-md-7'>" + rs.itemDetail.itemNameEn + "</div></div>"
-                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Name(Vietnamese):</div><div class='col-md-7'>" + rs.itemDetail.itemNameVn + "</div></div>";
-                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Category:</div><div class='col-md-7'>" + rs.itemDetail.category + "</div></div>";
-                            html += "<div class='row mx-auto text-start'><div class='col-md-5 fw-bold'>Information:</div><div class='col-md-7'>" + rs.itemDetail.information + "</div></div>";
-                            html += "</div>";*@
+                            html = html + bf_Select + bf_Select_op + ln_Select + ln_Select_op + af_Select + af_Select_op;
                             self.setContent(html);
+                        });
+                    },
+                    onContentReady: function () {
+                        // when content is fetched & rendered in DOM
+                        if ($("#bf_Select").val() == "0") {
+                            $(".bf_Select_op").hide();
+                        } else {
+                            $(".bf_Select_op").show();
+                        }
+                        $("#bf_Select").change(function () {
+                            if ($("#bf_Select").val() == "0") {
+                                $(".bf_Select_op").hide();
+                            } else {
+                                $(".bf_Select_op").show();
+                            }
                         });
                     },
                     buttons: {
                         Exit: function () {
                         },
+                        Update: {
+                            btnClass: 'btn-primary',
+                            action: function () {
+                                    var bf_s = $("#bf_Select").val();
+                                    var ln_s = $("#ln_Select").val();
+                                    var af_s = $("#af_Select").val();
+                                    $.ajax({
+                                        url: '@Url.Action("UpdateOrder", "Orders")',
+                                        type: "POST",
+                                        dataType: "json",
+                                        data: {
+                                            usercode: usercode,
+                                            orderday: orderday,
+                                            currentmonth: currentmonth,
+                                            breakfast: bf_s,
+                                            lunch: ln_s,
+                                            afternoon: af_s
+                                        },
+                                        success: function (data) {
+                                            if (data.success) {
+                                                $.confirm({
+                                                    title: 'Successfully!',
+                                                    content: data.message,
+                                                    type: 'green',
+                                                    typeAnimated: true,
+                                                    buttons: {
+                                                        Ok: {
+                                                            btnClass: 'btn-success',
+                                                            action: function () {
+                                                                window.location.reload();
+                                                            }
+                                                        },
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                $.confirm({
+                                                    title: 'Error!',
+                                                    content: data.message,
+                                                    type: 'red',
+                                                    typeAnimated: true,
+                                                    buttons: {
+                                                        Ok: {
+                                                            btnClass: 'btn-red',
+                                                            action: function () {
+
+                                                            }
+                                                        },
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                        },
                     }
                 });
             })
+
+
 
             // Init Language
             if ($("#language").val() === "vn") {

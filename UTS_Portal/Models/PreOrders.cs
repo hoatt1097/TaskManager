@@ -23,8 +23,6 @@ namespace UTS_Portal.Models
         [Key]
         [Column("Repast_ID")]
         public int RepastId { get; set; }
-        [Column("ID")]
-        public int Id { get; set; }
         [Required]
         [StringLength(6)]
         public string MonthYear { get; set; }
