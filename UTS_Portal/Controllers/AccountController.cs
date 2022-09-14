@@ -235,8 +235,34 @@ namespace UTS_Portal.Controllers
             return View();
         }
 
-        public IActionResult ChangePasswordStaff(string? tab)
+        public IActionResult ChangePasswordStaff(ChangePassword model)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (currentUser.RoleName?.Trim() == "Parent") {
+                return Json(new { success = false, message = "You can not change password. Please contact manager to change." });
+            }
+
+            Users user = _context.Users
+                       .Include(p => p.Role)
+                       .Where(p => p.Active == true)
+                       .SingleOrDefault(p => p.Id.ToString() == currentUser.Id);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "Change password unsuccessfully!" });
+            }
+
+
+            string pass = Utilities.MD5Hash(model.CurrentPassword.Trim());
+            if (user.Password != pass)
+            {
+                return Json(new { success = false, message = "Current password not correct!" });
+            }
+
+            string newPassword = Utilities.MD5Hash(model.NewPassword.Trim());
+            user.Password = newPassword;
+            _context.Update(user);
+            _context.SaveChanges();
+
             return Json(new { success = true, message = "Change password Successfully" });
         }
     }

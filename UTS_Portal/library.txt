@@ -14,6 +14,8 @@ https://flatpickr.js.org/examples/
  add-migration inital
  update-database
 
+ hoatt1097 --> hash: 84d1782df8dd56d75df3b515469c9711
+
 
 
 // Sinh model tu database - Các anotation ở trong config

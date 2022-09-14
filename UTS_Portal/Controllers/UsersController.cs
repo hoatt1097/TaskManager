@@ -134,18 +134,21 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Fullname,Email,Phone,Username,Password,Active,CreatedDate,RoleId,LastLogin")] Users accounts)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Fullname,Email,Password,Phone,Username,Active,CreatedDate,RoleId,LastLogin")] Users accounts, string PasswordNew)
         {
             if (id != accounts.Id)
             {
                 return NotFound();
             }
-
+            ModelState.Remove("Password");
             if (ModelState.IsValid)
             {
                 try
                 {
-                    accounts.Password = Utilities.MD5Hash(accounts.Password);
+                    if(!string.IsNullOrEmpty(PasswordNew))
+                    {
+                        accounts.Password = Utilities.MD5Hash(PasswordNew);
+                    }
                     _context.Update(accounts);
                     await _context.SaveChangesAsync();
                 }
