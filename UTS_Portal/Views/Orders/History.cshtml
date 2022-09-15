@@ -4,6 +4,7 @@
     string StudentName = ViewBag.StudentName;
     var SelectBoxOrderMonth = ViewBag.SelectBoxOrderMonth;
     string RoleName = User.Claims.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value;
+    string Permissions = User.Claims.FirstOrDefault(x => x.Type.Equals("Permissions", StringComparison.OrdinalIgnoreCase))?.Value;
     string isDisabled = RoleName == "Parent" ? "disabled" : "";
 
     List<OrderSubmit> listOrderSubmit = ViewBag.ListOrderSubmit;
@@ -119,17 +120,20 @@
                                     var breakfask_ckcode = day.Breakfast.Count() > 0 ? day.Breakfast[0].Ckcode : "0";
                                     <div class="col-md-6">
                                         <div class="card info-card sales-card order-day">
-                                            <span class="badge bg-primary btn-update"
-                                                  data-bs-toggle="tooltip"
-                                                  data-bs-placement="bottom"
-                                                  data-bs-original-title="Update order"
-                                                  orderDay="@day.Day"
-                                                  currentMonth="@day.CurrentMonth"
-                                                  breakfast="@breakfask_ckcode"
-                                                  lunch="@day.Lunch[0].Ckcode"
-                                                  afternoon="@day.Afternoon[0].Ckcode">
-                                                <i class="bi bi-star me-1"></i>Update
-                                            </span>
+                                            @if (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE"))
+                                            {
+                                                <span class="badge bg-primary btn-update"
+                                                      data-bs-toggle="tooltip"
+                                                      data-bs-placement="bottom"
+                                                      data-bs-original-title="Update order"
+                                                      orderDay="@day.Day"
+                                                      currentMonth="@day.CurrentMonth"
+                                                      breakfast="@breakfask_ckcode"
+                                                      lunch="@day.Lunch[0].Ckcode"
+                                                      afternoon="@day.Afternoon[0].Ckcode">
+                                                    <i class="bi bi-star me-1"></i>Update
+                                                </span>
+                                            }
 
                                             <div class="card-body pre-order">
                                                 <h5 class="card-title pt-1 pb-1">Day @day.Day/@day.CurrentMonth</h5>
@@ -181,17 +185,20 @@
                                     var breakfask_ckcode = day.Breakfast.Count() > 0 ? day.Breakfast[0].Ckcode : "0";
                                     <div class="col-md-6">
                                         <div class="card info-card sales-card">
-                                            <span class="badge bg-primary btn-update order-day"
-                                                  data-bs-toggle="tooltip"
-                                                  data-bs-placement="bottom"
-                                                  data-bs-original-title="Update order"
-                                                  orderDay="@day.Day"
-                                                  currentMonth="@day.CurrentMonth"
-                                                  breakfast="@breakfask_ckcode"
-                                                  lunch="@day.Lunch[0].Ckcode"
-                                                  afternoon="@day.Afternoon[0].Ckcode">
-                                                <i class="bi bi-star me-1"></i>Update
-                                            </span>
+                                            @if (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE"))
+                                            {
+                                                <span class="badge bg-primary btn-update order-day"
+                                                      data-bs-toggle="tooltip"
+                                                      data-bs-placement="bottom"
+                                                      data-bs-original-title="Update order"
+                                                      orderDay="@day.Day"
+                                                      currentMonth="@day.CurrentMonth"
+                                                      breakfast="@breakfask_ckcode"
+                                                      lunch="@day.Lunch[0].Ckcode"
+                                                      afternoon="@day.Afternoon[0].Ckcode">
+                                                    <i class="bi bi-star me-1"></i>Update
+                                                </span>
+                                            }
 
                                             <div class="card-body pre-order">
                                                 <h5 class="card-title pt-1 pb-1">Day @day.Day/@day.CurrentMonth</h5>

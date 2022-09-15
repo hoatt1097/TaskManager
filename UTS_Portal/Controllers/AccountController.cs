@@ -29,8 +29,8 @@ namespace UTS_Portal.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
-            var taiuseroanID = HttpContext.Session.GetString("AccountId");
-            if (taiuseroanID != null) return RedirectToAction("Index", "Home");
+            var AccountId = HttpContext.Session.GetString("AccountId");
+            if (AccountId != null) return RedirectToAction("Index", "Home");
 
             LoginViewModel loginViewModel = new LoginViewModel { AccountType = "Parent" };
             return View(loginViewModel);

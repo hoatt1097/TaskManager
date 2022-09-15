@@ -61,6 +61,11 @@ namespace UTS_Portal.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(role.Functions == null || role.Functions == "")
+                {
+                    _notyfService.Error("Permissions is required");
+                    return View(role);
+                }
                 _context.Add(role);
                 await _context.SaveChangesAsync();
                 _notyfService.Success("Create role successfully");
@@ -99,6 +104,11 @@ namespace UTS_Portal.Controllers
 
             if (ModelState.IsValid)
             {
+                if (role.Functions == null || role.Functions == "")
+                {
+                    _notyfService.Error("Permissions is required");
+                    return View(role);
+                }
                 try
                 {
                     _context.Update(role);
