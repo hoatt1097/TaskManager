@@ -82,7 +82,11 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card order-table">
-            <div class="card-body">
+            <div class="card-body" style="position: relative">
+                @if (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE"))
+                {
+                    <label class="btn btn-primary mt-3 mb-3 mr-3" style="background-color: #FF8302 !important; border: none; width: fit-content; position: absolute; top: 10px; right: 15px" onclick="ExportFile('Admin')"><i class="bi bi-download"></i> Export All Users</label>
+                }
                 <h1 class="pt-0 text-center">Order history</h1>
                 <div class="row">
                     <div class="col-md-4">
@@ -100,7 +104,7 @@
                     </div>
                     <div class="col-md-2 d-grid">
                         <label class="control-label">Action:</label>
-                        <label class="form-control btn btn-primary" id="ViewHistory" style="width: 100px">View</label>
+                        <label class="form-control btn btn-primary" id="ViewHistory" style="width: 100px;">View</label>
                     </div>
 
                     @if (listOrderSubmit != null && listOrderSubmit.Count > 0)
@@ -111,16 +115,17 @@
                                 <option value="vn">Vietnamese</option>
                                 <option value="en" selected>English</option>
                             </select>
-
-                            @*<label class="btn btn-primary mt-3 mb-3 mr-3" onclick="ExportFile('Parent')">Export Excel</label>*@
-
+                            @if (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE") || Permissions.Contains("PARENT"))
+                            {
+                                <label class="btn btn-primary mt-3 mb-3 mr-3" style="background-color: #FF8302 !important; border: none;" onclick="ExportFile('Parent')"><i class="bi bi-download"></i> Export Excel</label>
+                            }
                             <div class="row en preorder-show" style="padding-right: 10px">
                                 @foreach (var day in listOrderSubmit)
                                 {
                                     var breakfask_ckcode = day.Breakfast.Count() > 0 ? day.Breakfast[0].Ckcode : "0";
                                     <div class="col-md-6">
                                         <div class="card info-card sales-card order-day">
-                                            @if (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE"))
+                                            @if (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE") || Permissions.Contains("PARENT"))
                                             {
                                                 <span class="badge bg-primary btn-update"
                                                       data-bs-toggle="tooltip"
@@ -489,80 +494,80 @@
             var parentId = $("#parentId").val().trim();
             var monthSelected = $("#txtMonth").val().trim();
             $.confirm({
-                closeIcon: true,
-                type: 'green',
-                typeAnimated: true,
-                boxWidth: '350px',
-                useBootstrap: false,
-                offsetTop: 0,
-                title: 'Export order: ' + monthSelected,
-                content: function () {
-                    var self = this;
-                    return $.ajax({
-                        url: '@Url.Action("GetListDayExport", "Orders")',
-                        data: { month: monthSelected },
-                        dataType: 'json',
-                        method: 'GET'
-                    }).done(function (response) {
-                        self.setContent(response.html);
-                    })
-                },
-                buttons: {
-                    ChooseAgain: {
-                        text: 'Cancel',
-                        btnClass: 'btn-red',
-                        action: function () {
-                        }
+                    closeIcon: true,
+                    type: 'green',
+                    typeAnimated: true,
+                    boxWidth: '350px',
+                    useBootstrap: false,
+                    offsetTop: 0,
+                    title: 'Export order: ' + monthSelected,
+                    content: function () {
+                        var self = this;
+                        return $.ajax({
+                                url: '@Url.Action("GetListDayExport", "Orders")',
+                                data: { month: monthSelected },
+                                dataType: 'json',
+                                method: 'GET'
+                            }).done(function (response) {
+                                self.setContent(response.html);
+                            })
                     },
-                    Submit: {
-                        text: 'Export',
-                        btnClass: 'btn-success',
-                        action: function () {
-                            var SelectDay = $("#SelectDay").val();
-                            $.ajax({
-                                url: '@Url.Action("ExportFile", "Orders")',
-                                type: "POST",
-                                dataType: "json",
-                                data: { parentId: parentId, month: monthSelected, selectDay: SelectDay, type: type},
-                                success: function (data) {
-                                    if (data.success) {
-                                        $.confirm({
-                                            title: 'Successfully!',
-                                            content: data.message,
-                                            type: 'green',
-                                            typeAnimated: true,
-                                            buttons: {
-                                                Ok: {
-                                                    btnClass: 'btn-success',
-                                                    action: function () {
+                    buttons: {
+                        ChooseAgain: {
+                            text: 'Cancel',
+                            btnClass: 'btn-red',
+                            action: function () {
+                            }
+                        },
+                        Submit: {
+                            text: 'Export',
+                            btnClass: 'btn-success',
+                            action: function () {
+                                var SelectDay = $("#SelectDay").val();
+                                $.ajax({
+                                    url: '@Url.Action("ExportFile", "Orders")',
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: { parentId: parentId, month: monthSelected, selectDay: SelectDay, type: type },
+                                    success: function (data) {
+                                        if (data.success) {
+                                            $.confirm({
+                                                title: 'Successfully!',
+                                                content: data.message,
+                                                type: 'green',
+                                                typeAnimated: true,
+                                                buttons: {
+                                                    Ok: {
+                                                        btnClass: 'btn-success',
+                                                        action: function () {
 
-                                                    }
-                                                },
-                                            }
-                                        });
-                                    }
-                                    else {
-                                        $.confirm({
-                                            title: 'Error!',
-                                            content: data.message,
-                                            type: 'red',
-                                            typeAnimated: true,
-                                            buttons: {
-                                                Ok: {
-                                                    btnClass: 'btn-red',
-                                                    action: function () {
+                                                        }
+                                                    },
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            $.confirm({
+                                                title: 'Error!',
+                                                content: data.message,
+                                                type: 'red',
+                                                typeAnimated: true,
+                                                buttons: {
+                                                    Ok: {
+                                                        btnClass: 'btn-red',
+                                                        action: function () {
 
-                                                    }
-                                                },
-                                            }
-                                        });
+                                                        }
+                                                    },
+                                                }
+                                            });
+                                        }
                                     }
-                                }
-                            });
-                        }
-                    },
-                }
-            });
+                                });
+                            }
+                        },
+                    }
+                });
         }
     </script>
 }

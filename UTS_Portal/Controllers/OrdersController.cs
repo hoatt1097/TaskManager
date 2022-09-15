@@ -157,40 +157,51 @@ namespace UTS_Portal.Controllers
         public IActionResult ExportFile(string? parentId, string? month, string? selectDay, string? type)
         {
             List<PreOrders> data = new List<PreOrders>();
-            if(type == "Parent")
+            string filename = "";
+            if (type == "Parent")
             {
                 if(selectDay == "all")
                 {
-                    data = _context.PreOrders.ToList().Where(x => x.MonthYear == month.Trim() && x.UserCode.Trim() == parentId.Trim())
+                    filename = "Order_" + parentId.Trim() + "_" + month.Replace("/", "") + ".xlsx";
+                    data = _context.PreOrders.ToList().Where(x => x.MonthYear == month.Replace("/","").Trim() && x.UserCode.Trim() == parentId.Trim())
                                                 .OrderBy(x => x.OrderDate)
-                                                .ThenBy(n => n.RepastId).ToList();
+                                                .ThenBy(n => n.RepastId)
+                                                .ThenBy(n => n.IsBundled).ToList();
                 } 
                 else
                 {
+                    filename = "Order_" + parentId.Trim() + "_" + selectDay.Replace("/", "") + ".xlsx";
                     data = _context.PreOrders.ToList().Where(x => x.OrderDate.ToString("dd/MM/yyyy") == selectDay.Trim() && x.UserCode.Trim() == parentId.Trim())
                                                 .OrderBy(x => x.OrderDate)
-                                                .ThenBy(n => n.RepastId).ToList();
+                                                .ThenBy(n => n.RepastId)
+                                                .ThenBy(n => n.IsBundled).ToList();
                 }
             } 
             else
             {
                 if (selectDay == "all")
                 {
-                    data = _context.PreOrders.ToList().Where(x => x.MonthYear == month.Trim())
+                    filename = "Order_All_" + month.Replace("/", "") + ".xlsx";
+                    data = _context.PreOrders.ToList().Where(x => x.MonthYear == month.Replace("/", "").Trim())
                                                 .OrderBy(x => x.UserCode)
                                                 .ThenBy(n => n.OrderDate)
-                                                .ThenBy(n => n.RepastId).ToList();
+                                                .ThenBy(n => n.RepastId)
+                                                .ThenBy(n => n.IsBundled).ToList();
                 }
                 else
                 {
+                    filename = "Order_All_" + selectDay.Replace("/", "") + ".xlsx";
                     data = _context.PreOrders.ToList().Where(x => x.OrderDate.ToString("dd/MM/yyyy") == selectDay.Trim())
                                                 .OrderBy(x => x.UserCode)
                                                 .ThenBy(n => n.OrderDate)
-                                                .ThenBy(n => n.RepastId).ToList();
+                                                .ThenBy(n => n.RepastId)
+                                                .ThenBy(n => n.IsBundled).ToList();
                 }
             }
 
             List<string> columns = new List<string>(new string[] {
+                "Campus",
+                "Campus Name",
                 "Submit date",
                 "Submit time",
                 "Account Code",
@@ -209,14 +220,14 @@ namespace UTS_Portal.Controllers
                 "Qty",
                 "Repast #",
                 "Bundled Qty",
-                "Repast Date",
-                "Repast time",
+                "Spending Date",
+                "Spending time",
+                "Total Spending Qty",
             });
-
-            using (var fs = new FileStream("Order.xlsx", FileMode.Create, FileAccess.Write))
+            using (var fs = new FileStream(filename, FileMode.Create, FileAccess.Write))
             {
                 IWorkbook workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("Sheet1");
+                ISheet excelSheet = workbook.CreateSheet(filename);
 
                 IRow row = excelSheet.CreateRow(0);
                 int columnIndex = 0;
@@ -233,29 +244,32 @@ namespace UTS_Portal.Controllers
                     Cscard cscard = _context.Cscard.Where(x => x.ParentId == item.UserCode).FirstOrDefault();
                     Goods goods = _context.Goods.Where(x => x.Ref == item.CkCode).FirstOrDefault();
                     Menus menus = _context.Menus.Where(x => x.MenuDate == item.OrderDate && x.ItemCode == item.ItemCode).FirstOrDefault();
+                    Campus campus = _context.Campus.Where(x => x.CampusId.Trim() == cscard.CampusId.Trim()).FirstOrDefault();
 
                     row = excelSheet.CreateRow(rowIndex);
-                    row.CreateCell(0).SetCellValue(item.SubmitDt); // Submit date
-                    row.CreateCell(1).SetCellValue(item.SubmitTm); // Submit time
-                    row.CreateCell(2).SetCellValue(item.UserCode); // Account Code
-                    row.CreateCell(3).SetCellValue(item.CanteenId); // Canteen Code
-                    row.CreateCell(4).SetCellValue(cscard.Name); // Account name
-                    row.CreateCell(5).SetCellValue(item.Class); // Class/Title
-                    row.CreateCell(6).SetCellValue(item.MonthYear); // Period
-                    row.CreateCell(7).SetCellValue(item.OrderDate); // Menu date
-                    row.CreateCell(8).SetCellValue(item.Week?.ToString()); // Week
-                    row.CreateCell(9).SetCellValue(item.DoW?.ToString()); // DoW
-                    row.CreateCell(10).SetCellValue(menus.Category); // Category
-                    row.CreateCell(11).SetCellValue(item.SubmitDt); // Item Code
-                    row.CreateCell(12).SetCellValue(item.SubmitDt); // Submit date
-                    row.CreateCell(13).SetCellValue(item.SubmitDt); // Submit date
-                    row.CreateCell(14).SetCellValue(item.SubmitDt); // Submit date
-                    row.CreateCell(15).SetCellValue(item.SubmitDt); // Submit date
-                    row.CreateCell(16).SetCellValue(item.SubmitDt); // Submit date
-                    row.CreateCell(17).SetCellValue(item.SubmitDt); // Submit date
-                    row.CreateCell(18).SetCellValue(item.SubmitDt); // Submit date
-                    row.CreateCell(19).SetCellValue(item.SubmitDt); // Submit date
-                    row.CreateCell(20).SetCellValue(item.SubmitDt); // Submit date
+                    row.CreateCell(columns.IndexOf("Campus")).SetCellValue(cscard.CampusId); // Campus
+                    row.CreateCell(columns.IndexOf("Campus Name")).SetCellValue(campus?.Description); // Campus Name
+                    row.CreateCell(columns.IndexOf("Submit date")).SetCellValue(item.SubmitDt.ToString("dd/MM/yyyy")); // Submit date
+                    row.CreateCell(columns.IndexOf("Submit time")).SetCellValue(item.SubmitTm?.ToString()); // Submit time
+                    row.CreateCell(columns.IndexOf("Account Code")).SetCellValue(item.UserCode?.Trim()); // Account Code
+                    row.CreateCell(columns.IndexOf("Canteen Code")).SetCellValue(item.CanteenId?.Trim()); // Canteen Code
+                    row.CreateCell(columns.IndexOf("Account name")).SetCellValue(cscard.Name?.Trim()); // Account name
+                    row.CreateCell(columns.IndexOf("Class/Title")).SetCellValue(item.Class?.Trim()); // Class/Title
+                    row.CreateCell(columns.IndexOf("Period")).SetCellValue(item.MonthYear?.Trim()); // Period
+                    row.CreateCell(columns.IndexOf("Menu date")).SetCellValue(item.OrderDate.ToString("dd/MM/yyyy")); // Menu date
+                    row.CreateCell(columns.IndexOf("Week")).SetCellValue(item.Week?.ToString()); // Week
+                    row.CreateCell(columns.IndexOf("DoW")).SetCellValue(item.DoW?.ToString()); // DoW
+                    row.CreateCell(columns.IndexOf("Category")).SetCellValue(menus.Category?.Trim()); // Category
+                    row.CreateCell(columns.IndexOf("Item Code")).SetCellValue(menus.ItemCode?.Trim()); // Item Code
+                    row.CreateCell(columns.IndexOf("CK code")).SetCellValue(menus.Ckcode?.Trim()); // CK code
+                    row.CreateCell(columns.IndexOf("Item Name (VN)")).SetCellValue(menus.ItemNameVn?.Trim()); // Item Name (VN)
+                    row.CreateCell(columns.IndexOf("Item Name (EN)")).SetCellValue(menus.ItemNameVn?.Trim()); // Item Name (EN)
+                    row.CreateCell(columns.IndexOf("Qty")).SetCellValue(item.Qty); // Qty
+                    row.CreateCell(columns.IndexOf("Repast #")).SetCellValue(item.RepastId); // Repast #
+                    row.CreateCell(columns.IndexOf("Bundled Qty")).SetCellValue(item.IsBundled ? "1" : ""); // Bundled Qty
+                    row.CreateCell(columns.IndexOf("Spending Date")).SetCellValue(""); // Spending Date
+                    row.CreateCell(columns.IndexOf("Spending time")).SetCellValue(""); // Spending time
+                    row.CreateCell(columns.IndexOf("Total Spending Qty")).SetCellValue((item.RepastDt != null) ? item.Qty.ToString() : ""); // Total Spending Qty
 
                     rowIndex++;
                 }
@@ -481,12 +495,6 @@ namespace UTS_Portal.Controllers
 
         public IActionResult GetUpdateOrder(string language, string usercode, string orderday, string currentmonth, string breakfast, string lunch, string afternoon)
         {
-            var currentUser = UserHelper.GetCurrentUser(HttpContext);
-            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("ORDER_MANAGE"))
-            {
-                return Json(new { success = false, message = "You have no permission!" });
-            }
-
             DateTime date = DateTime.Parse(currentmonth + "/" + orderday);
             List<Menus> listMenu = _context.Menus.ToList().Where(x => x.MenuDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")).ToList();
             List<PreOrders> listOrder = _context.PreOrders.ToList().Where(x => x.UserCode.Trim() == usercode.Trim() && x.OrderDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")).ToList();

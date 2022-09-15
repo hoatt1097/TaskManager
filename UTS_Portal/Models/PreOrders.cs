@@ -54,8 +54,16 @@ namespace UTS_Portal.Models
         [Column("Plc_ID")]
         [StringLength(5)]
         public string PlcId { get; set; }
+        [Column("REPAST_DT", TypeName = "date")]
+        public DateTime? RepastDt { get; set; }
+        [Column("REPAST_TM")]
+        [StringLength(5)]
+        public string RepastTm { get; set; }
+        [Column("TRANS_NUM")]
+        [StringLength(18)]
+        public string TransNum { get; set; }
         [Column("POST")]
-        [StringLength(20)]
+        [StringLength(1)]
         public string Post { get; set; }
         public bool? IsModified { get; set; }
         [Column("Modi_Date", TypeName = "date")]

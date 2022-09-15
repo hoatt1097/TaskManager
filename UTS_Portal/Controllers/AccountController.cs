@@ -136,6 +136,7 @@ namespace UTS_Portal.Controllers
                             new Claim("Email", user.Email.ToString().Trim()),
                             new Claim("RoleId", (-1).ToString()),
                             new Claim("RoleName", "Parent"),
+                            new Claim("Permissions", "PARENT"),
                             new Claim(ClaimTypes.Role, "Parent")
                         };
                         var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");

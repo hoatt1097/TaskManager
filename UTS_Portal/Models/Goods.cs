@@ -9,7 +9,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UTS_Portal.Models
 {
-    [Table("GOODS")]
     public partial class Goods
     {
         [Key]
@@ -32,6 +31,9 @@ namespace UTS_Portal.Models
         [Column("CLS_CODE")]
         [StringLength(2)]
         public string ClsCode { get; set; }
+        [Required]
+        [StringLength(120)]
+        public string Category { get; set; }
         [Required]
         [Column("SHORT_NAME")]
         [StringLength(120)]

@@ -9,7 +9,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UTS_Portal.Models
 {
-    [Table("CSCARD")]
     public partial class Cscard
     {
         [Column("IDX")]
@@ -62,6 +61,8 @@ namespace UTS_Portal.Models
         [Column("CRD_TYPE")]
         [StringLength(2)]
         public string CrdType { get; set; }
+        [Column("Order_Type")]
+        public int OrderType { get; set; }
         [Required]
         [Column("USER_TYPE")]
         [StringLength(2)]

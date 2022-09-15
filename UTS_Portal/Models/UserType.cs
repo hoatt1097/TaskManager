@@ -12,7 +12,7 @@ namespace UTS_Portal.Models
     [Table("User_Type")]
     public partial class UserType
     {
-        [Required]
+        [Key]
         [StringLength(1)]
         public string Prefix { get; set; }
         [Required]

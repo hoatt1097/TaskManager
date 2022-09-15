@@ -13,6 +13,10 @@ namespace UTS_Portal.Models
     {
         [Column("IDX")]
         public int Idx { get; set; }
+        [Required]
+        [Column("Node_ID")]
+        [StringLength(3)]
+        public string NodeId { get; set; }
         [Key]
         [Column("Campus_ID")]
         [StringLength(2)]
