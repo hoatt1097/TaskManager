@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,9 +15,10 @@ namespace UTS_Portal.Controllers
     public class RolesController : Controller
     {
         private readonly db_utsContext _context;
-
-        public RolesController(db_utsContext context)
+        public INotyfService _notyfService { get; }
+        public RolesController(db_utsContext context, INotyfService notyfService)
         {
+            _notyfService = notyfService;
             _context = context;
         }
 
@@ -55,12 +57,13 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Roles role)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Functions")] Roles role)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(role);
                 await _context.SaveChangesAsync();
+                _notyfService.Success("Create role successfully");
                 return RedirectToAction(nameof(Index));
             }
             return View(role);
@@ -87,7 +90,7 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Roles role)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Functions")] Roles role)
         {
             if (id != role.Id)
             {
@@ -99,6 +102,7 @@ namespace UTS_Portal.Controllers
                 try
                 {
                     _context.Update(role);
+                    _notyfService.Success("Update role successfully");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -139,10 +143,17 @@ namespace UTS_Portal.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var users = _context.Users.Where(x => x.RoleId == id).ToList();
+            if(users.Count > 0)
+            {
+                _notyfService.Error("Delete role unsuccessfully");
+                return Json(new { success = false, message = "Can not delete role." });
+            }
+
             var role = await _context.Roles.FindAsync(id);
             _context.Roles.Remove(role);
             await _context.SaveChangesAsync();
-
+            _notyfService.Success("Delete role successfully");
             // return RedirectToAction(nameof(Index));
             return Json(new { success = true, message = "Deleted Successfully" });
         }

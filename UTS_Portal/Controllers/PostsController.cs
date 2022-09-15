@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
 using UTS_Portal.Extension;
+using UTS_Portal.Helpers;
 using UTS_Portal.Models;
 
 namespace UTS_Portal.Controllers
@@ -81,13 +82,22 @@ namespace UTS_Portal.Controllers
             {
                 return NotFound();
             }
-
+            posts.Views += 1;
+            _context.Update(posts);
+            await _context.SaveChangesAsync();
             return View(posts);
         }
 
         // GET: Posts/Create
         public IActionResult Create()
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("BLOG_MANAGE"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
+
             Posts post = new Posts { Author = HttpContext.Session.GetString("Fullname") };
             return View(post);
         }
@@ -99,6 +109,13 @@ namespace UTS_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Scontents,Contents,Thumb,Published,CreatedDate,Author,Views,IsHot")] Posts posts, Microsoft.AspNetCore.Http.IFormFile fThumb)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("BLOG_MANAGE"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 //Handle Thumb
@@ -123,6 +140,13 @@ namespace UTS_Portal.Controllers
         // GET: Posts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("BLOG_MANAGE"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -143,6 +167,13 @@ namespace UTS_Portal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Scontents,Contents,Thumb,Published,CreatedDate,Author,Views,IsHot")] Posts posts, Microsoft.AspNetCore.Http.IFormFile fThumb)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("BLOG_MANAGE"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (id != posts.Id)
             {
                 return NotFound();
@@ -204,6 +235,12 @@ namespace UTS_Portal.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("BLOG_MANAGE"))
+            {
+                return Json(new { success = false, message = "You have no permission!" });
+            }
+
             var posts = await _context.Posts.FindAsync(id);
             _context.Posts.Remove(posts);
             await _context.SaveChangesAsync();

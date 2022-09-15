@@ -15,6 +15,7 @@ namespace UTS_Portal.Helpers
         public string Email { get; set; }
         public string RoleId { get; set; }
         public string RoleName { get; set; }
+        public string Permissions { get; set; }
     }
     public class UserHelper
     {
@@ -30,6 +31,7 @@ namespace UTS_Portal.Helpers
                 Email = claims?.FirstOrDefault(x => x.Type.Equals("Email", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
                 RoleId = claims?.FirstOrDefault(x => x.Type.Equals("RoleId", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
                 RoleName = claims?.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
+                Permissions = claims?.FirstOrDefault(x => x.Type.Equals("Permissions", StringComparison.OrdinalIgnoreCase))?.Value?.Trim(),
             };
             return currentUser;
         }

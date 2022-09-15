@@ -481,6 +481,12 @@ namespace UTS_Portal.Controllers
 
         public IActionResult GetUpdateOrder(string language, string usercode, string orderday, string currentmonth, string breakfast, string lunch, string afternoon)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("ORDER_MANAGE"))
+            {
+                return Json(new { success = false, message = "You have no permission!" });
+            }
+
             DateTime date = DateTime.Parse(currentmonth + "/" + orderday);
             List<Menus> listMenu = _context.Menus.ToList().Where(x => x.MenuDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")).ToList();
             List<PreOrders> listOrder = _context.PreOrders.ToList().Where(x => x.UserCode.Trim() == usercode.Trim() && x.OrderDate.ToString("ddMMyyyy") == date.ToString("ddMMyyyy")).ToList();

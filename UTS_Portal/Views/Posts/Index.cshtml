@@ -103,9 +103,37 @@
                             type: "POST",
                             url: url,
                             success: function (data) {
-                                if (data.success)
-                                {
-                                    location.reload(true);
+                                if (data.success) {
+                                    $.confirm({
+                                        title: 'Successfully!',
+                                        content: data.message,
+                                        type: 'green',
+                                        typeAnimated: true,
+                                        buttons: {
+                                            Ok: {
+                                                btnClass: 'btn-success',
+                                                action: function () {
+                                                    window.location.reload();
+                                                }
+                                            },
+                                        }
+                                    });
+                                }
+                                else {
+                                    $.confirm({
+                                        title: 'Error!',
+                                        content: data.message,
+                                        type: 'red',
+                                        typeAnimated: true,
+                                        buttons: {
+                                            Ok: {
+                                                btnClass: 'btn-red',
+                                                action: function () {
+
+                                                }
+                                            },
+                                        }
+                                    });
                                 }
                             }
                         });

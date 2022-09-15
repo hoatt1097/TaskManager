@@ -89,6 +89,12 @@ namespace UTS_Portal.Controllers
         // GET: Menus/Create
         public IActionResult Create()
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("MENU_MANAGE"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
             return View();
         }
 
@@ -133,6 +139,13 @@ namespace UTS_Portal.Controllers
         // GET: Menus/Edit/5
         public async Task<IActionResult> Edit(int? id, string? tab)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("MENU_MANAGE"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -339,6 +352,13 @@ namespace UTS_Portal.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("MENU_MANAGE"))
+            {
+                return Json(new { success = false, message = "You have no permission!" });
+            }
+
+
             var menuInfos = await _context.MenuInfos.FindAsync(id);
 
             // Delete all images in project
@@ -510,14 +530,19 @@ namespace UTS_Portal.Controllers
         public IActionResult DeleteImage(string path)
         {
             var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("MENU_MANAGE"))
+            {
+                return Json(new { success = false, message = "You have no permission!" });
+            }
+
             if (currentUser.RoleName?.Trim() == "Parent")
             {
-                return Json(new { success = true, message = "User has no permission!" });
+                return Json(new { success = false, message = "User has no permission!" });
             }
 
             if (path == null || path == "")
             {
-                return Json(new { success = true, message = "Image path not exist" });
+                return Json(new { success = false, message = "Image path not exist" });
             }
 
             bool result = Utilities.DeleteFile(path);

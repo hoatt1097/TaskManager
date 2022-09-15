@@ -84,6 +84,7 @@ namespace UTS_Portal.Controllers
                             new Claim("Email", user.Email.ToString().Trim()),
                             new Claim("RoleId", user.RoleId.ToString().Trim()),
                             new Claim("RoleName", user.Role.Name.Trim()),
+                            new Claim("Permissions", user.Role.Functions.Trim()),
                             new Claim(ClaimTypes.Role, user.Role.Name.Trim())
                         };
                         var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");

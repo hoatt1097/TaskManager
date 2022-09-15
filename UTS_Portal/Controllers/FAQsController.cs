@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
+using UTS_Portal.Helpers;
 using UTS_Portal.Models;
 
 namespace UTS_Portal.Controllers
@@ -13,10 +15,11 @@ namespace UTS_Portal.Controllers
     public class FAQsController : Controller
     {
         private readonly db_utsContext _context;
-
-        public FAQsController(db_utsContext context)
+        public INotyfService _notyfService { get; }
+        public FAQsController(db_utsContext context, INotyfService notyfService)
         {
             _context = context;
+            _notyfService = notyfService;
         }
 
         // GET: FAQ
@@ -65,6 +68,12 @@ namespace UTS_Portal.Controllers
         // GET: FAQ/Create
         public IActionResult Create()
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
             return View();
         }
 
@@ -87,6 +96,12 @@ namespace UTS_Portal.Controllers
         // GET: FAQ/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
             if (id == null)
             {
                 return NotFound();
@@ -157,6 +172,12 @@ namespace UTS_Portal.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN"))
+            {
+                _notyfService.Error("You have no permission!");
+                return Json(new { success = false, message = "You have no permission!" });
+            }
             var faqs = await _context.Faqs.FindAsync(id);
             _context.Faqs.Remove(faqs);
             await _context.SaveChangesAsync();

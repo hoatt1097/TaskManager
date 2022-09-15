@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PagedList.Core;
+using UTS_Portal.Helpers;
 using UTS_Portal.Models;
 
 namespace UTS_Portal.Controllers
@@ -67,6 +68,12 @@ namespace UTS_Portal.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN"))
+            {
+                return Json(new { success = false, message = "You have no permission!" });
+            }
+
             var feedbacks = await _context.Feedbacks.FindAsync(id);
             _context.Feedbacks.Remove(feedbacks);
             await _context.SaveChangesAsync();

@@ -6,6 +6,7 @@
     string parentCode = User.Claims.FirstOrDefault(x => x.Type.Equals("Code", StringComparison.OrdinalIgnoreCase))?.Value;
 
     string RoleName = User.Claims.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value;
+    string Permissions = User.Claims.FirstOrDefault(x => x.Type.Equals("Permissions", StringComparison.OrdinalIgnoreCase))?.Value;
 
     string notiCount = "0";
     var count = new Byte[20];
@@ -101,8 +102,11 @@
                 <li class="nav-item @Html.IsSelected(controller: "Users") @Html.IsSelected(controller: "Roles") @Html.IsSelected(controller: "FAQs") @Html.IsSelected(controller: "Posts") @Html.IsSelected(controller: "Feedbacks")">
                     <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-menu-button-wide"></i><span>Administration</span><i class="bi bi-chevron-down ms-auto"></i> </a>
                     <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li> <a class="nav-link collapsed" asp-controller="Users" asp-action="Index"> <i class="bi bi-circle"></i><span>Users</span> </a></li>
-                        <li> <a class="nav-link collapsed" asp-controller="Roles" asp-action="Index"> <i class="bi bi-circle"></i><span>Roles</span> </a></li>
+                        @if (Permissions.Contains("ADMIN"))
+                        {
+                            <li> <a class="nav-link collapsed" asp-controller="Users" asp-action="Index"> <i class="bi bi-circle"></i><span>Users</span> </a></li>
+                            <li> <a class="nav-link collapsed" asp-controller="Roles" asp-action="Index"> <i class="bi bi-circle"></i><span>Roles</span> </a></li>
+                        }
                         <li> <a class="nav-link collapsed" asp-controller="Posts" asp-action="Index"> <i class="bi bi-circle"></i><span>Blogs</span> </a></li>
                         <li> <a class="nav-link collapsed" asp-controller="FAQs" asp-action="Index"> <i class="bi bi-circle"></i><span>FAQs</span> </a></li>
                         <li> <a class="nav-link collapsed" asp-controller="Feedbacks" asp-action="Index"> <i class="bi bi-circle"></i><span>Feedbacks</span> </a></li>
