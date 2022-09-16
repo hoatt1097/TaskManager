@@ -118,7 +118,6 @@ namespace UTS_Portal.Controllers
                             return View(model);
                         }
 
-
                         HttpContext.Session.SetString("UserID", user.ParentId.ToString().Trim());
                         HttpContext.Session.SetString("UserCode", user.ParentId.ToString().Trim());
                         HttpContext.Session.SetString("Fullname", user.Name.Trim());

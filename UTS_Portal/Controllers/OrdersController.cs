@@ -224,7 +224,12 @@ namespace UTS_Portal.Controllers
                 "Spending time",
                 "Total Spending Qty",
             });
-            using (var fs = new FileStream(filename, FileMode.Create, FileAccess.Write))
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "export");
+            if (!System.IO.Directory.Exists(path))
+            {
+                System.IO.Directory.CreateDirectory(path);
+            }
+            using (var fs = new FileStream(path + "/" + filename, FileMode.Create, FileAccess.Write))
             {
                 IWorkbook workbook = new XSSFWorkbook();
                 ISheet excelSheet = workbook.CreateSheet(filename);
@@ -267,8 +272,8 @@ namespace UTS_Portal.Controllers
                     row.CreateCell(columns.IndexOf("Qty")).SetCellValue(item.Qty); // Qty
                     row.CreateCell(columns.IndexOf("Repast #")).SetCellValue(item.RepastId); // Repast #
                     row.CreateCell(columns.IndexOf("Bundled Qty")).SetCellValue(item.IsBundled ? "1" : ""); // Bundled Qty
-                    row.CreateCell(columns.IndexOf("Spending Date")).SetCellValue(""); // Spending Date
-                    row.CreateCell(columns.IndexOf("Spending time")).SetCellValue(""); // Spending time
+                    row.CreateCell(columns.IndexOf("Spending Date")).SetCellValue(item.RepastDt?.ToString("dd/MM/yyyy")); // Spending Date
+                    row.CreateCell(columns.IndexOf("Spending time")).SetCellValue(item.RepastTm); // Spending time
                     row.CreateCell(columns.IndexOf("Total Spending Qty")).SetCellValue((item.RepastDt != null) ? item.Qty.ToString() : ""); // Total Spending Qty
 
                     rowIndex++;
@@ -277,7 +282,19 @@ namespace UTS_Portal.Controllers
             }
 
 
-            return Json(new { success = true, message = "Export Successfully!" });
+            return Json(new { success = true, message = "Export Successfully!", filename });
+        }
+
+        public FileResult DownloadFile(string filename)
+        {
+            //Build the File Path.
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "export", filename);
+
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes(path);
+            Utilities.DeleteFile(path);
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream", filename);
         }
 
         public IActionResult GetListDayExport(string? month)
@@ -404,7 +421,7 @@ namespace UTS_Portal.Controllers
             }
             catch (DbUpdateException)
             {
-                return Json(new { success = false, message = $"Your pre-order already existed. Please contact canteen manager to revise!" });
+                return Json(new { success = false, type= "ExistOrder", message = $"Your pre-order already existed. Please contact canteen manager to revise!</br>Bạn đã đặt món rồi. Nếu cần chỉnh sửa, vui lòng liên lạc với quản lý Canteen!" });
             }
             catch (Exception)
             {

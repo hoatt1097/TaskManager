@@ -531,20 +531,8 @@
                                     data: { parentId: parentId, month: monthSelected, selectDay: SelectDay, type: type },
                                     success: function (data) {
                                         if (data.success) {
-                                            $.confirm({
-                                                title: 'Successfully!',
-                                                content: data.message,
-                                                type: 'green',
-                                                typeAnimated: true,
-                                                buttons: {
-                                                    Ok: {
-                                                        btnClass: 'btn-success',
-                                                        action: function () {
-
-                                                        }
-                                                    },
-                                                }
-                                            });
+                                            var filename = data.filename;
+                                            window.location.href = "@Url.Action("DownloadFile", "Orders")?filename=" + filename;
                                         }
                                         else {
                                             $.confirm({

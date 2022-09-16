@@ -809,19 +809,35 @@
                                                     }
                                                 });
                                             } else {
-                                                $.confirm({
-                                                    title: 'Error!',
-                                                    content: data.message,
-                                                    type: 'red',
-                                                    typeAnimated: true,
-                                                    buttons: {
-                                                        Ok: {
-                                                            btnClass: 'btn-red',
-                                                            action: function () {
-                                                            }
-                                                        },
-                                                    }
-                                                });
+                                                if (data.type == "ExistOrder") {
+                                                    $.confirm({
+                                                        title: 'Notice!',
+                                                        content: data.message,
+                                                        type: 'green',
+                                                        typeAnimated: true,
+                                                        buttons: {
+                                                            Ok: {
+                                                                action: function () {
+                                                                }
+                                                            },
+                                                        }
+                                                    });
+                                                } else {
+                                                    $.confirm({
+                                                        title: 'Error!',
+                                                        content: data.message,
+                                                        type: 'red',
+                                                        typeAnimated: true,
+                                                        buttons: {
+                                                            Ok: {
+                                                                btnClass: 'btn-red',
+                                                                action: function () {
+                                                                }
+                                                            },
+                                                        }
+                                                    });
+                                                }
+                                                
                                             }
                                         }
                                     });
