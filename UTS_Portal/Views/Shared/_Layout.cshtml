@@ -99,7 +99,7 @@
 
             @if (RoleName != "Parent")
             {
-                <li class="nav-item @Html.IsSelected(controller: "Users") @Html.IsSelected(controller: "Roles") @Html.IsSelected(controller: "FAQs") @Html.IsSelected(controller: "Posts") @Html.IsSelected(controller: "Feedbacks")">
+                <li class="nav-item @Html.IsSelected(controller: "Users") @Html.IsSelected(controller: "Roles") @Html.IsSelected(controller: "FAQs") @Html.IsSelected(controller: "Posts") @Html.IsSelected(controller: "Feedbacks") @Html.IsSelected(controller: "Menus")">
                     <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-menu-button-wide"></i><span>Administration</span><i class="bi bi-chevron-down ms-auto"></i> </a>
                     <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         @if (Permissions.Contains("ADMIN"))
