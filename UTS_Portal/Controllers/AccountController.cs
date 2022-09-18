@@ -187,6 +187,11 @@ namespace UTS_Portal.Controllers
                     return View();
                 }
 
+                string gender = "Not Provided";
+                if (user.Sex.Trim() == "01") gender = "Male";
+                if (user.Sex.Trim() == "02") gender = "Female";
+                if (user.Sex.Trim() == "03") gender = "Child";
+
                 MyProfile myProfile = new MyProfile
                 {
                     Type = "SchoolAccount",
@@ -198,7 +203,7 @@ namespace UTS_Portal.Controllers
                     Email = user.Email,
                     Phone = user.Phone,
                     CreatedDate = user.LastDate?.ToString("yyyy/MM/dd"),
-                    Sex = user.Sex,
+                    Sex = gender,
                     Address = user.Address,
                     Class = user.Class,
                     ClassName = user.ClassName

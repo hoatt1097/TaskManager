@@ -21,5 +21,6 @@ namespace UTS_Portal.ViewModels
         public string Address { get; set; }
         public string Class { get; set; }
         public string ClassName { get; set; }
+        public string Information { get; set; }
     }
 }
