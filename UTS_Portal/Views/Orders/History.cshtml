@@ -5,6 +5,7 @@
     var SelectBoxOrderMonth = ViewBag.SelectBoxOrderMonth;
     string RoleName = User.Claims.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value;
     string Permissions = User.Claims.FirstOrDefault(x => x.Type.Equals("Permissions", StringComparison.OrdinalIgnoreCase))?.Value;
+    Permissions = string.IsNullOrEmpty(Permissions) ? "" : Permissions;
     string isDisabled = RoleName == "Parent" ? "disabled" : "";
 
     List<OrderSubmit> listOrderSubmit = ViewBag.ListOrderSubmit;
@@ -83,7 +84,7 @@
     <div class="col-md-12">
         <div class="card order-table">
             <div class="card-body" style="position: relative">
-                @if (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE"))
+                @if (!string.IsNullOrEmpty(Permissions) && (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE")))
                 {
                     <label class="btn btn-primary mt-3 mb-3 mr-3" style="background-color: #FF8302 !important; border: none; width: fit-content; position: absolute; top: 10px; right: 15px" onclick="ExportFile('Admin')"><i class="bi bi-download"></i> Export All Users</label>
                 }
@@ -127,17 +128,20 @@
                                         <div class="card info-card sales-card order-day">
                                             @if (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE") || Permissions.Contains("PARENT"))
                                             {
-                                                <span class="badge bg-primary btn-update"
-                                                      data-bs-toggle="tooltip"
-                                                      data-bs-placement="bottom"
-                                                      data-bs-original-title="Update order"
-                                                      orderDay="@day.Day"
-                                                      currentMonth="@day.CurrentMonth"
-                                                      breakfast="@breakfask_ckcode"
-                                                      lunch="@day.Lunch[0].Ckcode"
-                                                      afternoon="@day.Afternoon[0].Ckcode">
-                                                    <i class="bi bi-star me-1"></i>Update
-                                                </span>
+                                                if (@day.AllowEdit)
+                                                {
+                                                    <span class="badge bg-primary btn-update"
+                                                          data-bs-toggle="tooltip"
+                                                          data-bs-placement="bottom"
+                                                          data-bs-original-title="Update order"
+                                                          orderDay="@day.Day"
+                                                          currentMonth="@day.CurrentMonth"
+                                                          breakfast="@breakfask_ckcode"
+                                                          lunch="@day.Lunch[0].Ckcode"
+                                                          afternoon="@day.Afternoon[0].Ckcode">
+                                                        <i class="bi bi-star me-1"></i>Update
+                                                    </span>
+                                                }
                                             }
 
                                             <div class="card-body pre-order">
@@ -192,17 +196,20 @@
                                         <div class="card info-card sales-card">
                                             @if (Permissions.Contains("ADMIN") || Permissions.Contains("ORDER_MANAGE"))
                                             {
-                                                <span class="badge bg-primary btn-update order-day"
-                                                      data-bs-toggle="tooltip"
-                                                      data-bs-placement="bottom"
-                                                      data-bs-original-title="Update order"
-                                                      orderDay="@day.Day"
-                                                      currentMonth="@day.CurrentMonth"
-                                                      breakfast="@breakfask_ckcode"
-                                                      lunch="@day.Lunch[0].Ckcode"
-                                                      afternoon="@day.Afternoon[0].Ckcode">
-                                                    <i class="bi bi-star me-1"></i>Update
-                                                </span>
+                                                if (@day.AllowEdit)
+                                                {
+                                                    <span class="badge bg-primary btn-update order-day"
+                                                          data-bs-toggle="tooltip"
+                                                          data-bs-placement="bottom"
+                                                          data-bs-original-title="Update order"
+                                                          orderDay="@day.Day"
+                                                          currentMonth="@day.CurrentMonth"
+                                                          breakfast="@breakfask_ckcode"
+                                                          lunch="@day.Lunch[0].Ckcode"
+                                                          afternoon="@day.Afternoon[0].Ckcode">
+                                                        <i class="bi bi-star me-1"></i>Update
+                                                    </span>
+                                                }
                                             }
 
                                             <div class="card-body pre-order">
@@ -408,6 +415,7 @@
                         Update: {
                             btnClass: 'btn-primary',
                             action: function () {
+                                    $("#loaderbody").removeClass('hide-spiner');
                                     var bf_s = $("#bf_Select").val();
                                     var ln_s = $("#ln_Select").val();
                                     var af_s = $("#af_Select").val();
@@ -424,6 +432,7 @@
                                             afternoon: af_s
                                         },
                                         success: function (data) {
+                                            $("#loaderbody").addClass('hide-spiner');
                                             if (data.success) {
                                                 $.confirm({
                                                     title: 'Successfully!',
@@ -523,6 +532,7 @@
                             text: 'Export',
                             btnClass: 'btn-success',
                             action: function () {
+                                $("#loaderbody").removeClass('hide-spiner');
                                 var SelectDay = $("#SelectDay").val();
                                 $.ajax({
                                     url: '@Url.Action("ExportFile", "Orders")',
@@ -531,6 +541,7 @@
                                     data: { parentId: parentId, month: monthSelected, selectDay: SelectDay, type: type },
                                     success: function (data) {
                                         if (data.success) {
+                                            $("#loaderbody").addClass('hide-spiner');
                                             var filename = data.filename;
                                             window.location.href = "@Url.Action("DownloadFile", "Orders")?filename=" + filename;
                                         }
@@ -555,7 +566,7 @@
                             }
                         },
                     }
-                });
+            });
         }
     </script>
 }

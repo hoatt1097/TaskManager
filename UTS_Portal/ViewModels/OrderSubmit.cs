@@ -12,6 +12,7 @@ namespace UTS_Portal.ViewModels
         public List<OrderItem> Breakfast { get; set; }
         public List<OrderItem> Lunch { get; set; }
         public List<OrderItem> Afternoon { get; set; }
+        public bool AllowEdit { get; set; }
     }
 
     public class OrderItem
@@ -24,5 +25,6 @@ namespace UTS_Portal.ViewModels
         public int Qty { get; set; }
         public int Bundled { get; set; }
         public int RepastId { get; set; }
+        public bool HasRepastDt { get; set; }
     }
 }

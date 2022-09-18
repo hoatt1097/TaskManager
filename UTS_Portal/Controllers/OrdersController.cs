@@ -87,6 +87,16 @@ namespace UTS_Portal.Controllers
                     .Where(x => x.UserCode.Trim() == parentId.Trim() && x.MonthYear == month.Replace("/", ""))
                     .ToList().OrderBy(x => x.OrderDate).ToList();
 
+                bool HasExpiredDate = false;
+                var menuInfo = _context.MenuInfos.ToList().Where(x => x.Month.ToString("MM/yyyy") == month).FirstOrDefault();
+                if (menuInfo != null)
+                {
+                    if (menuInfo.StartDt <= DateTime.Now && menuInfo.EndDt >= DateTime.Now)
+                    {
+                        HasExpiredDate = true;
+                    }
+                }
+
                 var listOrderDate = orderHistory.Select(x => x.OrderDate).Distinct();
                 foreach(var day in listOrderDate)
                 {
@@ -95,6 +105,7 @@ namespace UTS_Portal.Controllers
                     List<OrderItem> Breakfast = new List<OrderItem>();
                     List<OrderItem> Lunch = new List<OrderItem>();
                     List<OrderItem> Afternoon = new List<OrderItem>();
+                    bool AllowEditDate = true;
 
                     var listOrderByDate = orderHistory.Where(x => x.OrderDate == day).ToList();
                     foreach(var item in listOrderByDate)
@@ -111,10 +122,17 @@ namespace UTS_Portal.Controllers
                             NameEn = goods != null ? goods.EnName?.Trim() : "",
                             Qty = item.Qty,
                             Bundled = item.IsBundled == true ? 1 : 0,
-                            RepastId = item.RepastId
+                            RepastId = item.RepastId,
+                            HasRepastDt = item.RepastDt != null
                         };
 
-                        if(orderItem.RepastId == 1)
+                        if(orderItem.HasRepastDt)
+                        {
+                            AllowEditDate = false;
+                        }
+                        
+
+                        if (orderItem.RepastId == 1)
                         {
                             Breakfast.Add(orderItem);
                         }
@@ -133,6 +151,7 @@ namespace UTS_Portal.Controllers
                     OrderSubmit orderDay = new OrderSubmit
                     {
                         Day = Day,
+                        AllowEdit = HasExpiredDate && AllowEditDate,
                         CurrentMonth = CurrentMonth,
                         Breakfast = Breakfast.OrderBy(x => x.Bundled).ToList(),
                         Lunch = Lunch.OrderBy(x => x.Bundled).ToList(),
@@ -245,8 +264,9 @@ namespace UTS_Portal.Controllers
                 int rowIndex = 1;
                 foreach (PreOrders item in data)
                 {
-                    Cscard cscard = _context.Cscard.Where(x => x.ParentId == item.UserCode).FirstOrDefault();
-                    Goods goods = _context.Goods.Where(x => x.Ref == item.CkCode).FirstOrDefault();
+                    Cscard cscard = _context.Cscard.Where(x => x.ParentId.Trim() == item.UserCode.Trim()).FirstOrDefault();
+                    if (cscard == null) continue;
+                    Goods goods = _context.Goods.Where(x => x.Ref.Trim() == item.CkCode.Trim()).FirstOrDefault();
                     Menus menus = _context.Menus.Where(x => x.MenuDate == item.OrderDate && x.ItemCode == item.ItemCode).FirstOrDefault();
                     Campus campus = _context.Campus.Where(x => x.CampusId.Trim() == cscard.CampusId.Trim()).FirstOrDefault();
 
