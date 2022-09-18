@@ -22,6 +22,26 @@ namespace UTS_Portal.Models
         [Column(TypeName = "date")]
         public DateTime MenuDate { get; set; }
         [Required]
+        [Column("User_Type")]
+        [StringLength(2)]
+        public string UserType { get; set; }
+        [Required]
+        [Column("Canteen_ID")]
+        [StringLength(5)]
+        public string CanteenId { get; set; }
+        [Required]
+        [Column("Cust_ID")]
+        [StringLength(5)]
+        public string CustId { get; set; }
+        [Required]
+        [Column("Plc_ID")]
+        [StringLength(5)]
+        public string PlcId { get; set; }
+        [Required]
+        [Column("Campus_ID")]
+        [StringLength(2)]
+        public string CampusId { get; set; }
+        [Required]
         [StringLength(30)]
         public string Category { get; set; }
         [Required]

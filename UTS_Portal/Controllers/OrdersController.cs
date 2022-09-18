@@ -303,7 +303,7 @@ namespace UTS_Portal.Controllers
             string html = "";
             html += "<label>Export Days: </label>";
             html += "<select class='custom-select mt-3 mb-3 ml-3' id='SelectDay' name='SelectDay' style='width: 160px;'>";
-            html += "<option value ='all'>All month</option>";
+            html += "<option value ='all'>Whole month</option>";
             foreach(var day in ListDays)
             {
                 html += "<option value ='" + day.ToString("dd/MM/yyyy") + "'>" + day.ToString("dd/MM/yyyy") + "</option>";

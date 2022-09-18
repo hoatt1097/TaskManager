@@ -19,5 +19,13 @@ namespace UTS_Portal.Models
         [StringLength(2000)]
         public string Images { get; set; }
         public bool Status { get; set; }
+        [Required]
+        [Column("CampusID")]
+        [StringLength(2)]
+        public string CampusId { get; set; }
+        [Column("StartDT", TypeName = "date")]
+        public DateTime StartDt { get; set; }
+        [Column("EndDT", TypeName = "date")]
+        public DateTime EndDt { get; set; }
     }
 }

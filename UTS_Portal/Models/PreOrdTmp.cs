@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UTS_Portal.Models
 {
-    public partial class PreOrders
+    public partial class PreOrdTmp
     {
         [Key]
         [StringLength(20)]

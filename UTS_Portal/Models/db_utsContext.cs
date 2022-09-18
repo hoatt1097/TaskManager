@@ -20,6 +20,7 @@ namespace UTS_Portal.Models
         }
 
         public virtual DbSet<Campus> Campus { get; set; }
+        public virtual DbSet<Crdtrans> Crdtrans { get; set; }
         public virtual DbSet<Cscard> Cscard { get; set; }
         public virtual DbSet<Faqs> Faqs { get; set; }
         public virtual DbSet<Feedbacks> Feedbacks { get; set; }
@@ -29,6 +30,10 @@ namespace UTS_Portal.Models
         public virtual DbSet<MenuInfos> MenuInfos { get; set; }
         public virtual DbSet<Menus> Menus { get; set; }
         public virtual DbSet<Posts> Posts { get; set; }
+        public virtual DbSet<PreOrdTmp> PreOrdTmp { get; set; }
+        public virtual DbSet<PreOrdTmpA> PreOrdTmpA { get; set; }
+        public virtual DbSet<PreOrdTmpM> PreOrdTmpM { get; set; }
+        public virtual DbSet<PreOrdTmpO> PreOrdTmpO { get; set; }
         public virtual DbSet<PreOrders> PreOrders { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Sysvar> Sysvar { get; set; }
@@ -63,6 +68,89 @@ namespace UTS_Portal.Models
                     .HasDefaultValueSql("('')");
             });
 
+            modelBuilder.Entity<Crdtrans>(entity =>
+            {
+                entity.HasKey(e => new { e.TransNum, e.TransCode, e.CardId, e.NodeId, e.GoodsId, e.Idx })
+                    .HasName("PK_CRDTRANS");
+
+                entity.Property(e => e.TransNum)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.TransCode)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.CardId)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.NodeId)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.GoodsId)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.CardId2)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.CrdType)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.CustId)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.ForexCys)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.PlcId)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Post)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Remark).HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Repast)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.RsCode)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.TranTime)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+            });
+
             modelBuilder.Entity<Cscard>(entity =>
             {
                 entity.HasKey(e => e.CardId)
@@ -74,6 +162,10 @@ namespace UTS_Portal.Models
                     .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.Address).HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Allergy1).HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Allergy2).HasDefaultValueSql("('')");
 
                 entity.Property(e => e.Barcode)
                     .IsUnicode(false)
@@ -318,8 +410,25 @@ namespace UTS_Portal.Models
                     .HasDefaultValueSql("('')");
             });
 
+            modelBuilder.Entity<MenuInfos>(entity =>
+            {
+                entity.Property(e => e.CampusId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
             modelBuilder.Entity<Menus>(entity =>
             {
+                entity.Property(e => e.CampusId)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.CanteenId)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
                 entity.Property(e => e.Category)
                     .IsUnicode(false)
                     .IsFixedLength()
@@ -331,6 +440,11 @@ namespace UTS_Portal.Models
                     .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.Class)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.CustId)
                     .IsUnicode(false)
                     .IsFixedLength()
                     .HasDefaultValueSql("('')");
@@ -350,6 +464,278 @@ namespace UTS_Portal.Models
                     .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.OriginalName).HasDefaultValueSql("('')");
+
+                entity.Property(e => e.PlcId)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.UserType)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
+            });
+
+            modelBuilder.Entity<PreOrdTmp>(entity =>
+            {
+                entity.HasKey(e => new { e.UserCode, e.OrderDate, e.ItemCode, e.RepastId })
+                    .HasName("PK_PreOrdTmp_1");
+
+                entity.Property(e => e.UserCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CampusId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CanteenId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CkCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Class)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CustId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModiTime)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModiUser)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.MonthYear)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.PlcId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Post)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.RepastTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.SubmitTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.TransNum)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<PreOrdTmpA>(entity =>
+            {
+                entity.HasKey(e => new { e.UserCode, e.OrderDate, e.ItemCode, e.RepastId })
+                    .HasName("PK_PreOrdTmp");
+
+                entity.Property(e => e.UserCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CampusId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CanteenId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CkCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Class)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CustId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModiTime)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModiUser)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.MonthYear)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.PlcId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Post)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.RepastTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.SubmitTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.TransNum)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<PreOrdTmpM>(entity =>
+            {
+                entity.HasKey(e => new { e.UserCode, e.OrderDate, e.ItemCode, e.RepastId });
+
+                entity.Property(e => e.UserCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CampusId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CanteenId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CkCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Class)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CustId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModiTime)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModiUser)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.MonthYear)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.PlcId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Post)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.RepastTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.SubmitTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.TransNum)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<PreOrdTmpO>(entity =>
+            {
+                entity.HasKey(e => new { e.UserCode, e.OrderDate, e.ItemCode, e.RepastId });
+
+                entity.Property(e => e.UserCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ItemCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CampusId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CanteenId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CkCode)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Class)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.CustId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModiTime)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ModiUser)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.MonthYear)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.PlcId)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Post)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.RepastTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.SubmitTm)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.TransNum)
+                    .IsUnicode(false)
+                    .IsFixedLength();
             });
 
             modelBuilder.Entity<PreOrders>(entity =>
@@ -363,6 +749,11 @@ namespace UTS_Portal.Models
                 entity.Property(e => e.ItemCode)
                     .IsUnicode(false)
                     .IsFixedLength();
+
+                entity.Property(e => e.CampusId)
+                    .IsUnicode(false)
+                    .IsFixedLength()
+                    .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.CanteenId)
                     .IsUnicode(false)

@@ -206,7 +206,8 @@ namespace UTS_Portal.Controllers
                     Sex = gender,
                     Address = user.Address,
                     Class = user.Class,
-                    ClassName = user.ClassName
+                    ClassName = user.ClassName,
+                    Information = user.Allergy1
                 };
                 ViewBag.MyProfile = myProfile;
             } 

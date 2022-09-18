@@ -160,6 +160,12 @@ namespace UTS_Portal.Models
         [StringLength(120)]
         public string Remark { get; set; }
         [Required]
+        [StringLength(250)]
+        public string Allergy1 { get; set; }
+        [Required]
+        [StringLength(250)]
+        public string Allergy2 { get; set; }
+        [Required]
         [Column("SIBLING")]
         [StringLength(120)]
         public string Sibling { get; set; }
