@@ -40,7 +40,7 @@ namespace UTS_Portal.Controllers
             string SelectBoxElement = BuildTxtMonth();
             ViewBag.SelectBoxElement = SelectBoxElement;
             
-            if (month != null)
+            if (month != null && month != "null")
             {
                 // Call data menu in month
                 DateTime date = DateTime.Parse(month + "/1");
@@ -53,9 +53,8 @@ namespace UTS_Portal.Controllers
 
                 // Check menu item data has data
                 ViewBag.HasMenuData = MenusByMonth.Count > 0 ? true : false;
+                ViewBag.CurrentMonth = month;
             }
-
-            ViewBag.CurrentMonth = month;
             return View();
         }
 
@@ -430,15 +429,26 @@ namespace UTS_Portal.Controllers
         }
         public string BuildTxtMonth()
         {
-            var MonthActive = _context.MenuInfos.OrderBy(x => x.Month).Where(x => x.Status == true)
-                .Select(x=> x.Month.ToString("MM/yyyy")).ToList();
+            var MonthActive = _context.MenuInfos
+                                        .Where(x => x.Status == true)
+                                        .Where(x => x.StartDt <= DateTime.Now)
+                                        .Where(x => x.EndDt >= DateTime.Now)
+                                        .OrderBy(x => x.Month)
+                                        .Select(x=> x.Month.ToString("MM/yyyy")).ToList();
 
             string selectElm = "<select class='custom-select' id='txtMonthSelect' name='txtMonthSelect'>";
-
-            foreach(var m in MonthActive)
+            if(MonthActive.Count == 0)
             {
-                selectElm += "<option value='" + m + "'>" + m + "</option>";
+                selectElm += "<option value='null'>Order time has expired. Please contact the canteen</option>";
             }
+            else
+            {
+                foreach (var m in MonthActive)
+                {
+                    selectElm += "<option value='" + m + "'>" + m + "</option>";
+                }
+            }
+            
             selectElm += "</select >";
 
             return selectElm;

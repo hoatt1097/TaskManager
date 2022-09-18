@@ -23,9 +23,9 @@ namespace UTS_Portal.Models
         [Column("CampusID")]
         [StringLength(2)]
         public string CampusId { get; set; }
-        [Column("StartDT", TypeName = "date")]
+        [Column("StartDT", TypeName = "datetime")]
         public DateTime StartDt { get; set; }
-        [Column("EndDT", TypeName = "date")]
+        [Column("EndDT", TypeName = "datetime")]
         public DateTime EndDt { get; set; }
     }
 }

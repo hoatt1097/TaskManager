@@ -110,6 +110,7 @@
                         <li> <a class="nav-link collapsed" asp-controller="Posts" asp-action="Index"> <i class="bi bi-circle"></i><span>Blogs</span> </a></li>
                         <li> <a class="nav-link collapsed" asp-controller="FAQs" asp-action="Index"> <i class="bi bi-circle"></i><span>FAQs</span> </a></li>
                         <li> <a class="nav-link collapsed" asp-controller="Feedbacks" asp-action="Index"> <i class="bi bi-circle"></i><span>Feedbacks</span> </a></li>
+                        <li class="nav-item @Html.IsSelected(controller: "Menus", action: "Index")"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="Index"> <i class="bi bi-circle"></i> <span>Menu</span> </a></li>
                     </ul>
                 </li>
             }
@@ -123,7 +124,7 @@
 
             @if (RoleName != "Parent")
             {
-                <li class="nav-item @Html.IsSelected(controller: "Menus", action: "Index")"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="Index"> <i class="bi bi-layout-text-window-reverse"></i> <span>Menu</span> </a></li>
+                
             }
 
             <li class="nav-item @Html.IsSelected(controller: "Menus", action: "ImagesView")"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="ImagesView"> <i class="bi bi-card-image"></i> <span>Menu Images</span> </a></li>

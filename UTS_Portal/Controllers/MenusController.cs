@@ -102,7 +102,7 @@ namespace UTS_Portal.Controllers
         [ValidateAntiForgeryToken]
         [RequestFormLimits(MultipartBodyLengthLimit = 268435456)]
         [RequestSizeLimit(268435456)]
-        public async Task<IActionResult> Create([Bind("Id,Month,Images,Status")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> fThumbs)
+        public async Task<IActionResult> Create([Bind("Id,Month,Images,Status, CampusId, StartDt, EndDt")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> fThumbs)
         {
             if (ModelState.IsValid)
             {
@@ -193,7 +193,7 @@ namespace UTS_Portal.Controllers
             string SelectBoxElement = BuildTxtMonth();
             ViewBag.SelectBoxElement = SelectBoxElement;
 
-            if (month != null)
+            if (month != null && month != "null")
             {
                 // Get all images in folder
                 var menuInfos = _context.MenuInfos.ToList().Where(x => x.Month.ToString("MM/yyyy") == month && x.Status == true).FirstOrDefault();
@@ -204,9 +204,8 @@ namespace UTS_Portal.Controllers
                 ViewBag.MenuId = menuInfos.Id;
                 ViewBag.CurrentMonth = menuInfos.Month.ToString("MM/yyyy");
                 ViewBag.MenuFileNames = Utilities.GetAllFiles("menus/" + menuInfos.Month.ToString("MMyyyy"));
+                ViewBag.CurrentMonth = month;
             }
-
-            ViewBag.CurrentMonth = month;
             return View();
         }
 
@@ -215,7 +214,7 @@ namespace UTS_Portal.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Month,Images,Status")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> fThumbs)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Month,Images,Status,CampusId, StartDt, EndDt")] MenuInfos menuInfos, IEnumerable<Microsoft.AspNetCore.Http.IFormFile> fThumbs)
         {
             if (id != menuInfos.Id)
             {
@@ -513,14 +512,25 @@ namespace UTS_Portal.Controllers
 
         public string BuildTxtMonth()
         {
-            var MonthActive = _context.MenuInfos.OrderBy(x => x.Month).Where(x => x.Status == true)
-                .Select(x => x.Month.ToString("MM/yyyy")).ToList();
+            var MonthActive = _context.MenuInfos
+                                        .Where(x => x.Status == true)
+                                        .Where(x => x.StartDt <= DateTime.Now)
+                                        .Where(x => x.EndDt >= DateTime.Now)
+                                        .OrderBy(x => x.Month)
+                                        .Select(x => x.Month.ToString("MM/yyyy")).ToList();
 
             string selectElm = "<select class='custom-select' id='txtMonthSelect' name='txtMonthSelect'>";
 
-            foreach (var m in MonthActive)
+            if (MonthActive.Count == 0)
             {
-                selectElm += "<option value='" + m + "'>" + m + "</option>";
+                selectElm += "<option value='null'>Order time has expired. Please contact the canteen</option>";
+            }
+            else
+            {
+                foreach (var m in MonthActive)
+                {
+                    selectElm += "<option value='" + m + "'>" + m + "</option>";
+                }
             }
             selectElm += "</select >";
 

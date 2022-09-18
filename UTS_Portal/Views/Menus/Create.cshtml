@@ -20,10 +20,25 @@
                 <h5 class="card-title m-0 pt-1 pb-2">Create new menu</h5>
                 <form class="row" asp-action="Create" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="CampusId" value="00"/>
+                    <div class="col-md-12 mb-2">
+                        <label class="control-label">Campus</label>
+                        <input class="form-control" value="UTS Van Lang Complex" disabled />
+                    </div>
                     <div class="col-md-12 mb-2">
                         <label asp-for="Month" class="control-label"></label>
                         <input asp-for="Month" class="form-control" type="month" />
                         <span asp-validation-for="Month" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="control-label">Date Start</label>
+                        <input asp-for="StartDt" class="form-control" type="date" />
+                        <span asp-validation-for="StartDt" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="control-label">End Start</label>
+                        <input asp-for="EndDt" class="form-control" type="date" />
+                        <span asp-validation-for="EndDt" class="text-danger"></span>
                     </div>
                     <div class="col-md-12 mb-2">
                         <label asp-for="Images" class="control-label"></label>
