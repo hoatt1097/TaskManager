@@ -85,7 +85,7 @@
 
             .main-content a {
                 font-size: 18px !important;
-                line-height: 0px !important;
+                line-height: 25px !important;
             }
 
             .main-content p {
@@ -138,7 +138,7 @@
                             {
                                 <div class="clearfix mb-4">
                                     <div class="image">
-                                        <img src="~/images/news/@item.Thumb" alt="" />
+                                        <a href="@Url.Action("Details", "Posts")/@item.Alias"><img src="~/images/news/@item.Thumb" alt="" /></a>
                                     </div>
                                     <div class="main-content">
                                         <a href="@Url.Action("Details", "Posts")/@item.Alias">@item.Title</a>
@@ -165,7 +165,7 @@
                         @foreach (var item in ListPopular)
                         {
                             <div class="post-item clearfix">
-                                <img src="~/images/news/@item.Thumb" style="height: 60px">
+                                <a href="@Url.Action("Details", "Posts")/@item.Alias"><img src="~/images/news/@item.Thumb" style="height: 60px"></a>
                                 <h4> <a href="@Url.Action("Details", "Posts")/@item.Alias">@item.Title</a> </h4>
                                 <p>@item.Scontents</p>
                             </div>

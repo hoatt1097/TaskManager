@@ -276,9 +276,9 @@ namespace UTS_Portal.Controllers
                     row.CreateCell(columns.IndexOf("Submit date")).SetCellValue(item.SubmitDt.ToString("dd/MM/yyyy")); // Submit date
                     row.CreateCell(columns.IndexOf("Submit time")).SetCellValue(item.SubmitTm?.ToString()); // Submit time
                     row.CreateCell(columns.IndexOf("Account Code")).SetCellValue(item.UserCode?.Trim()); // Account Code
-                    row.CreateCell(columns.IndexOf("Canteen Code")).SetCellValue(item.CanteenId?.Trim()); // Canteen Code
+                    row.CreateCell(columns.IndexOf("Canteen Code")).SetCellValue(cscard.CardId?.Trim()); // Canteen Code
                     row.CreateCell(columns.IndexOf("Account name")).SetCellValue(cscard.Name?.Trim()); // Account name
-                    row.CreateCell(columns.IndexOf("Class/Title")).SetCellValue(item.Class?.Trim()); // Class/Title
+                    row.CreateCell(columns.IndexOf("Class/Title")).SetCellValue(cscard.ClassName?.Trim()); // Class/Title
                     row.CreateCell(columns.IndexOf("Period")).SetCellValue(item.MonthYear?.Trim()); // Period
                     row.CreateCell(columns.IndexOf("Menu date")).SetCellValue(item.OrderDate.ToString("dd/MM/yyyy")); // Menu date
                     row.CreateCell(columns.IndexOf("Week")).SetCellValue(item.Week?.ToString()); // Week
