@@ -79,7 +79,7 @@ namespace UTS_Portal.Controllers
             var SelectBoxOrderMonth = BuildSelectBoxOrderMonth(month);
             ViewBag.SelectBoxOrderMonth = SelectBoxOrderMonth;
 
-            if (parentId?.Trim() != null && month?.Trim() != null)
+            if (!string.IsNullOrEmpty(parentId) && !string.IsNullOrEmpty(month))
             {
                 List<OrderSubmit> listOrderSubmit = new List<OrderSubmit>();
 

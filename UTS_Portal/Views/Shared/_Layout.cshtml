@@ -124,7 +124,7 @@
 
             @if (RoleName != "Parent")
             {
-                
+
             }
 
             <li class="nav-item @Html.IsSelected(controller: "Menus", action: "ImagesView")"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="ImagesView"> <i class="bi bi-card-image"></i> <span>Menu Images</span> </a></li>
@@ -140,17 +140,22 @@
                 <li class="nav-item @Html.IsSelected(controller: "Orders", action: "History")"> <a class="nav-link collapsed" asp-controller="Orders" asp-action="History"> <i class="bi bi-clock-history"></i> <span>Order History</span> </a></li>
             }
 
-            @*<li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-bar-chart"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i> </a>
-            <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li> <a href="#"> <i class="bi bi-circle"></i><span>Chart.js</span> </a></li>
-                <li> <a href="#"> <i class="bi bi-circle"></i><span>ApexCharts</span> </a></li>
-                <li> <a href="#"> <i class="bi bi-circle"></i><span>ECharts</span> </a></li>
-                <li> <a href="#"> <i class="bi bi-circle"></i><span>Chart.js</span> </a></li>
-                <li> <a href="#"> <i class="bi bi-circle"></i><span>ApexCharts</span> </a></li>
-                <li> <a href="#"> <i class="bi bi-circle"></i><span>ECharts</span> </a></li>
-            </ul>
-        </li>*@
+            @if (RoleName == "Parent")
+            {
+                <li class="nav-item @Html.IsSelected(controller: "Report", action: "SpendingReport")"> <a class="nav-link collapsed" asp-controller="Report" asp-action="SpendingReport" asp-route-parentId="@parentCode.Trim()"> <i class="bi bi-bar-chart"></i> <span>Reports</span> </a></li>
+            }
+            else
+            {
+                <li class="nav-item @Html.IsSelected(controller: "Report", action: "SpendingReport")">
+                    <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-bar-chart"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i> </a>
+                    <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        <li> <a asp-controller="Report" asp-action="SpendingReport"> <i class="bi bi-circle"></i><span>Customer Spending Report</span> </a></li>
+                        <li> <a asp-controller="Report" asp-action="SaleReport"> <i class="bi bi-circle"></i><span>Sale Report</span> </a></li>
+                        <li> <a asp-controller="Report" asp-action="SaleReport"> <i class="bi bi-circle"></i><span>Sale Report2</span> </a></li>
+                    </ul>
+                </li>
+            }
+
             <li class="nav-item @Html.IsSelected(controller: "FAQs", action: "List")"> <a class="nav-link collapsed" asp-controller="FAQs" asp-action="List"> <i class="bi bi-question-circle"></i> <span>F.A.Q</span> </a></li>
             <li class="nav-item @Html.IsSelected(controller: "Feedbacks", action: "Create")"> <a class="nav-link collapsed" asp-controller="Feedbacks" asp-action="Create"> <i class="bi bi-envelope"></i> <span>Contact</span> </a></li>
         </ul>

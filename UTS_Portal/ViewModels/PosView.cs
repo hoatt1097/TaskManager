@@ -15,5 +15,6 @@ namespace UTS_Portal.ViewModels
         public string ClassName { get; set; }
         public string CardId { get; set; }
         public string Password { get; set; }
+        public string Bal_Amount { get; set; }
     }
 }

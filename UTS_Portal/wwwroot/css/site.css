@@ -90,6 +90,29 @@
 .preorder-show .col-md-6 {
     margin-bottom: 30px;
 }
+
+button.dt-button {
+    padding: 5px 10px !important;
+}
+
+table thead tr {
+    background-color: wheat;
+}
+
+.dataTables_scrollHeadInner table th, table td {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+.dataTables_scroll .dataTables_scrollBody {
+    height: auto !important;
+    min-height: 200px !important;
+    max-height: 800px !important;
+}
+
+.pagination {
+    margin-top: 20px !important;
+}
 /* Iphone */
 @media only screen and (max-width: 414px) {
     main {

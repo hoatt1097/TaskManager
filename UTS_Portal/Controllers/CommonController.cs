@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using UTS_Portal.Models;
@@ -22,7 +23,8 @@ namespace UTS_Portal.Controllers
         {
             var parentDB = _context.Cscard.AsNoTracking().ToList();
             List<ParentView> parentViews = new List<ParentView>();
-            foreach(var x in parentDB)
+            CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");   // try with "en-US"
+            foreach (var x in parentDB)
             {
                 var newP = new ParentView
                 {
@@ -32,8 +34,9 @@ namespace UTS_Portal.Controllers
                     Password = x.Password.Trim(),
                     ClassName = x.ClassName.Trim(),
                     CardId = x.CardId.Trim(),
-                    Phone = x.Phone.Trim()
-                };
+                    Phone = x.Phone.Trim(),
+                    Bal_Amount = x.BalAmount.ToString("#,###", cul.NumberFormat)
+            };
                 parentViews.Add(newP);
             }
 
