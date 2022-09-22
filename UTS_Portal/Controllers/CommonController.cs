@@ -19,7 +19,7 @@ namespace UTS_Portal.Controllers
             _context = context;
         }
 
-        public List<ParentView> GetAllParent(string itemSearchText)
+        public List<ParentView> GetAllParent(string itemSearchText, string? type)
         {
             var parentDB = _context.Cscard.AsNoTracking().ToList();
             List<ParentView> parentViews = new List<ParentView>();
@@ -36,12 +36,29 @@ namespace UTS_Portal.Controllers
                     CardId = x.CardId.Trim(),
                     Phone = x.Phone.Trim(),
                     Bal_Amount = x.BalAmount.ToString("#,###", cul.NumberFormat)
-            };
+                };
                 parentViews.Add(newP);
             }
 
-            return parentViews.Where(x => x.Name.Contains(itemSearchText, StringComparison.OrdinalIgnoreCase) || x.ParentId.Contains(itemSearchText, StringComparison.OrdinalIgnoreCase))
+            var data = parentViews.Where(x => x.Name.Contains(itemSearchText, StringComparison.OrdinalIgnoreCase) || x.ParentId.Contains(itemSearchText, StringComparison.OrdinalIgnoreCase))
                 .Take(10).ToList();
+            if(!string.IsNullOrEmpty(type) && type.ToUpper() == "ALL")
+            {
+                var newP = new ParentView
+                {
+                    ParentId = "All",
+                    Name = "All user",
+                    Email = "All",
+                    Password = "",
+                    ClassName = "",
+                    CardId = "",
+                    Phone = "",
+                    Bal_Amount = ""
+                };
+                data.Insert(0, newP);
+            }
+
+            return data;
         }
     }
 }

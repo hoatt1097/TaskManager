@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace UTS_Portal.ViewModels
 {
-    public class SpendingReport
+    public class SaleDetail
     {
+        public String Campus { get; set; }
         public String Date { get; set; }
         public String Time { get; set; }
         public String ReceiptNumber { get; set; }
@@ -14,6 +15,7 @@ namespace UTS_Portal.ViewModels
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal Amount { get; set; }
+        public String GrpName { get; set; }
         public String CkCode { get; set; }
         public String ItemNameVN { get; set; }
         public String ItemNameEN { get; set; }
