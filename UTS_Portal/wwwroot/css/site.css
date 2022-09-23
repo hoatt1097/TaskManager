@@ -95,10 +95,6 @@ button.dt-button {
     padding: 5px 10px !important;
 }
 
-table thead tr {
-    background-color: wheat;
-}
-
 .dataTables_scrollHeadInner table th, table td {
     padding-top: 4px !important;
     padding-bottom: 4px !important;

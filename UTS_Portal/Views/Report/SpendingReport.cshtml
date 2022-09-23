@@ -8,6 +8,7 @@
     string StudentName = ViewBag.StudentName;
     string RoleName = User.Claims.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value;
     string isDisabled = RoleName == "Parent" ? "disabled" : "";
+    string CampusName = ViewBag.CampusName;
 
     string Bal_Amount = ViewBag.Bal_Amount;
 }
@@ -32,8 +33,16 @@
                 <div class="form-row">
                     <label class="col-sm-4 font-weight-bold">Campus:</label>
                     <div class="col-sm-8">
-                        <select class="custom-select" id="txtCampusList" name="txtCampusList" asp-items="ViewBag.CampusList" style="width: 300px">
-                        </select>
+                        @if (RoleName != "Parent")
+                        {
+                            <select class="custom-select" id="txtCampusList" name="txtCampusList" asp-items="ViewBag.CampusList" style="width: 300px">
+                            </select>
+                        }
+                        else
+                        {
+                            @CampusName
+                        }
+                        
                     </div>
                 </div>
                 <div class="form-row mt-2">
@@ -204,6 +213,7 @@
                 "scrollX": true,
                 "scrollY": '34vh',
                 "order": [],
+                "pageLength": 50,
                 "language": {
                     "emptyTable" : "No data found."
                 },

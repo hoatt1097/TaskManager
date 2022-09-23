@@ -40,6 +40,14 @@ namespace UTS_Portal.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
+            else
+            {
+                if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("VIEW_REPORT"))
+                {
+                    _notyfService.Error("You have no permission!");
+                    return RedirectToAction("Index", "Home");
+                }
+            }
 
             var campusList = new List<SelectListItem>();
             var campus = _context.Campus.ToList();
@@ -70,6 +78,12 @@ namespace UTS_Portal.Controllers
                 else
                 {
                     Cscard cscard = _context.Cscard.Where(x => x.ParentId.Trim() == parentId.Trim()).FirstOrDefault();
+
+                    Campus currentCampus = _context.Campus.Where(c => c.CampusId == cscard.CampusId).FirstOrDefault();
+                    Campus campusDefault = _context.Campus.Where(c => c.CampusId == "00").FirstOrDefault();
+                    var campusName = currentCampus != null ? currentCampus.Description : campusDefault.Description;
+                    ViewBag.CampusName = campusName;
+
                     if (cscard != null)
                     {
                         ViewData["Bal_Amount"] = cscard.BalAmount.ToString("#,###", cul.NumberFormat);
@@ -150,6 +164,12 @@ namespace UTS_Portal.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("VIEW_REPORT"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction("Index", "Home");
+            }
+
             var campusList = new List<SelectListItem>();
             var campus = _context.Campus.ToList();
             foreach (var item in campus)
@@ -227,6 +247,11 @@ namespace UTS_Portal.Controllers
                 _notyfService.Error("User has not permission!");
                 return RedirectToAction("Index", "Home");
             }
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("VIEW_REPORT"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction("Index", "Home");
+            }
 
             var campusList = new List<SelectListItem>();
             var campus = _context.Campus.ToList();
@@ -294,6 +319,11 @@ namespace UTS_Portal.Controllers
             if (currentUser.RoleName?.Trim() == "Parent")
             {
                 _notyfService.Error("User has not permission!");
+                return RedirectToAction("Index", "Home");
+            }
+            if (!currentUser.Permissions.Contains("ADMIN") && !currentUser.Permissions.Contains("VIEW_REPORT"))
+            {
+                _notyfService.Error("You have no permission!");
                 return RedirectToAction("Index", "Home");
             }
 

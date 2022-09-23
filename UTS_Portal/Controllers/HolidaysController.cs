@@ -6,6 +6,7 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using UTS_Portal.Helpers;
 using UTS_Portal.Models;
 using UTS_Portal.ViewModels;
 
@@ -85,6 +86,12 @@ namespace UTS_Portal.Controllers
         // GET: Holidays/Create
         public IActionResult Create()
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
             return View();
         }
 
@@ -128,6 +135,12 @@ namespace UTS_Portal.Controllers
         // GET: Holidays/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN"))
+            {
+                _notyfService.Error("You have no permission!");
+                return RedirectToAction(nameof(Index));
+            }
             if (id == null)
             {
                 return NotFound();
@@ -198,6 +211,11 @@ namespace UTS_Portal.Controllers
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(string month)
         {
+            var currentUser = UserHelper.GetCurrentUser(HttpContext);
+            if (!currentUser.Permissions.Contains("ADMIN"))
+            {
+                return Json(new { success = true, message = "You have no permission!" });
+            }
             var holidays = _context.Holidays.ToList().Where(x => x.Day.ToString("MM/yyyy") == month).ToList();
 
             foreach(var holiday in holidays)

@@ -78,9 +78,10 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        @if (RoleName != "Parent") { 
+                        @if (RoleName != "Parent")
+                        {
                             <li> <a class="dropdown-item d-flex align-items-center" href="@Url.Action("MyProfile", "Account")?tab=change-password"> <i class="bi bi-gear"></i> <span>Change Password</span> </a></li>
-                        }  
+                        }
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -99,13 +100,14 @@
 
             @if (RoleName != "Parent")
             {
-                <li class="nav-item @Html.IsSelected(controller: "Users") @Html.IsSelected(controller: "Roles") @Html.IsSelected(controller: "FAQs") @Html.IsSelected(controller: "Posts") @Html.IsSelected(controller: "Feedbacks") @Html.IsSelected(controller: "Menus")">
+                <li class="nav-item @Html.IsSelected(controller: "Users") @Html.IsSelected(controller: "Roles") @Html.IsSelected(controller: "FAQs") @Html.IsSelected(controller: "Posts") @Html.IsSelected(controller: "Feedbacks") @Html.IsSelected(controller: "Menus") @Html.IsSelected(controller: "Holidays")">
                     <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-menu-button-wide"></i><span>Administration</span><i class="bi bi-chevron-down ms-auto"></i> </a>
                     <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                         @if (Permissions.Contains("ADMIN"))
                         {
                             <li> <a class="nav-link collapsed" asp-controller="Users" asp-action="Index"> <i class="bi bi-circle"></i><span>Users</span> </a></li>
                             <li> <a class="nav-link collapsed" asp-controller="Roles" asp-action="Index"> <i class="bi bi-circle"></i><span>Roles</span> </a></li>
+                            <li> <a class="nav-link collapsed" asp-controller="Holidays" asp-action="Index"> <i class="bi bi-circle"></i><span>Holidays</span> </a></li>
                         }
                         <li> <a class="nav-link collapsed" asp-controller="Posts" asp-action="Index"> <i class="bi bi-circle"></i><span>Blogs</span> </a></li>
                         <li> <a class="nav-link collapsed" asp-controller="FAQs" asp-action="Index"> <i class="bi bi-circle"></i><span>FAQs</span> </a></li>
@@ -113,11 +115,6 @@
                         <li class="nav-item @Html.IsSelected(controller: "Menus", action: "Index")"> <a class="nav-link collapsed" asp-controller="Menus" asp-action="Index"> <i class="bi bi-circle"></i> <span>Menu</span> </a></li>
                     </ul>
                 </li>
-            }
-
-            @if (RoleName != "Parent")
-            {
-                <li class="nav-item @Html.IsSelected(controller: "Holidays")"> <a class="nav-link collapsed" asp-controller="Holidays" asp-action="Index"> <i class="bi bi-file-earmark"></i> <span>Holidays</span> </a></li>
             }
 
             <li class="nav-item @Html.IsSelected(controller: "Posts", action: "List")"> <a class="nav-link collapsed" asp-controller="Posts" asp-action="List"> <i class="bi bi-collection"></i> <span>Blogs</span> </a></li>
@@ -146,15 +143,18 @@
             }
             else
             {
-                <li class="nav-item @Html.IsSelected(controller: "Report")">
-                    <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-bar-chart"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i> </a>
-                    <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        <li> <a asp-controller="Report" asp-action="SpendingReport"> <i class="bi bi-circle"></i><span>Customer Spending Report</span> </a></li>
-                        <li> <a asp-controller="Report" asp-action="SaleDetail"> <i class="bi bi-circle"></i><span>Sale Detail</span> </a></li>
-                        <li> <a asp-controller="Report" asp-action="SaleCategory"> <i class="bi bi-circle"></i><span>Sale by Campus & Item category</span> </a></li>
-                        <li> <a asp-controller="Report" asp-action="SaleMeal"> <i class="bi bi-circle"></i><span>Sale by Campus & Meal</span> </a></li>
-                    </ul>
-                </li>
+                @if (Permissions.Contains("ADMIN") || Permissions.Contains("VIEW_REPORT"))
+                {
+                    <li class="nav-item @Html.IsSelected(controller: "Report")">
+                        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-bar-chart"></i><span>Reports</span><i class="bi bi-chevron-down ms-auto"></i> </a>
+                        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                            <li> <a asp-controller="Report" asp-action="SpendingReport"> <i class="bi bi-circle"></i><span>Customer Spending Report</span> </a></li>
+                            <li> <a asp-controller="Report" asp-action="SaleDetail"> <i class="bi bi-circle"></i><span>Sale Detail</span> </a></li>
+                            <li> <a asp-controller="Report" asp-action="SaleCategory"> <i class="bi bi-circle"></i><span>Sale by Campus & Item category</span> </a></li>
+                            <li> <a asp-controller="Report" asp-action="SaleMeal"> <i class="bi bi-circle"></i><span>Sale by Campus & Meal</span> </a></li>
+                        </ul>
+                    </li>
+                }
             }
 
             <li class="nav-item @Html.IsSelected(controller: "FAQs", action: "List")"> <a class="nav-link collapsed" asp-controller="FAQs" asp-action="List"> <i class="bi bi-question-circle"></i> <span>F.A.Q</span> </a></li>
