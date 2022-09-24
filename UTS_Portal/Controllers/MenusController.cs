@@ -457,7 +457,7 @@ namespace UTS_Portal.Controllers
                         var MonthYear = MonthImport;
                         /*var Week = (int?)currentRow.GetCell(1).NumericCellValue;
                         var Dow = (int?)currentRow.GetCell(2).NumericCellValue;*/
-                        var MenuDate = DateTime.ParseExact(currentRow.GetCell(3)?.ToString(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        var MenuDate = DateTime.ParseExact(currentRow.GetCell(3)?.ToString(), "dd-MMM-yyyy", CultureInfo.InvariantCulture);
                         var Category = currentRow.GetCell(4).ToString();
                         var ItemCode = goods != null ? goods.GoodsId : "";
                         var OriginalName = goods != null ? goods.OtherName : currentRow.GetCell(7).ToString();
