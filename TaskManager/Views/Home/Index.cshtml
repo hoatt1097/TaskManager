@@ -1,0 +1,901 @@
+﻿@using TaskManager.ViewModels
+@{
+    ViewData["Title"] = "Home Page";
+    TableV tableV = ViewBag.TableV;
+    string tableMode = ViewBag.tableMode;
+    List<ProjectViewM> projectViews = ViewBag.projectViews;
+    List<UserViewM> userViews = ViewBag.userViews;
+    List<UserViewM> assignees = ViewBag.assignees;
+    FilterViewM filterViewM = ViewBag.filterViewM;
+    //string parentCode = User.Claims.FirstOrDefault(x => x.Type.Equals("Code", StringComparison.OrdinalIgnoreCase))?.Value;
+    //string RoleName = User.Claims.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value;
+}
+@section Styles {
+    <style>
+        td.parent-row {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            font-size: 14px;
+        }
+    </style>
+}
+
+<!-- <h1 class="display-4">Collapsing Sidebar Menu</h1> -->
+
+<!-- Project section -->
+<div class="css-section d-none" id="project-section">
+    <div class="form-inline align-items-center">
+    <label class="form-label">Action*:</label>
+    <select class="form-control custom-input mr-2" id="projectAction">
+        <option value="CREATE">New</option>
+        <option value="UPDATE">Update</option>
+        <option value="DELETE">Delete</option>
+    </select>
+
+    <label class="form-label">Project*:</label> <br>
+    <input type="text" class="form-control custom-input-nowidth mr-2 searchProject" id="searchProject" placeholder="Type to create new or update ...">
+
+    <label class="form-label">Status*:</label>
+    <select class="form-control custom-input mr-3" id="projectStatus">
+        <option value="OPEN">Open</option>
+        <option value="ON DISCUSSING">On discussing</option>
+        <option value="FUTURE">Future</option>
+        <option value="CLOSED">Closed</option>
+    </select>
+
+    <button class="btn btn-primary mr-2 custom-input" id="addproject">Action</button>
+    </div>
+</div>
+<!-- Project section -->
+
+<!-- Filter section -->
+<div class="css-section d-none" id="filter-section">
+    <div class="d-flex">
+    <div >
+        <div>
+             <label class="form-label mr-2"><b>Project</b></label>
+                <input 
+                    type="checkbox" 
+                    name="filter-project" 
+                    value="" 
+                    id="select-all-project" 
+                    @(filterViewM.Project != null && filterViewM.Project.First() == "all" ?"checked='checked'":"")
+                > Select All
+
+                @foreach (var p in projectViews)
+                { 
+                    @if(p.Status != "CLOSED") {
+                        <input 
+                            type="checkbox" 
+                            name="filter-project" 
+                            value="@p.Id" 
+                            data-active="@p.Active" 
+                            class="filter-checkbox"
+                             @(filterViewM.Project != null && (filterViewM.Project.First() == "all" || filterViewM.Project.Contains(@p.Id.ToString())) ? "checked='checked'" : "")
+                        > 
+                            <span>@p.Name</span>
+                    }
+                    else {
+                        <input 
+                            type="checkbox" 
+                            name="filter-project" 
+                            value="@p.Id" 
+                            data-active="@p.Active" 
+                            class="filter-checkbox ac"
+                             @(filterViewM.Project != null && (filterViewM.Project.First() == "all" || filterViewM.Project.Contains(@p.Id.ToString())) ? "checked='checked'" : "")
+                        > 
+                            <span class="red">@p.Name</span>
+                    }
+                }
+        </div>
+  
+        <div>
+            <label class="form-label mr-2"><b>Assignee</b></label>
+            <input 
+                type="checkbox" name="filter-user" value="" id="select-all-assignee"
+                 @(filterViewM.Assignee != null && filterViewM.Assignee.First() == "all" ?"checked='checked'":"")
+            > Select All 
+            @foreach (var p in userViews)
+            { 
+                @if(p.Active) {
+                    <input 
+                        type="checkbox" 
+                        name="filter-user" 
+                        value="@p.Id" 
+                        data-active="@p.Active" 
+                        class="filter-checkbox"
+                        @(filterViewM.Assignee != null && (filterViewM.Assignee.First() == "all" || filterViewM.Assignee.Contains(@p.Id.ToString())) ? "checked='checked'" : "")
+                    > <span>@p.DisplayName</span>
+                }
+                else {
+                    <input 
+                        type="checkbox" 
+                        name="filter-user" 
+                        value="@p.Id" 
+                        data-active="@p.Active" 
+                        class="filter-checkbox ac"
+                        @(filterViewM.Assignee != null && (filterViewM.Assignee.First() == "all" || filterViewM.Assignee.Contains(@p.Id.ToString())) ? "checked='checked'" : "")
+                    > <span class="red">@p.DisplayName</span>
+                }
+                
+            }
+        </div>
+
+        <div>
+        <label class="form-label mr-2"><b>Task status</b></label>
+        <input type="checkbox" name="filter-taskstatus" value="" id="select-all-taskstatus" @(filterViewM.TaskStatus != null && filterViewM.TaskStatus.First() == "all" ?"checked='checked'":"")> Select All 
+
+        <input 
+            type="checkbox" name="filter-taskstatus" value="OPEN" class="filter-checkbox" 
+            @(filterViewM.TaskStatus != null && (filterViewM.TaskStatus.First() == "all" || filterViewM.TaskStatus.Contains("OPEN")) ? "checked='checked'" : "")
+            > Open 
+        <input 
+            type="checkbox" name="filter-taskstatus" value="IN PROGRESS" class="filter-checkbox"
+            @(filterViewM.TaskStatus != null && (filterViewM.TaskStatus.First() == "all" || filterViewM.TaskStatus.Contains("IN PROGRESS")) ? "checked='checked'" : "")
+            > In Progress 
+        <input 
+            type="checkbox" name="filter-taskstatus" value="WAITING APPROVAL" class="filter-checkbox"
+            @(filterViewM.TaskStatus != null && (filterViewM.TaskStatus.First() == "all" || filterViewM.TaskStatus.Contains("WAITING APPROVAL")) ? "checked='checked'" : "")
+            > Waiting Approval 
+        <input 
+            type="checkbox" name="filter-taskstatus" value="WAITING USER" class="filter-checkbox"
+            @(filterViewM.TaskStatus != null && (filterViewM.TaskStatus.First() == "all" || filterViewM.TaskStatus.Contains("WAITING USER")) ? "checked='checked'" : "")
+            > Waiting User 
+        <input 
+            type="checkbox" name="filter-taskstatus" value="DONE" class="filter-checkbox"
+            @(filterViewM.TaskStatus != null && (filterViewM.TaskStatus.First() == "all" || filterViewM.TaskStatus.Contains("DONE")) ? "checked='checked'" : "")
+            > Done
+        </div>
+    </div>
+    <button class="btn btn-primary ml-5 custom-input filter" data-action="FILTER">Apply</button>
+    <button class="btn btn-primary ml-5 custom-input filter" data-action="CLEAR">Clear</button>
+    </div>
+</div>
+<!-- Project section -->
+
+<div class="">
+    <table class="table table-striped">
+        <tbody>
+        <tr>
+            <td class="child-part">
+            <table class="table table-task ">
+                <thead>
+                <tr>
+                    @if(tableMode == "Normal") {
+                        <th class="index">#</th>
+                        <th class="assignee">PIC</th>
+                        <th class="subject">Subject</th>
+                        <th class="status">Status</th>
+                        <th class="udpatetime">Update Time</th>
+                        <th class="duedate">Start date</th>
+                        <th class="per-progress">% Done</th>
+                        <th class="duedate">Due date</th>
+                        <th class="ticket">Ticket</th>
+                    } else {
+                        <th class="index">#</th>
+                        <th class="assignee">Assignee</th>
+                        <th class="subject w3">Subject</th>
+                        <th class="description w4">Description</th>
+                        <th class="description">Next Action</th>
+                    }
+                </tr>
+                </thead>
+            </table>
+            </td>
+        </tr>
+        
+         @foreach (var project in tableV.Projects)
+         {
+                var projectId = @project.Id;
+                <tr class="clickable-row" data-target="#row@(projectId)-child" data-row="#row@(projectId)-icon">
+                    <td class="parent-row">
+                    <span><i id="row@(projectId)-icon" class="fa fa-minus"></i></span>
+                        @project.Name
+                    </td>
+                </tr>
+                <tr>
+                    <td id="row@(projectId)-child" class="child-part">
+                    <table class="table table-task">
+                        <tbody>
+                            @foreach (var t in project.Tasks)
+                            {
+                                @if(tableMode == "Normal") {
+                                    <tr data-id="@t.Id">
+                                        <td class="index">@t.Index</td>
+                                        <td class="assignee">@t.Pic</td>
+                                        <td class="subject editable">@t.Subject</td>
+                                        <td class="status">@t.Status</td>
+                                        <td class="udpatetime">@t.UpdateTime</td>
+                                        <td class="duedate">@t.StartDate</td>
+                                        <td class="per-progress">@t.Progress%</td>
+                                        <td class="duedate">@t.DueDate</td>
+                                         <td class="ticket">@t.HelpdeskTicket</td>
+                                    </tr>   
+                                }
+                                else {
+                                    <tr data-id="@t.Id">
+                                        <td class="index">@t.Index</td>
+                                        <td class="assignee">@t.Pic</td>
+                                        <td class="subject editable w3">@t.Subject</td>
+                                        <td class="description editable w4">@Html.Raw(@t.Description)</td>
+                                        <td class="description editable">@Html.Raw(@t.Action)</td>
+                                    </tr>
+                                }
+                                 
+                            }    
+                        </tbody>
+                      
+                    </table>
+                    </td>
+                </tr> 
+         } 
+        </tbody>
+    </table>
+
+    <!-- Dropdown menu cho mỗi hàng -->
+    <!-- --------------- -->
+    <ul class="context-menu dropdown-menu" id="contextMenu">
+        <li class="dropdown-item task-detail">Detail</li>
+        <li class="dropdown-item">Comment</li>
+              
+        <div class="dropdown-divider"></div>
+
+        <li class="action dropdown-item">Status
+            <!-- Dropdown menu cho tùy chọn "Open" -->
+            <ul class="context-menu sub-menu dropdown-menu" id="subMenuOpen">
+            <li class="action dropdown-item cus-dropdown-item" data-type="status" data-value="Open" data-id="OPEN">Open</li>
+            <li class="action dropdown-item cus-dropdown-item" data-type="status" data-value="In Progress" data-id="IN PROGRESS">In Progress</li>
+            <li class="action dropdown-item cus-dropdown-item" data-type="status" data-value="Waiting Approval" data-id="WAITING APPROVAL">Waiting Approval</li>
+            <li class="action dropdown-item cus-dropdown-item" data-type="status" data-value="Waiting User" data-id="WAITING USER">Waiting User</li>
+            <li class="action dropdown-item cus-dropdown-item" data-type="status" data-value="Done" data-id="DONE">Done</li>
+            </ul>
+        </li>
+
+        <li class="action dropdown-item">PIC
+        <!-- Dropdown menu cho tùy chọn "Open" -->
+        <ul class="context-menu sub-menu dropdown-menu picDropdownSub" id="subMenuOpen">
+             @foreach (var t in assignees)
+             {
+                 <li class="action dropdown-item cus-dropdown-item" data-type="assignee" data-value="@t.Id" data-displayname="@t.DisplayName">@t.DisplayName</li>
+             }
+            
+        </ul>
+        </li>
+              
+        <div class="dropdown-divider"></div>
+        <li class="action dropdown-item" data-type="change_tablemode" data-value="toggle">Change mode</li>
+        <li class="action dropdown-item" data-type="hide" data-value="hide">Hide this row</li>
+    </ul>
+    <!-- --------------- -->
+            
+</div>
+
+<div class="navbar-container" id="task-container">
+  <div class="resizer"></div>
+  <div class="navbar-right" id="navbar-right">
+    <button class="close-btn">X</button>
+    <div class="task-detail-container">
+        <div class="container">
+          <div class="fix-title">
+            <h2 id="task-title">Task Detail (#1)</h2>
+            <button class="btn btn-primary mb-2 custom-input newOrUpdateTask" data-id="NEW">New</button>
+            <button class="btn btn-primary mb-2 custom-input newOrUpdateTask" data-id="UPDATE">Update</button>
+            <button class="btn btn-danger mb-2 custom-input newOrUpdateTask" data-id="DELETE">Delete</button>
+          </div>
+          
+          <form class="menu-right-form">
+            <input type="hidden" id="taskId" value="">
+
+            <div class="mb-2 errorMessage">
+              <label class="form-label hide" id="errorMessage">Error</label>
+            </div>
+
+            <div class="mb-2">
+              <label for="taskTitle" class="form-label">Subject <span class="require">*</span></label>
+              <input type="text" class="form-control custom-input-nowidth" id="taskTitle">
+            </div>
+
+            <div class="mb-2">
+              <label for="description" class="form-label">Description</label>
+              <textarea class="form-control" id="description" rows="3"></textarea>
+            </div>
+
+            <div class="mb-2">
+              <label for="nextaction" class="form-label">Next Action</label>
+              <textarea class="form-control" id="nextaction" rows="3"></textarea>
+            </div>
+
+            <div class="mb-2 row">
+              <div class="col-12 col-custom">
+                <div class="mb-2">
+                  <label for="projectDropdown" class="form-label">Project</label>
+                  <select class="form-control custom-input" id="projectDropdown">
+                    <option value="1">Scuf</option>
+                    <option value="2">OriginPC</option>
+                    <option value="3">Transparency IO</option>
+                    <option value="4">Shopify</option>
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label for="ticket" class="form-label">Helpdesk ticket</label>
+                  <input type="text" class="form-control custom-input" id="ticket">
+                </div>
+
+                <div class="mb-2">
+                  <label for="statusDropdown" class="form-label">Status</label>
+                  <select class="form-control custom-input" id="statusDropdown">
+                    <option value="OPEN">Open</option>
+                    <option value="IN PROGRESS">In Progress</option>
+                    <option value="WAITING APPROVAL">Waiting Approval</option>
+                    <option value="WAITING USER">Waiting User</option>
+                    <option value="DONE">Done</option>
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <label for="progressDropdown" class="form-label">Progress</label>
+                  <select class="form-control custom-input" id="progressDropdown">
+                    <option value="10">10%</option>
+                    <option value="20">20%</option>
+                    <option value="30">30%</option>
+                    <option value="40">40%</option>
+                    <option value="50">50%</option>
+                    <option value="60">60%</option>
+                    <option value="70">70%</option>
+                    <option value="80">80%</option>
+                    <option value="90">90%</option>
+                    <option value="100">100%</option>
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label for="picDropdown" class="form-label">PIC</label>
+                  <select class="form-control custom-input" id="picDropdown">
+                      <!-- Call AJAX GetUsers -->
+                  </select>
+                </div>
+
+                <div class="mb-2">
+                  <label for="ticket" class="form-label">Requestor</label>
+                  <input type="text" class="form-control custom-input" id="requestor">
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-2">
+              <label for="assigneeDropdown" class="form-label">Assignee</label> <br>
+              <select multiple="multiple" class="form-control" id="assigneeDropdown">
+                   <!-- Call AJAX GetUsers -->
+              </select>
+            </div>
+
+            
+
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" class="form-control custom-input" id="startDate">
+              </div>
+              <div class="col-md-6 mb-2">
+                <label for="dueDate" class="form-label">Due Date</label>
+                <input type="date" class="form-control custom-input" id="dueDate">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <label for="estimateDate" class="form-label">Estimate Date</label>
+                <input type="date" class="form-control custom-input" id="estimateDate">
+              </div>
+            </div>
+
+            <label for="ticket" class="form-label mt-3 mb-5" id="lastestUpdate">Latest update: 2023/08/03 12:00</label>
+
+          </form>
+        </div>
+      </div>
+  </div>
+
+@section Scripts{
+    <script>
+        jQuery(document).ready(function () {
+            //const showNavbar = sessionStorage.getItem("showNavbar");
+            //const taskId = sessionStorage.getItem("taskId");
+            //const currentWidth = sessionStorage.getItem("currentWidth");
+            //if (showNavbar === 'true') {
+            //    // Show task detail
+            //    const navbarContainer = $(".navbar-container");
+            //    const startWidth = - $(".navbar-container").width();
+            //    console.log(navbarContainer.css("right"));
+            //    if (navbarContainer.css("right") !== "0px") {
+            //        navbarContainer.css("right", "0px");
+            //        navbarContainer.css("width", currentWidth);
+            //        $(".navbar-right").width(currentWidth);
+            //    }
+            //
+             //   setTaskDetail(taskId);
+
+           // }
+
+            const showFilter = sessionStorage.getItem("showFilter"); 
+            if(showFilter === 'true')
+             {
+                 $('#filter-section').removeClass('d-none');
+             }
+            sessionStorage.removeItem("showFilter");
+
+
+            refreshTask();
+
+            $("#searchProject").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "@Url.Action("GetProjects", "Home")",
+                        type: "GET",
+                        dataType: "json",
+                        data: { searchText: request.term , type: 'autocomplete'},
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.name,
+                                    value: item.name,
+                                    status: item.status
+                                };
+                            }))
+                        }
+                    })
+                },
+                select: function (event, ui) {
+                    console.log(ui);
+                    if (!$(this).data('keyHandled')) {
+                        $('#projectStatus option:selected').removeAttr('selected');
+                        $('#projectStatus option[value=' + ui.item.status +']').attr('selected','selected');
+                        return true;
+                    }
+                    return false;
+                },
+            });
+
+            $("#addproject").click(function () {
+                $("#searchProject").removeClass('error');
+
+                var action = $("#projectAction").val();
+                var name = $("#searchProject").val();
+                var status = $("#projectStatus").val();
+
+                if(name == '') {
+                    $("#searchProject").addClass('error');
+                } else {
+                     $.ajax({
+                        url: '@Url.Action("AddOrUpdateProject", "Home")',
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            action: action,
+                            name: name,
+                            status: status
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                showToast('success', data.message);
+                            }
+                            else {
+                                showToast('error', data.message);
+                            }
+                        }
+                    });
+                }
+            })
+
+
+            function refreshTask() {
+                $("#errorMessage").addClass("hide");
+                $.ajax({
+                    url: "@Url.Action("GetProjects", "Home")",
+                    type: "GET",
+                    dataType: "json",
+                    data: { searchText: '', type: 'dropdown' },
+                    success: function (data) {
+                        populateSelectBox('#projectDropdown', data);
+                    }
+                });
+
+                $.ajax({
+                    url: "@Url.Action("GetUsers", "Home")",
+                    type: "GET",
+                    dataType: "json",
+                    data: {  },
+                    success: function (data) {
+                        populateSelectBox('#picDropdown', data);
+                        populateSelectBox('#assigneeDropdown', data);
+                    }
+                });
+
+                function populateSelectBox(selector, data) {
+                    // Get the select element
+                    var selectBox = $(selector);
+
+                    // Clear the select box in case it already has options
+                    selectBox.empty();
+
+                    // Loop through the data and append options to the select box
+                    $.each(data, function (index, item) {
+                        selectBox.append(
+                            $("<option>", {
+                                value: item.id, 
+                                text: item.name, 
+                            })
+                        );
+                    });
+                }
+
+
+            }
+
+            function getCurrentDate() {
+              var today = new Date();
+              var year = today.getFullYear();
+              var month = String(today.getMonth() + 1).padStart(2, '0');
+              var day = String(today.getDate()).padStart(2, '0');
+              return year + '-' + month + '-' + day;
+            }
+
+            $("#new-ticket").click(function () {
+               $("#errorMessage").addClass("hide");
+               $("#taskTitle").val('');
+               $('#description').summernote('code', '');
+               $('#nextaction').val('');
+               $("#ticket").val('');
+               $("#projectDropdown option:first").prop("selected", true);
+               $("#statusDropdown option:first").prop("selected", true);
+               $("#progressDropdown option:first").prop("selected", true);
+               $("#picDropdown option:first").prop("selected", true);
+               $("#requestor").val('');
+               $('#assigneeDropdown').val(null).trigger('change');
+               $("#startDate").val(getCurrentDate());
+               $("#dueDate").val('');
+               $("#estimateDate").val('');
+               $("#lastestUpdate").hide();
+            });
+
+
+            // Create Update Task
+            $(".newOrUpdateTask").click(function () {
+                $("#task-container").find("input.error, textarea.error, select.error").removeClass("error");
+               $("#errorMessage").addClass("hide");
+               var action = $(this).data('id');
+               var taskId = action == 'NEW' ? '' : $("#taskId").val();
+               var taskTitle = $("#taskTitle").val();
+               var description = $('#description').summernote('code');
+               var nextaction = $('#nextaction').val();
+               var project = $("#projectDropdown").val();
+               var ticket = $("#ticket").val();
+               var status = $("#statusDropdown").val();
+               var progress = $("#progressDropdown").val();
+               var pic = $("#picDropdown").val();
+               var requestor = $("#requestor").val();
+               var assignee = $('#assigneeDropdown').val();
+               var startDate = $("#startDate").val();
+               var dueDate = $("#dueDate").val();
+               var estimateDate = $("#estimateDate").val();
+
+
+               var checkError = true;
+               if (action !== 'DELETE' && new Date(estimateDate) > new Date(dueDate)) {
+                   $("#estimateDate").addClass('error');
+                   $("#errorMessage").removeClass("hide");
+                   $("#errorMessage").html("Estimate Date should before Due Date");
+                   checkError = false;
+               }
+               if (taskTitle == '') {
+                   checkError = false;
+                   $("#taskTitle").addClass('error');
+                   $("#errorMessage").removeClass("hide");
+                   $("#errorMessage").html("Task subject can not blank");
+               }
+
+               if(checkError) 
+               {
+                   var task = {
+                        id              : taskId,
+                        subject         : taskTitle, 
+                        description     : description, 
+                        action          : nextaction,
+                        projectId       : project,
+                        helpdeskTicket  : ticket, 
+                        status          : status, 
+                        progress        : progress,
+                        pic             : pic,
+                        requestor       : requestor, 
+                        assignee        : assignee, 
+                        startDate       : startDate,
+                        dueDate         : dueDate, 
+                        estimateDate    : estimateDate
+                   };
+
+                   $.ajax({
+                        url: '@Url.Action("CreateOrUpdateTask", "Home")',
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            task: task,
+                            action: action
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                @*var title = '';
+                                if(action == 'NEW' || action == 'UPDATE') {
+                                    title = "Task Detail (#" + data.task.id + ")";
+                                    var currentWidth = $(".navbar-container").width();
+                                    sessionStorage.setItem("showNavbar", "true");
+                                    sessionStorage.setItem("title",  title);
+                                    sessionStorage.setItem("taskId",  data.task.id);
+                                    sessionStorage.setItem("currentWidth",  currentWidth);
+                                    showToast('success', data.message);
+                                    window.location.href = "@Url.Action("Index","Home")";
+                                }
+                                if(action == 'DELETE') {
+                                    $('tr[data-id="'+data.task.id+'"]').hide();
+                                    $("#task-title").html("Deleted");
+                                }
+                                *@
+                                sessionStorage.setItem("showToast", "true");
+                                sessionStorage.setItem("toastMessage", data.message);
+                                location.reload();
+                            }
+                            else {
+                                showToast('error', data.message);
+                            }
+                        }
+                    });
+               }
+              
+            });
+
+            $(".task-detail").click(function () {
+                const navbarContainer = $(".navbar-container");
+                const startWidth = - $(".navbar-container").width();
+                if (navbarContainer.css("right") !== "0px") {
+                    navbarContainer.css("right", "0px");
+                }
+
+                // Handle get Task Detail info
+                if (clickedRowID) {
+                    setTaskDetail(clickedRowID);
+                } else {
+                    alert("Please right-click on a row to select it first.");
+                }
+                $("#contextMenu").css("display", "none"); // Đóng context menu sau khi click
+            });
+
+            function setTaskDetail(clickedRowID) {
+                $("#task-title").html("Task Detail (#" + clickedRowID + ")");
+                    $("#taskId").val(clickedRowID);
+
+                    $.ajax({
+                        url: '@Url.Action("GetTaskDetail", "Home")',
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            Id: clickedRowID
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                refreshTask();
+
+                                var tableTaskV = data.tableTaskV;
+                                setTimeout(function() {
+                                $("#taskTitle").val(tableTaskV.subject);
+                                $('#description').summernote('code', tableTaskV.description);
+                                $('#nextaction').val(tableTaskV.action);
+                                $("#projectDropdown").val(tableTaskV.projectId);
+                                $("#ticket").val(tableTaskV.helpdeskTicket);
+                                $("#statusDropdown").val(tableTaskV.statusCode);
+                                $("#progressDropdown").val(tableTaskV.progress);
+                                $("#picDropdown").val(tableTaskV.picId);
+                                $("#requestor").val(tableTaskV.requestor);
+                                $('#assigneeDropdown').val(tableTaskV.assigneeName).trigger('change');
+                                $("#startDate").val(tableTaskV.startDate);
+                                $("#dueDate").val(tableTaskV.dueDate);
+                                $("#estimateDate").val(tableTaskV.estimateDate);      
+                                }, 100);
+                            }
+                            else {
+                                showToast('error', data.message);
+                            }
+                        }
+                    });
+            }
+
+
+            // Bắt sự kiện click vào tùy chọn "Open" trong dropdown menu
+            $(".action").on("click", function () {
+                if (clickedRowID) {
+                    var type = $(this).data("type");
+                    var value = $(this).data("value");
+                    if(type != null && type != null) {
+                        switch(type) {
+                          case 'hide':
+                            $("tr[data-id=" + clickedRowID + "]").hide();
+                            break;
+                          case 'change_tablemode':
+                            changeTableMode();
+                            break;
+                          case 'assignee':
+                            var displayName = $(this).data("displayname");
+                            updateAssignee(clickedRowID, value, type, displayName );
+                            break;
+                          case 'status':
+                            var displayStatus = $(this).data("value");
+                            var status = $(this).data("id");
+                            updateStatus(clickedRowID, type, status, displayStatus);
+                            break;
+                        }
+                    }
+                    
+
+                } else {
+                    alert("Please right-click on a row to select it first.");
+                }
+                $("#contextMenu").css("display", "none"); // Đóng context menu sau khi click
+            });
+            
+            function changeTableMode() {
+                $.ajax({
+                    url: '@Url.Action("ChangeTableMode", "Home")',
+                    type: "POST",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.success) {
+                            location.reload();
+                        }
+                        else {
+                            showToast('error', data.message);
+                        }
+                    }
+                });
+            }
+
+            function updateAssignee(taskID, assignID, type, displayName) {
+                $.ajax({
+                    url: '@Url.Action("UpdatePIC", "Home")',
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                            taskID: taskID,
+                            assignID: assignID
+                    },
+                    success: function (data) {
+                        if(data.success) {
+                            var now = new Date();
+                            $("tr[data-id=" + taskID + "] ." + type + "").html(displayName);
+                            $("tr[data-id=" + taskID + "] .udpatetime").html('Today ' + now.getHours() + ':' + now.getMinutes());
+                            showToast('success', data.message);
+                        } else {
+                            showToast('error', data.message);
+                        }
+                    }
+                });
+            }
+
+            function updateStatus(taskID, type, status, displayStatus) {
+                $.ajax({
+                    url: '@Url.Action("UpdateTaskStatus", "Home")',
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                            taskID: taskID,
+                            status: status
+                    },
+                    success: function (data) {
+                        if(data.success) {
+                            var now = new Date();
+                            $("tr[data-id=" + taskID + "] ." + type + "").html(displayStatus);
+                            $("tr[data-id=" + taskID + "] .udpatetime").html('Today ' + now.getHours() + ':' + now.getMinutes());
+                            showToast('success', data.message);
+                        } else {
+                            showToast('error', data.message);
+                        }
+                    }
+                });
+            }
+
+
+
+
+
+            // Xử lý sự kiện khi button "Apply Filter" được click
+
+
+
+
+            $('.filter').on('click', function () {
+                var action = $(this).data("action");
+                const projectValues = getCheckedValues('filter-project');
+                const assigneeValues = getCheckedValues('filter-user');
+                const taskstatusValues = getCheckedValues('filter-taskstatus');
+
+                // Kiểm tra nếu chọn tất cả thì gửi 'all', ngược lại thì gửi giá trị checkbox đã chọn
+                const projectData = (projectValues.length - 1 === projectCheckboxes.length) ? 'all' : projectValues;
+                const assigneeData = (assigneeValues.length - 1 === assigneeCheckboxes.length) ? 'all' : assigneeValues;
+                const taskstatusData = (taskstatusValues.length - 1 === taskstatusCheckboxes.length) ? 'all' : taskstatusValues;
+
+                // Gọi hàm xử lý API và gửi giá trị lên server qua Ajax
+                callAPI(projectData, assigneeData, taskstatusData, action);
+
+            });
+
+            // Hàm lấy giá trị của các checkbox được chọn
+            function getCheckedValues(checkboxName) {
+                const checkedValues = [];
+                $(`input[name="${checkboxName}"]:checked`).each(function () {
+                    checkedValues.push($(this).val());
+                });
+                return checkedValues;
+            }
+
+            // Filter
+            // Hàm xử lý gọi API và gửi giá trị lên server
+            function callAPI(projectData, assigneeData, taskstatusData, action) {
+                console.log('Project data:', projectData);
+                console.log('Assignee data:', assigneeData);
+                console.log('Assignee data:', taskstatusData);
+
+                var filterViewM = {
+                    Project             : projectData,
+                    Assignee            : assigneeData, 
+                    TaskStatus          : taskstatusData
+                };
+
+                $.ajax({
+                    url: '@Url.Action("UpdateFilter", "Home")',
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                            FilterViewM: filterViewM,
+                            action: action
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            sessionStorage.setItem("showFilter",  'true');
+                            if(action === 'CLEAR') {
+                                removeFilterParam();
+                            } else {
+                                addFilterParam();
+                            }  
+                        }
+                        else {
+                            showToast('error', data.message);
+                        }
+                    }
+                });
+                
+            }
+
+            // Function to add 'filter=true' to URL
+            function addFilterParam() {
+                var filterParam = "filter=true";
+
+                if (window.location.search.length > 0) {
+                    if(window.location.href.indexOf('filter=true') == -1 )
+                    {
+                        window.location.href += "&" + filterParam;
+                    }
+                    else {
+                        location.reload();
+                    }
+                } else {
+                    window.location.href += "?" + filterParam;
+                }
+            }
+
+            // Function to remove 'filter=true' from URL
+            function removeFilterParam() {
+                var currentUrl = window.location.href;
+
+                currentUrl = currentUrl.replaceAll('?filter=true', '').replaceAll('&filter=true', '');
+                window.location.href = currentUrl;
+            }
+        });
+    </script>
+}

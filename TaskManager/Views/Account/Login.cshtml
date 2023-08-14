@@ -1,0 +1,224 @@
+﻿@model TaskManager.ViewModels.LoginViewModel
+@{ Layout = null; }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login</title>
+    <link href="~/images/logo/favicon.png" rel="icon">
+    <style>
+        body {
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            @*background-image: url(./images/logo/UTS-overview-banner.jpg);*@
+            background-image: url(https://thecaterersportal.com/ckpos/images/logo/UTS-overview-banner.jpg);
+            margin: 0;
+        }
+
+            body::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,.32);
+                z-index: 0;
+            }
+
+        .container {
+            /*border:1px solid white;*/
+            width: 700px;
+            min-height: 400px;
+            position: absolute;
+            top: 50%;
+            left: 37%;
+            transform: translate(-50%, -50%);
+            display: inline-flex;
+        }
+
+        .backbox {
+            background-color: #404040;
+            width: 100%;
+            height: 80%;
+            position: absolute;
+            transform: translate(0,-50%);
+            top: 50%;
+            display: inline-flex;
+        }
+
+        .frontbox {
+            background-color: white;
+            border-radius: 20px;
+            min-height: 100%;
+            width: 50%;
+            z-index: 10;
+            position: absolute;
+            right: 0;
+            margin-right: 2%;
+            margin-left: 3%;
+            transition: right .8s ease-in-out;
+        }
+
+        .moving {
+            right: 45%;
+        }
+
+        .loginMsg, .signupMsg {
+            width: 50%;
+            height: 100%;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+            .loginMsg .title,
+            .signupMsg .title {
+                font-size: 23px;
+                color: #ff8302;
+                font-weight: 700;
+            }
+
+            .loginMsg p,
+            .signupMsg p {
+                font-weight: 100;
+            }
+
+        .textcontent {
+            color: white;
+            margin-left: 12%;
+        }
+
+        .loginMsg button,
+        .signupMsg button {
+            background-color: #404040;
+            border: 2px solid white;
+            border-radius: 10px;
+            color: white;
+            box-sizing: content-box;
+            font-weight: 300;
+            padding: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        /* front box content*/
+        .login, .signup {
+            padding: 20px;
+            text-align: center;
+        }
+
+            .login h2,
+            .signup h2 {
+                color: #ff8302;
+                font-size: 22px;
+            }
+
+        .inputbox {
+            margin-top: 30px;
+        }
+
+        .login input,
+        .signup input {
+            display: block;
+            width: 100%;
+            height: 40px;
+            background-color: #f2f2f2;
+            border: none;
+            margin-top: 20px;
+        }
+
+        .login button,
+        .signup button {
+            background-color: #35B729;
+            border: none;
+            color: white;
+            font-weight: 300;
+            box-sizing: content-box;
+            padding: 10px;
+            border-radius: 10px;
+            width: 90%;
+            cursor: pointer;
+        }
+
+        /* Fade In & Out*/
+        .login p {
+            cursor: pointer;
+            color: #404040;
+            font-size: 15px;
+        }
+
+        .signup p {
+            font-size: 15px;
+        }
+
+        .loginMsg, .signupMsg {
+            /*opacity: 1;*/
+            transition: opacity .8s ease-in-out;
+        }
+
+        .visibility {
+            opacity: 0;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .text-danger {
+            text-align: left !important;
+            color: #ff8302;
+            font-size: 14px;
+        }
+
+        .account-error {
+            margin-bottom: 0;
+            color: #ff8302 !important;
+        }
+
+        .inputbox {
+            margin-top: 0 !important;
+        }
+
+        button[type=submit] {
+            background-color: #ff8302;
+        }
+
+        input {
+            font-size: 14px;
+            padding-left: 14px;
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="frontbox">
+            <form class="row" asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="login">
+                    <h2>LOG IN</h2> 
+                    <p class="account-error"> @ViewBag.Error</p>
+                    <div class="inputbox">
+                        <input type="text" asp-for="UserName" placeholder=" USERNAME">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+
+                        <input type="password" asp-for="Password" placeholder=" PASSWORD">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <p>FORGET PASSWORD?</p>
+                    <button type="submit">LOG IN</button>
+                </div>
+            </form>
+        </div>
+        <!-- frontbox -->
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        
+       
+    </script>
+</body>
+</html>
+

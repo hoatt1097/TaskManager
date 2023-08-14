@@ -1,0 +1,183 @@
+﻿@using TaskManager.Helpers
+
+@{
+    string userId = User.Claims.FirstOrDefault(x => x.Type.Equals("UserId", StringComparison.OrdinalIgnoreCase))?.Value;
+    //string username = User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.OrdinalIgnoreCase))?.Value;
+    //string parentCode = User.Claims.FirstOrDefault(x => x.Type.Equals("Code", StringComparison.OrdinalIgnoreCase))?.Value;
+
+    //string RoleName = User.Claims.FirstOrDefault(x => x.Type.Equals("RoleName", StringComparison.OrdinalIgnoreCase))?.Value;
+    //string Permissions = User.Claims.FirstOrDefault(x => x.Type.Equals("Permissions", StringComparison.OrdinalIgnoreCase))?.Value;
+
+    //string notiCount = "0";
+    //var count = new Byte[20];
+    //bool notiCountBl = Context.Session.TryGetValue("NotiCount", out count);
+    //if (notiCountBl) { notiCount = System.Text.Encoding.UTF8.GetString(count); }
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TaskManager</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link href="~/images/logo/favicon.png" rel="icon">
+    <link href="~/assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/summernote/summernote-bs4.css" rel="stylesheet" />
+    <link href="~/assets/toastify-js/toastify.min.css" rel="stylesheet" />
+    <link href="~/assets/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="~/lib/jquery-confirm/jquery-confirm.min.css" rel="stylesheet" />
+    <link href="~/lib/jqueryui/themes/base/jquery-ui.css" rel="stylesheet" />
+
+
+    <link href="~/css/homepage.css" rel="stylesheet" />
+
+    
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+     <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark cus-navbar">
+      <a class="navbar-brand" href="">Navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto menu">
+          <li class="nav-item home active">
+            <a class="nav-link" href="@Url.Action("Index", "Home")">
+              All Tasks
+              </a>
+          </li>
+          <li class="nav-item assignme">
+            <a class="nav-link" href="@Url.Action("Index", "Home")?userId=@userId">
+              Assigned to me
+            </a>
+          </li>
+          <!-- <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Dropdown
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="">Action</a>
+              <a class="dropdown-item" href="">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="">Something else here</a>
+            </div>
+          </li> -->
+        </ul>
+
+        <button class="btn btn-primary mr-2" id="new-ticket">New task</button>
+        <button class="btn btn-primary mr-2 js-show-section" data-id="project-section">Project</button>
+        <button class="btn btn-primary mr-2 js-show-section" data-id="filter-section">Filter</button>
+
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <ul class="navbar-nav ">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Hoa.Tran
+                </a>
+                <div class="dropdown-menu login-dropdown" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="">Help</a>
+                </div>
+              </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="row" id="body-row">
+        <!-- Sidebar -->
+        <div id="sidebar-container" class="sidebar-collapsed d-none d-md-block">
+            <!-- d-* hiddens the Sidebar in smaller devices. Its itens can be kept on the Navbar 'Menu' -->
+            <!-- Bootstrap List Group -->
+            <ul class="list-group">
+                <!-- Separator with title -->
+                <!-- <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed d-none">
+                    <small>MAIN MENU</small>
+                </li> -->
+                <!-- /END Separator -->
+                <!-- Menu with submenu -->
+                @*<a href="#submenu1" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-start align-items-center">
+                        <span class="fa fa-tasks fa-fw mr-3"></span>
+                        <span class="menu-collapsed d-none">Projects</span>
+                        <span class="submenu-icon ml-auto"></span>
+                    </div>
+                </a>
+                <!-- Submenu content -->
+                <div id='submenu1' class="collapse sidebar-submenu cus-submenu">
+                    <input type="checkbox" name="filter-project" value=""> Select All <br>
+                    <input type="checkbox" name="filter-project" value="scuf"> Scuf <br>
+                    <input type="checkbox" name="filter-project" value="originpc"> OriginPC <br>
+                    <input type="checkbox" name="filter-project" value="cdw"> CDW <br>
+                    <input type="checkbox" name="filter-project" value="walmart"> Walmart <br>
+                    <input type="checkbox" name="filter-project" value="shopify"> Shopify <br>
+                </div>
+                <a href="#submenu2" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-start align-items-center">
+                        <span class="fa fa-user fa-fw mr-3"></span>
+                        <span class="menu-collapsed d-none">Users</span>
+                        <span class="submenu-icon ml-auto"></span>
+                    </div>
+                </a>
+                <!-- Submenu content -->
+                <div id='submenu2' class="collapse sidebar-submenu cus-submenu">
+                    <input type="checkbox" name="filter-user"  value="0"> Select All <br>
+                    <input type="checkbox" name="filter-user"  value="1"> Tuan Nguyen <br>
+                    <input type="checkbox" name="filter-user"  value="2"> Hiep <br>
+                    <input type="checkbox" name="filter-user"  value="3"> Huy <br>
+                    <input type="checkbox" name="filter-user"  value="4"> Hoa <br>
+                </div>
+            *@
+                <!-- Separator with title -->
+                <!-- <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed d-none">
+                    <small>OPTIONS</small>
+                </li> -->
+                <!-- /END Separator -->
+                <a href="" class="bg-dark list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-start align-items-center">
+                        <span class="fa fa-tasks fa-fw mr-3"></span>
+                        <span class="menu-collapsed d-none">Projects</span>
+                    </div>
+                </a>
+                <!-- Separator without title -->
+                <!-- /END Separator -->
+                <a href="#top" data-toggle="sidebar-colapse" class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
+                    <div class="d-flex w-100 justify-content-start align-items-center">
+                        <span id="collapse-icon" class="fa fa-2x mr-3"></span>
+                        <span id="collapse-text" class="menu-collapsed d-none">Collapse</span>
+                    </div>
+                </a>
+            </ul><!-- List Group END-->
+        </div><!-- sidebar-container END -->
+        <!-- MAIN -->
+        <div class="col pt-2 pr-3 pl-3">
+           
+           @RenderBody()
+        </div><!-- Main Col END -->
+    </div><!-- body-row END -->
+
+</div>
+    <script src="~/lib/jquery/dist/jquery.slim.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/assets/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/select2/dist/js/select2.min.js"></script>
+    <script src="~/assets/toastify-js/toastify.min.js"></script>
+    <script src="~/assets/summernote/summernote-bs4.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
+    <script src="~/js/hompage.js" asp-append-version="true"></script>
+    <script src="~/js/updatetask.js" asp-append-version="true"></script>
+
+    @await Component.InvokeAsync("Notyf")
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
