@@ -1,0 +1,86 @@
+﻿@model Projects
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Users</a>
+            <span class="breadcrumb-item active">New</span>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Create new user</h5>
+                <form class="row cus-form" asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-md-12 mb-2">
+                        <label asp-for="Name" class="control-label"></label><label class="text-danger">*</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label asp-for="Status" class="control-label"></label><label class="text-danger">*</label>
+                        <select asp-for="Status" class="form-control" asp-items="ViewBag.StatusOptions"></select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label asp-for="ChannelId" class="control-label">Channel</label>
+                        <select asp-for="ChannelId" class="form-control" asp-items="ViewBag.ChannelId"></select>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label asp-for="PIC" class="control-label"></label>
+                        <select asp-for="PIC" class="form-control" asp-items="ViewBag.PIC"></select>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label asp-for="Progress" class="control-label"></label>
+                        <select asp-for="Progress" class="form-control" asp-items="ViewBag.ProgressValues"></select>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea class="summernote" asp-for="Description"></textarea>
+                    </div>
+                     <div class="col-md-12 mb-2">
+                        <label asp-for="NextAction" class="control-label">Next Action</label>
+                        <textarea class="form-control cus-textarea" asp-for="NextAction" rows="3"></textarea>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <input asp-for="Active" class="form-check-input ml-1" type="checkbox">
+                        <label class="ml-4">Active</label>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
+                styleTags: ['p', 'h1', 'h2', 'h3', 'h4', 'h5'],
+                height: 200,
+                minHeight: null,
+                maxHeight: null,
+                focus: true
+            });
+        });
+    </script>
+}

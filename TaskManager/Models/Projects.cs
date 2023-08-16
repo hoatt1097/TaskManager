@@ -22,8 +22,18 @@ namespace TaskManager.Models
         [StringLength(255)]
         public string Status { get; set; }
 
-        [StringLength(2500)]
+        [StringLength(5000)]
         public string Description { get; set; }
+
+        [StringLength(2500)]
+        public string NextAction { get; set; }
+
+        [StringLength(255)]
+        public string PIC { get; set; }
+
+        public int ChannelId { get; set; }
+
+        public int Progress { get; set; }
 
         public bool Active { get; set; }
 

@@ -1,0 +1,81 @@
+﻿@model Users
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div class="header-sub-title">
+        <nav class="breadcrumb breadcrumb-dash">
+            <a asp-action="Index" class="breadcrumb-item"><i class="anticon anticon-home"></i>Users</a>
+            <span class="breadcrumb-item active">New</span>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Create new user</h5>
+                <form class="row cus-form" asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="Username" class="control-label"></label><label class="text-danger">*</label>
+                        <input asp-for="Username" class="form-control" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="Password" class="control-label"></label><label class="text-danger">*</label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="DisplayName" class="control-label"></label><label class="text-danger">*</label>
+                        <input asp-for="DisplayName" class="form-control" />
+                        <span asp-validation-for="DisplayName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="Fullname" class="control-label"></label><label class="text-danger">*</label>
+                        <input asp-for="Fullname" class="form-control" />
+                        <span asp-validation-for="Fullname" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="Email" class="control-label"></label></label><label class="text-danger">*</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="Phone" class="control-label"></label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="RoleId" class="control-label"></label>
+                        <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="ChannelId" class="control-label">Channel</label>
+                        <select asp-for="ChannelId" class="form-control" asp-items="ViewBag.ChannelId"></select>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <input asp-for="Active" class="form-check-input ml-1" type="checkbox">
+                        <label class="ml-4">Active</label>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

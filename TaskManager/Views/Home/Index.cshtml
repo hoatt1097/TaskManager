@@ -188,9 +188,9 @@
          {
                 var projectId = @project.Id;
                 <tr class="clickable-row" data-target="#row@(projectId)-child" data-row="#row@(projectId)-icon">
-                    <td class="parent-row">
-                    <span><i id="row@(projectId)-icon" class="fa fa-minus"></i></span>
-                        @project.Name
+                    <td class="parent-row d-flex">
+                        <span class="w-100"><i id="row@(projectId)-icon" class="fa fa-minus"></i> @project.Name</span>
+                        <a href="/Projects/Edit/@(projectId)">Detail</a>
                     </td>
                 </tr>
                 <tr>

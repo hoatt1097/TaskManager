@@ -68,12 +68,15 @@ namespace TaskManager.Controllers
                     _context.Update(users);
                     await _context.SaveChangesAsync();
 
+
+
                     HttpContext.Session.SetString("UserId", users.Id.ToString().Trim());
                     HttpContext.Session.SetString("Username", users.Username.ToString().Trim());
                     HttpContext.Session.SetString("DisplayName", users.DisplayName);
                     HttpContext.Session.SetString("LastLogin", users.LastLogin.ToString());
                     HttpContext.Session.SetString("ChannelId", users.ChannelId.ToString());
                     HttpContext.Session.SetString("ChannelName", users.ChannelName);
+                    HttpContext.Session.SetString("Sidebar", "close");
 
 
                     //identity
@@ -88,6 +91,7 @@ namespace TaskManager.Controllers
                             new Claim("ChannelId", users.ChannelId.ToString().Trim()),
                             new Claim("ChannelName", users.ChannelName.Trim()),
                             new Claim("RoleName", users.Role.Name.Trim()),
+                            new Claim("Role", users.Role.Code.Trim()),
                             new Claim(ClaimTypes.Role, users.Role.Code.Trim())
                         };
                     var grandmaIdentity = new ClaimsIdentity(userClaims, "User Identity");
@@ -116,6 +120,18 @@ namespace TaskManager.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+        }
+
+        public IActionResult UpdateSidebarSession(string status)
+        {
+            HttpContext.Session.SetString("Sidebar", status);
+            return Ok();
+        }
+
+        public string GetSidebarSession()
+        {
+            string  a = HttpContext.Session.GetString("Sidebar");
+            return a;
         }
     }
 }

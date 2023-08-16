@@ -3,7 +3,9 @@
 .error {
     border: solid 1px red;
 }
-
+.table-striped tbody tr:nth-of-type(odd)  {
+    background-color: white !important;
+}
 .require {
     color: red;
 }
@@ -262,7 +264,7 @@
 }
 
 .table-task tbody tr:hover {
-  background-color: #ccc;
+  // background-color: #ccc;
 }
 
 .parent-row {
@@ -557,6 +559,35 @@ td.description p, td.description ol, td.description ul {
 
 .searchProject {
   width: 250px !important;
+}
+
+.table-responsive .e-commerce-table tr th, .table-responsive .e-commerce-table tr td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+.card .btn {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.breadcrumb.breadcrumb-dash {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-bottom: 7px;
+}
+.page-link {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.cus-form .form-control, .custom-select {
+    height: 30px;
+    padding: 1px 0.75rem
+}
+
+.login-dropdown {
+    top: 29px !important;
+    right: 0 !important;
 }
 
 

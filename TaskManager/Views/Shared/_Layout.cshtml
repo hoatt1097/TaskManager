@@ -2,6 +2,14 @@
 
 @{
     string userId = User.Claims.FirstOrDefault(x => x.Type.Equals("UserId", StringComparison.OrdinalIgnoreCase))?.Value;
+    string DisplayName = User.Claims.FirstOrDefault(x => x.Type.Equals("DisplayName", StringComparison.OrdinalIgnoreCase))?.Value;
+    string Role = User.Claims.FirstOrDefault(x => x.Type.Equals("Role", StringComparison.OrdinalIgnoreCase))?.Value;
+    
+    string sidebar = "close";
+    var sidebarByte = new Byte[20];
+    bool checkExist = Context.Session.TryGetValue("Sidebar", out sidebarByte);
+    if (checkExist) { sidebar = System.Text.Encoding.UTF8.GetString(sidebarByte); }
+
     //string username = User.Claims.FirstOrDefault(x => x.Type.Equals("Username", StringComparison.OrdinalIgnoreCase))?.Value;
     //string parentCode = User.Claims.FirstOrDefault(x => x.Type.Equals("Code", StringComparison.OrdinalIgnoreCase))?.Value;
 
@@ -40,7 +48,7 @@
 </head>
 <body>
      <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-dark cus-navbar">
-      <a class="navbar-brand" href="">Navbar</a>
+      <a class="navbar-brand" asp-controller="Home" asp-action="Index">Hiptech</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -80,8 +88,8 @@
         </form>
         <ul class="navbar-nav ">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Hoa.Tran
+                <a class="nav-link dropdown-toggle" style="min-width: 100px" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   @DisplayName
                 </a>
                 <div class="dropdown-menu login-dropdown" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a>
@@ -95,7 +103,8 @@
 
     <div class="row" id="body-row">
         <!-- Sidebar -->
-        <div id="sidebar-container" class="sidebar-collapsed d-none d-md-block">
+        <input type="hidden" id="sidebar" value="@sidebar"/>
+        <div id="sidebar-container" class="@(sidebar == "close" ? "sidebar-collapsed" : "sidebar-expanded") d-none d-md-block">
             <!-- d-* hiddens the Sidebar in smaller devices. Its itens can be kept on the Navbar 'Menu' -->
             <!-- Bootstrap List Group -->
             <ul class="list-group">
@@ -141,19 +150,33 @@
                 <!-- <li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed d-none">
                     <small>OPTIONS</small>
                 </li> -->
+
+                @if (Role.Contains("ADMIN"))
+                {
+                    <a asp-controller="Users" asp-action="Index" class="bg-dark list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-start align-items-center">
+                            <span class="fa fa-user fa-fw mr-3"></span>
+                            <span class="menu-collapsed @(sidebar == "close" ? "d-none" : "")">Users</span>
+                        </div>
+                    </a>
+                }
+
                 <!-- /END Separator -->
-                <a href="" class="bg-dark list-group-item list-group-item-action">
+                <a asp-controller="Projects" asp-action="Index" class="bg-dark list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-start align-items-center">
                         <span class="fa fa-tasks fa-fw mr-3"></span>
-                        <span class="menu-collapsed d-none">Projects</span>
+                        <span class="menu-collapsed @(sidebar == "close" ? "d-none" : "")">Projects</span>
                     </div>
                 </a>
+
+                
+
                 <!-- Separator without title -->
                 <!-- /END Separator -->
-                <a href="#top" data-toggle="sidebar-colapse" class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
+                <a href="" data-toggle="sidebar-colapse" class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
                     <div class="d-flex w-100 justify-content-start align-items-center">
-                        <span id="collapse-icon" class="fa fa-2x mr-3"></span>
-                        <span id="collapse-text" class="menu-collapsed d-none">Collapse</span>
+                        <span id="collapse-icon" class="fa fa-2x mr-3 @(sidebar == "close" ? "fa-angle-double-right" : "fa-angle-double-left")"></span> 
+                        <span id="collapse-text" class="menu-collapsed @(sidebar == "close" ? "d-none" : "")">Collapse</span>
                     </div>
                 </a>
             </ul><!-- List Group END-->
@@ -176,6 +199,47 @@
     <script src="~/lib/jquery-confirm/jquery-confirm.min.js"></script>
     <script src="~/js/hompage.js" asp-append-version="true"></script>
     <script src="~/js/updatetask.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            // Collapse click
+            $('[data-toggle=sidebar-colapse]').click(function () {
+                SidebarCollapse();
+            });
+
+            function SidebarCollapse() {
+                $('.menu-collapsed').toggleClass('d-none');
+                $('.sidebar-submenu').toggleClass('d-none');
+                $('.submenu-icon').toggleClass('d-none');
+                $('#sidebar-container').toggleClass('sidebar-expanded sidebar-collapsed');
+
+                // Treating d-flex/d-none on separators with title
+                var SeparatorTitle = $('.sidebar-separator-title');
+                if (SeparatorTitle.hasClass('d-flex')) {
+                    SeparatorTitle.removeClass('d-flex');
+                } else {
+                    SeparatorTitle.addClass('d-flex');
+                }
+
+                // Collapse/Expand icon
+                $('#collapse-icon').toggleClass('fa-angle-double-left fa-angle-double-right');
+
+                var status = $("#sidebar").val() == "close" ? "open" : "close" ;
+                $("#sidebar").val(status);
+                $.ajax({
+                    type: "POST",
+                    url: "/Account/UpdateSidebarSession",
+                    data: { status: status },
+                    success: function() {
+                    },
+                    error: function() {
+                        console.log("Error updating session.");
+                    }
+                });
+            }
+         });
+    </script>
 
     @await Component.InvokeAsync("Notyf")
     @RenderSection("Scripts", required: false)
