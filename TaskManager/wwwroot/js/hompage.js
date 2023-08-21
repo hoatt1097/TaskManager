@@ -14,6 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function () {
 
+    $("#parent-icon").click(function () {
+        $(".child").toggleClass('fa-plus fa-minus');
+        $(".child-table").toggleClass('d-none');
+    });
+
     // Loại bỏ lớp 'active' khỏi tất cả các phần tử li
     
 

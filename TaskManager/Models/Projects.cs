@@ -22,7 +22,7 @@ namespace TaskManager.Models
         [StringLength(255)]
         public string Status { get; set; }
 
-        [StringLength(5000)]
+        [StringLength(10000)]
         public string Description { get; set; }
 
         [StringLength(2500)]

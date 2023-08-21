@@ -28,7 +28,7 @@ namespace TaskManager.Controllers
         public async Task<IActionResult> Index(int? page, int channelID = 0)
         {
             var pageNumber = page == null || page <= 0 ? 1 : page.Value;
-            var pageSize = 10;
+            var pageSize = 30;
 
             var ls = _context.Projects.AsNoTracking().OrderBy(x => x.Id);
 

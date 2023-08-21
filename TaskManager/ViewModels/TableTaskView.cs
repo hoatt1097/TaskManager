@@ -44,5 +44,6 @@ namespace TaskManager.ViewModels
         public string EstimateDate { get; set; }
         public string CreationDate { get; set; }
         public string UpdateTime { get; set; }
+        public string LastestUpdateTime { get; set; }
     }
 }

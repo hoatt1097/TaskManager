@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -322,6 +323,9 @@ namespace TaskManager.Controllers
             tableV.TotalTask = totalTask;
             tableV.Projects = tableProjectVs;
 
+            ViewData["Project"] = new SelectList(_context.Projects.Where(x => x.Active == true), "Id", "Name");
+            ViewData["PIC"] = new SelectList(_context.Users.Where(x => x.Active == true), "Id", "DisplayName");
+
             ViewBag.TableV = tableV;
             return View();
         }
@@ -354,6 +358,7 @@ namespace TaskManager.Controllers
                     StartDate = task.StartDate,
                     DueDate = task.DueDate,
                     EstimateDate = task.EstimateDate,
+                    LastestUpdateTime = task.LastUpdateDate != null ? "Latest update: " + task.LastUpdateDate?.ToString("yyyy/MM/dd HH:mm:ss") : "Latest update: ",
                     Active = true
                 };
 

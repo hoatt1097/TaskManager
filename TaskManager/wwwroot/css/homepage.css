@@ -1,10 +1,13 @@
 ﻿@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
+#parent-icon:hover {
+    cursor: pointer;
+}
 .error {
     border: solid 1px red;
 }
 .table-striped tbody tr:nth-of-type(odd)  {
-    background-color: white !important;
+    background-color: white;
 }
 .require {
     color: red;
@@ -408,9 +411,7 @@ td.description p, td.description ol, td.description ul {
   background-color: #f0f0f0;
 }
 
-.row-clicked, .show-detail {
-  background-color: #E1DE3C !important;
-}
+
 
 
 .sub-menu {
@@ -588,6 +589,10 @@ td.description p, td.description ol, td.description ul {
 .login-dropdown {
     top: 29px !important;
     right: 0 !important;
+}
+
+.row-clicked, .show-detail {
+    background-color: #E1DE3C !important;
 }
 
 

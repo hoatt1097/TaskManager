@@ -162,7 +162,7 @@
                 <thead>
                 <tr>
                     @if(tableMode == "Normal") {
-                        <th class="index">#</th>
+                        <th class="index"><span class="w-100"><i id="parent-icon" class="child fa fa-minus"></i></span> #</th>
                         <th class="assignee">PIC</th>
                         <th class="subject">Subject</th>
                         <th class="status">Status</th>
@@ -172,7 +172,7 @@
                         <th class="duedate">Due date</th>
                         <th class="ticket">Ticket</th>
                     } else {
-                        <th class="index">#</th>
+                        <th class="index"><span class="w-100"><i id="parent-icon" class="child fa fa-minus"></i></span> #</th>
                         <th class="assignee">Assignee</th>
                         <th class="subject w3">Subject</th>
                         <th class="description w4">Description</th>
@@ -189,12 +189,12 @@
                 var projectId = @project.Id;
                 <tr class="clickable-row" data-target="#row@(projectId)-child" data-row="#row@(projectId)-icon">
                     <td class="parent-row d-flex">
-                        <span class="w-100"><i id="row@(projectId)-icon" class="fa fa-minus"></i> @project.Name</span>
+                        <span class="w-100"><i id="row@(projectId)-icon" class="child fa fa-minus"></i> @project.Name</span>
                         <a href="/Projects/Edit/@(projectId)">Detail</a>
                     </td>
                 </tr>
                 <tr>
-                    <td id="row@(projectId)-child" class="child-part">
+                    <td id="row@(projectId)-child" class="child-table child-part">
                     <table class="table table-task">
                         <tbody>
                             @foreach (var t in project.Tasks)
@@ -309,12 +309,7 @@
               <div class="col-12 col-custom">
                 <div class="mb-2">
                   <label for="projectDropdown" class="form-label">Project</label>
-                  <select class="form-control custom-input" id="projectDropdown">
-                    <option value="1">Scuf</option>
-                    <option value="2">OriginPC</option>
-                    <option value="3">Transparency IO</option>
-                    <option value="4">Shopify</option>
-                  </select>
+                  <select class="form-control custom-input" id="projectDropdown" class="form-control" asp-items="ViewBag.Project"></select>
                 </div>
 
                 <div class="mb-2">
@@ -335,6 +330,7 @@
                 <div class="mb-2">
                   <label for="progressDropdown" class="form-label">Progress</label>
                   <select class="form-control custom-input" id="progressDropdown">
+                     <option value="0">0%</option>
                     <option value="10">10%</option>
                     <option value="20">20%</option>
                     <option value="30">30%</option>
@@ -350,9 +346,7 @@
 
                 <div class="mb-2">
                   <label for="picDropdown" class="form-label">PIC</label>
-                  <select class="form-control custom-input" id="picDropdown">
-                      <!-- Call AJAX GetUsers -->
-                  </select>
+                  <select class="form-control custom-input" id="picDropdown" class="form-control" asp-items="ViewBag.PIC"></select>
                 </div>
 
                 <div class="mb-2">
@@ -364,9 +358,7 @@
             
             <div class="mb-2">
               <label for="assigneeDropdown" class="form-label">Assignee</label> <br>
-              <select multiple="multiple" class="form-control" id="assigneeDropdown">
-                   <!-- Call AJAX GetUsers -->
-              </select>
+              <select multiple="multiple" class="form-control" id="assigneeDropdown" class="form-control" asp-items="ViewBag.PIC"></select>
             </div>
 
             
@@ -389,7 +381,7 @@
               </div>
             </div>
 
-            <label for="ticket" class="form-label mt-3 mb-5" id="lastestUpdate">Latest update: 2023/08/03 12:00</label>
+            <label for="ticket" class="form-label mt-3 mb-5" id="lastestUpdate"></label>
 
           </form>
         </div>
@@ -681,24 +673,25 @@
                         },
                         success: function (data) {
                             if (data.success) {
-                                refreshTask();
+                                //refreshTask();
 
                                 var tableTaskV = data.tableTaskV;
                                 setTimeout(function() {
-                                $("#taskTitle").val(tableTaskV.subject);
-                                $('#description').summernote('code', tableTaskV.description);
-                                $('#nextaction').val(tableTaskV.action);
-                                $("#projectDropdown").val(tableTaskV.projectId);
-                                $("#ticket").val(tableTaskV.helpdeskTicket);
-                                $("#statusDropdown").val(tableTaskV.statusCode);
-                                $("#progressDropdown").val(tableTaskV.progress);
-                                $("#picDropdown").val(tableTaskV.picId);
-                                $("#requestor").val(tableTaskV.requestor);
-                                $('#assigneeDropdown').val(tableTaskV.assigneeName).trigger('change');
-                                $("#startDate").val(tableTaskV.startDate);
-                                $("#dueDate").val(tableTaskV.dueDate);
-                                $("#estimateDate").val(tableTaskV.estimateDate);      
-                                }, 100);
+                                    $("#taskTitle").val(tableTaskV.subject);
+                                    $('#description').summernote('code', tableTaskV.description);
+                                    $('#nextaction').val(tableTaskV.action);
+                                    $("#projectDropdown").val(tableTaskV.projectId);
+                                    $("#ticket").val(tableTaskV.helpdeskTicket);
+                                    $("#statusDropdown").val(tableTaskV.statusCode);
+                                    $("#progressDropdown").val(tableTaskV.progress);
+                                    $("#picDropdown").val(tableTaskV.picId);
+                                    $("#requestor").val(tableTaskV.requestor);
+                                    $('#assigneeDropdown').val(tableTaskV.assigneeName).trigger('change');
+                                    $("#startDate").val(tableTaskV.startDate);
+                                    $("#dueDate").val(tableTaskV.dueDate);
+                                    $("#estimateDate").val(tableTaskV.estimateDate);
+                                    $("#lastestUpdate").html(tableTaskV.lastestUpdateTime);
+                                }, 200);
                             }
                             else {
                                 showToast('error', data.message);
